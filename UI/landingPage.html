@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CareerAI - Hệ sinh thái Việc làm AI</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#e9ddff",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "primary-container": "#00487a",
+                        "primary": "#003156",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "surface-bright": "#f7f9fb",
+                        "inverse-primary": "#9dcaff",
+                        "on-primary-fixed-variant": "#03497b",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#003723",
+                        "on-tertiary-fixed": "#002113",
+                        "surface-dim": "#d8dadc",
+                        "accent-electric": "#A855F7",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#9dcaff",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-container-high": "#e6e8ea",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#005035",
+                        "on-secondary-container": "#fffbff",
+                        "surface-glass": "rgba(255, 255, 255, 0.7)",
+                        "surface-tint": "#2b6195",
+                        "background": "#f7f9fb",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#001d35",
+                        "text-rich": "#333333",
+                        "on-secondary": "#ffffff",
+                        "outline": "#727780",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#42474f",
+                        "on-tertiary-container": "#33ca91",
+                        "on-secondary-fixed": "#23005c",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary-fixed": "#6ffbbe",
+                        "inverse-surface": "#2d3133",
+                        "surface": "#f7f9fb",
+                        "surface-container": "#eceef0",
+                        "outline-variant": "#c2c7d0",
+                        "primary-fixed": "#d1e4ff",
+                        "on-background": "#191c1e",
+                        "secondary-container": "#8455ef",
+                        "on-primary-container": "#86b7f0",
+                        "secondary": "#6b38d4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "8px",
+                        "container-max": "1280px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "display-lg": [
+                            "Hanken Grotesk"
+                        ],
+                        "label-md": [
+                            "Hanken Grotesk"
+                        ],
+                        "body-md": [
+                            "Hanken Grotesk"
+                        ],
+                        "display-lg-mobile": [
+                            "Hanken Grotesk"
+                        ],
+                        "body-lg": [
+                            "Hanken Grotesk"
+                        ],
+                        "label-caps": [
+                            "JetBrains Mono"
+                        ],
+                        "headline-md": [
+                            "Hanken Grotesk"
+                        ]
+                    },
+                    "fontSize": {
+                        "display-lg": [
+                            "48px",
+                            {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                            }
+                        ],
+                        "label-md": [
+                            "14px",
+                            {
+                                "lineHeight": "20px",
+                                "fontWeight": "500"
+                            }
+                        ],
+                        "body-md": [
+                            "16px",
+                            {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                            }
+                        ],
+                        "display-lg-mobile": [
+                            "36px",
+                            {
+                                "lineHeight": "42px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                            }
+                        ],
+                        "body-lg": [
+                            "18px",
+                            {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                            }
+                        ],
+                        "label-caps": [
+                            "12px",
+                            {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                            }
+                        ],
+                        "headline-md": [
+                            "24px",
+                            {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                            }
+                        ]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 49, 86, 0.05);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #A855F7 0%, #003156 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(168, 85, 247, 0.2);
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+    <!-- TopNavBar -->
+    <header
+        class="docked full-width top-0 sticky z-50 backdrop-blur-xl border-b border-on-surface/10 shadow-sm bg-surface-glass">
+        <div class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-20">
+            <div class="flex items-center gap-8">
+                <a class="font-display-lg text-headline-md font-bold text-primary" href="#">CareerAI</a>
+                <nav class="hidden md:flex gap-6">
+                    <!-- Intent: Landing Page. None of these strictly match JSON exactly, but mapping conceptual tabs -->
+                    <a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200"
+                        href="#">Về chúng tôi</a>
+                    <a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200"
+                        href="#">Tính năng</a>
+                    <a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200"
+                        href="#">Bảng giá</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-4">
+                <button
+                    class="font-label-md text-label-md text-primary font-bold hover:text-secondary transition-colors px-4 py-2">Đăng
+                    nhập</button>
+                <button class="font-label-md text-label-md btn-primary text-white px-6 py-2 rounded-lg shadow-sm">Đăng
+                    ký</button>
+            </div>
+        </div>
+    </header>
+    <main class="flex-1">
+        <!-- Hero Section -->
+        <section class="relative min-h-[819px] flex items-center justify-center overflow-hidden">
+            <!-- STITCH_SHADER_START:ANIMATION_2 class="absolute inset-0 w-full h-full -z-10 opacity-40" -->
+            <div class="absolute inset-0 w-full h-full -z-10 opacity-40" style="display:block;">
+                <canvas id="shader-canvas-ANIMATION_2" style="display:block;width:100%;height:100%"></canvas>
+                <script>
+                        (function () {
+                            const canvas = document.getElementById('shader-canvas-ANIMATION_2');
+
+                            // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+                            // This fires on initial layout and whenever the element is resized.
+                            function syncSize() {
+                                const w = canvas.clientWidth || 1280;
+                                const h = canvas.clientHeight || 720;
+                                if (canvas.width !== w || canvas.height !== h) {
+                                    canvas.width = w;
+                                    canvas.height = h;
+                                }
+                            }
+                            if (typeof ResizeObserver !== 'undefined') {
+                                new ResizeObserver(syncSize).observe(canvas);
+                            }
+                            syncSize();
+
+                            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                            if (!gl) return;
+                            const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+                            const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+
+varying vec2 v_texCoord;
+
+void main() {
+    vec2 uv = v_texCoord;
+    vec2 mouse = u_mouse / u_resolution;
+    
+    // Gradient background (Deep Navy)
+    vec3 color1 = vec3(0.0, 0.1, 0.2); // Navy
+    vec3 color2 = vec3(0.05, 0.05, 0.1); // Darker Navy
+    vec3 bg = mix(color1, color2, uv.y);
+    
+    // AI Flow Light Trails (Neon Green/Purple)
+    float flow = sin(uv.x * 10.0 - u_time * 2.0) * 0.5 + 0.5;
+    float pulse = sin(u_time * 3.0) * 0.1 + 0.9;
+    
+    vec3 accent = vec3(0.2, 1.0, 0.6); // Neon Green
+    if (sin(u_time * 0.5) > 0.0) accent = vec3(0.7, 0.3, 1.0); // Electric Purple
+    
+    float trail = smoothstep(0.48, 0.5, uv.y + sin(uv.x * 8.0 + u_time) * 0.05);
+    trail *= smoothstep(0.52, 0.5, uv.y + sin(uv.x * 8.0 + u_time) * 0.05);
+    
+    // Data "particles"
+    float particles = fract(sin(dot(uv.xy, vec2(12.9898, 78.233))) * 43758.5453);
+    particles = pow(particles, 50.0) * pulse;
+    
+    vec3 finalColor = bg + accent * trail * 0.5 + accent * particles;
+    
+    gl_FragColor = vec4(finalColor, 1.0);
+}`;
+                            function cs(type, src) {
+                                const s = gl.createShader(type);
+                                gl.shaderSource(s, src);
+                                gl.compileShader(s);
+                                return s;
+                            }
+                            const prog = gl.createProgram();
+                            gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+                            gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+                            gl.linkProgram(prog);
+                            gl.useProgram(prog);
+                            const buf = gl.createBuffer();
+                            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+                            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+                            const pos = gl.getAttribLocation(prog, 'a_position');
+                            gl.enableVertexAttribArray(pos);
+                            gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+                            const uTime = gl.getUniformLocation(prog, 'u_time');
+                            const uRes = gl.getUniformLocation(prog, 'u_resolution');
+                            const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+                            // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+                            // Shaders that need normalized coords should use: u_mouse / u_resolution.
+                            let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+                            window.addEventListener('mousemove', (event) => {
+                                const rect = canvas.getBoundingClientRect();
+                                if (rect.width && rect.height) {
+                                    const nx = (event.clientX - rect.left) / rect.width;
+                                    const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+                                    mouse.x = nx * canvas.width;
+                                    mouse.y = ny * canvas.height;
+                                }
+                            });
+
+                            function render(t) {
+                                if (typeof ResizeObserver === 'undefined') syncSize();
+                                gl.viewport(0, 0, canvas.width, canvas.height);
+                                if (uTime) gl.uniform1f(uTime, t * 0.001);
+                                if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+                                if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+                                gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+                                requestAnimationFrame(render);
+                            }
+                            render(0);
+                        })();
+                </script>
+            </div>
+            <!-- STITCH_SHADER_END:ANIMATION_2 -->
+            <div
+                class="relative z-10 text-center px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
+                <div class="glass-panel max-w-3xl mx-auto p-10 rounded-2xl animate-fade-in-up">
+                    <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-6">
+                        Hệ sinh thái Việc làm AI - Khớp nối thời gian, Tối ưu thu nhập
+                    </h1>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant mb-10">
+                        Giải pháp quản trị nhân sự sinh viên thông minh nhất hiện nay.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <button
+                            class="btn-primary text-white font-label-md text-label-md px-8 py-3 rounded-lg w-full sm:w-auto">
+                            Dành cho Sinh viên
+                        </button>
+                        <button
+                            class="border-2 border-primary text-primary hover:bg-primary/5 font-label-md text-label-md px-8 py-3 rounded-lg transition-colors w-full sm:w-auto bg-surface-lowest">
+                            Dành cho Doanh nghiệp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Features Section -->
+        <section class="py-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="font-headline-md text-headline-md text-primary mb-4">Tính năng cốt lõi</h2>
+                <div class="w-16 h-1 bg-accent-electric mx-auto rounded-full"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_4px_20px_rgba(0,49,86,0.05)] border border-outline-variant/30 hover:shadow-[0_8px_30px_rgba(0,49,86,0.1)] transition-all duration-300 group">
+                    <div
+                        class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-secondary text-3xl"
+                            style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+                    </div>
+                    <h3 class="font-headline-md text-lg font-bold text-primary mb-3">Bộ lọc thời gian động</h3>
+                    <p class="text-on-surface-variant font-body-md">Tự động đề xuất ca làm việc phù hợp với lịch học của
+                        sinh viên nhờ thuật toán AI thông minh.</p>
+                </div>
+                <!-- Card 2 -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_4px_20px_rgba(0,49,86,0.05)] border border-outline-variant/30 hover:shadow-[0_8px_30px_rgba(0,49,86,0.1)] transition-all duration-300 group">
+                    <div
+                        class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-primary text-3xl"
+                            style="font-variation-settings: 'FILL' 1;">shield</span>
+                    </div>
+                    <h3 class="font-headline-md text-lg font-bold text-primary mb-3">Xác thực 2 chiều</h3>
+                    <p class="text-on-surface-variant font-body-md">Đảm bảo an toàn tuyệt đối với quy trình định danh
+                        sinh viên và xác thực doanh nghiệp chặt chẽ.</p>
+                </div>
+                <!-- Card 3 -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_4px_20px_rgba(0,49,86,0.05)] border border-outline-variant/30 hover:shadow-[0_8px_30px_rgba(0,49,86,0.1)] transition-all duration-300 group">
+                    <div
+                        class="w-16 h-16 rounded-full bg-accent-electric/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-accent-electric text-3xl"
+                            style="font-variation-settings: 'FILL' 1;">star</span>
+                    </div>
+                    <h3 class="font-headline-md text-lg font-bold text-primary mb-3">Đánh giá Trust Score</h3>
+                    <p class="text-on-surface-variant font-body-md">Hệ thống chấm điểm tín nhiệm dựa trên hiệu suất công
+                        việc và lịch sử tương tác trên nền tảng.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="w-full bottom-0 bg-surface-container-low border-t border-outline-variant/30 shadow-none">
+        <div
+            class="w-full py-12 px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex flex-col items-center md:items-start gap-2">
+                <span class="font-headline-md text-headline-md text-primary">CareerAI</span>
+                <span class="font-body-md text-body-md text-on-surface-variant/70">© 2024 CareerAI Platform. Powered by
+                    ICTU Intel Engine.</span>
+            </div>
+            <div class="flex flex-wrap justify-center gap-6">
+                <a class="font-label-caps text-label-caps text-on-surface-variant/70 hover:text-accent-electric transition-colors focus:underline focus:underline-offset-4"
+                    href="#">Privacy Policy</a>
+                <a class="font-label-caps text-label-caps text-on-surface-variant/70 hover:text-accent-electric transition-colors focus:underline focus:underline-offset-4"
+                    href="#">Terms of Service</a>
+                <a class="font-label-caps text-label-caps text-on-surface-variant/70 hover:text-accent-electric transition-colors focus:underline focus:underline-offset-4"
+                    href="#">University Guidelines</a>
+                <a class="font-label-caps text-label-caps text-on-surface-variant/70 hover:text-accent-electric transition-colors focus:underline focus:underline-offset-4"
+                    href="#">Trust &amp; Safety</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

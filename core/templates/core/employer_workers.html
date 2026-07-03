@@ -1,0 +1,136 @@
+{% extends 'core/base_employer.html' %}
+{% load static %}
+
+{% block title %}Quản lý nhân công - CareerAI{% endblock %}
+
+{% block employer_content %}
+<div class="space-y-6">
+    <!-- Header block -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+            <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary font-bold">Danh sách nhân công</h2>
+            <p class="text-on-surface-variant">Quản lý, đánh giá hiệu suất và xem thông tin chi tiết các sinh viên đã và đang làm việc.</p>
+        </div>
+        <div class="bg-primary/10 text-primary px-4 py-2 rounded-full text-xs font-bold border border-primary/20">
+            Tổng cộng: {{ workers|length }} nhân công
+        </div>
+    </div>
+
+    <!-- Directory Search & List -->
+    <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-[0_8px_30px_rgb(0,0,0,0.02)] p-6 space-y-6">
+        <!-- Client-side filter input -->
+        <div class="flex items-center gap-3 bg-surface/50 border border-outline-variant/30 rounded-xl px-3 py-2 max-w-md">
+            <span class="material-symbols-outlined text-outline">search</span>
+            <input type="text" id="workerSearchInput" oninput="filterWorkersTable()" placeholder="Tìm kiếm theo tên, mã sinh viên, ngành..." class="bg-transparent border-0 p-0 text-sm focus:ring-0 w-full placeholder:text-outline/65 text-text-rich" />
+        </div>
+
+        <!-- Workers Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse" id="workersTable">
+                <thead>
+                    <tr class="border-b border-outline-variant/30 text-on-surface-variant font-label-caps text-label-caps">
+                        <th class="py-4 px-4 font-semibold uppercase tracking-wider">Họ và tên / MSV</th>
+                        <th class="py-4 px-4 font-semibold uppercase tracking-wider">Ngành học</th>
+                        <th class="py-4 px-4 font-semibold uppercase tracking-wider text-center">Uy tín hệ thống</th>
+                        <th class="py-4 px-4 font-semibold uppercase tracking-wider text-center">Số ca đăng ký</th>
+                        <th class="py-4 px-4 font-semibold uppercase tracking-wider text-center">Đã hoàn thành</th>
+                        <th class="py-4 px-4 font-semibold uppercase tracking-wider">Đánh giá trung bình</th>
+                        <th class="py-4 px-4 font-semibold uppercase tracking-wider text-right">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm">
+                    {% for worker in workers %}
+                        <tr class="worker-row border-b border-outline-variant/10 hover:bg-surface-container-low transition-colors group">
+                            <!-- Name / Code -->
+                            <td class="py-4 px-4 flex items-center gap-3">
+                                {% if worker.avatar %}
+                                    <img src="{{ worker.avatar.url }}" alt="{{ worker.full_name }}" class="w-10 h-10 rounded-xl object-cover border border-outline-variant/20 shadow-sm" />
+                                {% else %}
+                                    <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary font-bold flex items-center justify-center border border-outline-variant/25">
+                                        {{ worker.full_name|slice:":1" }}
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <a href="{% url 'employer_student_profile' worker.id %}" class="font-bold text-text-rich hover:text-primary hover:underline transition-colors block">{{ worker.full_name }}</a>
+                                    <span class="text-xs text-outline font-semibold">MSV: {{ worker.student_code }} &middot; Lớp: {{ worker.class_name }}</span>
+                                </div>
+                            </td>
+                            <!-- Major -->
+                            <td class="py-4 px-4 text-on-surface-variant font-medium">
+                                {{ worker.major }}
+                            </td>
+                            <!-- System Trust Score -->
+                            <td class="py-4 px-4 text-center">
+                                <span class="bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded text-xs font-bold inline-flex items-center gap-0.5 shadow-sm">
+                                    <span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+                                    {{ worker.trust_score|floatformat:1 }}
+                                </span>
+                            </td>
+                            <!-- Total shifts -->
+                            <td class="py-4 px-4 text-center font-bold text-text-rich">
+                                {{ worker.total_shifts }} ca
+                            </td>
+                            <!-- Completed shifts -->
+                            <td class="py-4 px-4 text-center">
+                                <span class="bg-emerald-500/10 text-emerald-600 px-2 py-0.5 rounded text-xs font-bold">
+                                    {{ worker.completed_shifts }} ca
+                                </span>
+                            </td>
+                            <!-- Company's average rating for this student -->
+                            <td class="py-4 px-4">
+                                {% if worker.avg_rating %}
+                                    <div class="flex text-amber-500" title="{{ worker.avg_rating|floatformat:1 }} sao">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= worker.avg_rating %}
+                                                <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                            {% else %}
+                                                <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">star</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <span class="text-xs text-outline italic">Chưa có đánh giá</span>
+                                {% endif %}
+                            </td>
+                            <!-- Action links -->
+                            <td class="py-4 px-4 text-right">
+                                <a href="{% url 'employer_student_profile' worker.id %}" class="bg-primary text-on-primary hover:bg-primary-container px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-1.5 w-fit ml-auto">
+                                    <span class="material-symbols-outlined text-sm">visibility</span>
+                                    Xem hồ sơ
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="py-12 text-center text-on-surface-variant">
+                                <div class="flex flex-col items-center gap-2">
+                                    <span class="material-symbols-outlined text-5xl text-outline-variant">people</span>
+                                    <p class="font-semibold text-sm">Chưa có nhân công sinh viên nào.</p>
+                                    <p class="text-xs text-outline">Các sinh viên ứng tuyển hoặc làm việc trong ca của bạn sẽ hiển thị ở đây.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterWorkersTable() {
+        const input = document.getElementById("workerSearchInput");
+        const filter = input.value.toLowerCase().trim();
+        const rows = document.querySelectorAll(".worker-row");
+
+        rows.forEach(row => {
+            const textContent = row.textContent.toLowerCase();
+            if (textContent.includes(filter)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+</script>
+{% endblock %}

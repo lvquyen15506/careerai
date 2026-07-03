@@ -1,0 +1,310 @@
+<!-- Breadcrumb & Title -->
+<div class="space-y-2">
+    <nav class="flex text-xs text-on-surface-variant/80 gap-1.5 items-center">
+        <a href="{% url 'home' %}" class="hover:text-primary hover:underline">Trang chủ</a>
+        <span class="material-symbols-outlined text-[12px] pointer-events-none">chevron_right</span>
+        <span class="text-outline">Chi tiết ca làm</span>
+    </nav>
+    <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary m-0">{{ shift.title }}</h2>
+    <p class="text-on-surface-variant font-medium flex items-center gap-1">
+        <span class="material-symbols-outlined text-[18px] text-primary">corporate_fare</span>
+        {{ shift.employer.company_name }}
+    </p>
+</div>
+
+<!-- Bento Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Left Panel (Shift info & Applicants) -->
+    <div class="col-span-1 lg:col-span-8 flex flex-col gap-6">
+        <!-- Info Grid -->
+        <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 p-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                <!-- Date -->
+                <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 bg-primary/5 text-primary rounded-xl flex items-center justify-center">
+                        <span class="material-symbols-outlined">calendar_today</span>
+                    </div>
+                    <div>
+                        <p class="text-xs text-outline font-bold">Ngày làm việc</p>
+                        <p class="text-sm font-bold text-text-rich mt-0.5">{{ shift.start_time|date:"d/m/Y" }}</p>
+                    </div>
+                </div>
+
+                <!-- Time -->
+                <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 bg-tertiary-fixed/10 text-tertiary rounded-xl flex items-center justify-center">
+                        <span class="material-symbols-outlined">schedule</span>
+                    </div>
+                    <div>
+                        <p class="text-xs text-outline font-bold">Thời gian</p>
+                        <p class="text-sm font-bold text-text-rich mt-0.5">{{ shift.start_time|time:"H:i" }} - {{ shift.end_time|time:"H:i" }}</p>
+                    </div>
+                </div>
+
+                <!-- Deadline -->
+                {% if shift.registration_deadline %}
+                <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 bg-rose-500/10 text-rose-600 rounded-xl flex items-center justify-center">
+                        <span class="material-symbols-outlined">alarm</span>
+                    </div>
+                    <div>
+                        <p class="text-xs text-outline font-bold">Hạn đăng ký</p>
+                        <p class="text-sm font-bold text-rose-600 mt-0.5">{{ shift.registration_deadline|date:"d/m/Y H:i" }}</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Wage -->
+                <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 bg-amber-500/10 text-amber-600 rounded-xl flex items-center justify-center">
+                        <span class="material-symbols-outlined">payments</span>
+                    </div>
+                    <div>
+                        <p class="text-xs text-outline font-bold">Lương / giờ</p>
+                        <p class="text-sm font-bold text-amber-600 mt-0.5">{{ shift.wage_per_hour|floatformat:0 }} VNĐ</p>
+                    </div>
+                </div>
+
+                <!-- Slots -->
+                <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 bg-secondary-container/10 text-secondary rounded-xl flex items-center justify-center">
+                        <span class="material-symbols-outlined">group</span>
+                    </div>
+                    <div>
+                        <p class="text-xs text-outline font-bold">Sinh viên nhận</p>
+                        <p class="text-sm font-bold text-text-rich mt-0.5">{{ shift.accepted_count }} / {{ shift.required_students }}</p>
+                    </div>
+                </div>
+
+                <!-- Target School -->
+                <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 bg-primary/5 text-primary rounded-xl flex items-center justify-center">
+                        <span class="material-symbols-outlined">school</span>
+                    </div>
+                    <div>
+                        <p class="text-xs text-outline font-bold">Trường yêu cầu</p>
+                        <p class="text-sm font-bold text-text-rich mt-0.5">
+                            {% if shift.target_school == 'Tất cả' or not shift.target_school %}
+                                Tất cả các trường
+                            {% else %}
+                                {{ shift.get_target_school_display|default:shift.target_school }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Target Major -->
+                <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 bg-primary/5 text-primary rounded-xl flex items-center justify-center">
+                        <span class="material-symbols-outlined">badge</span>
+                    </div>
+                    <div>
+                        <p class="text-xs text-outline font-bold">Ngành yêu cầu</p>
+                        <p class="text-sm font-bold text-text-rich mt-0.5">
+                            {% if shift.target_major == 'Tất cả' or not shift.target_major %}
+                                Tất cả các ngành
+                            {% else %}
+                                {{ shift.get_target_major_display|default:shift.target_major }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {% if shift.description %}
+                <div class="pt-6 border-t border-outline-variant/30 space-y-2">
+                    <h4 class="font-label-md text-label-md font-bold text-primary flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[18px]">notes</span>
+                        Mô tả công việc
+                    </h4>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">
+                        {{ shift.description|linebreaksbr }}
+                    </p>
+                </div>
+            {% endif %}
+
+            <div class="pt-4 border-t border-outline-variant/30 flex items-center gap-2 text-xs">
+                <span class="font-bold text-primary">Trạng thái ca:</span>
+                {% if shift.status == 'Open' %}
+                    <span class="bg-primary/10 text-primary px-2.5 py-0.5 rounded-full font-bold">Đang mở</span>
+                {% elif shift.status == 'Filled' %}
+                    <span class="bg-secondary-container/20 text-secondary px-2.5 py-0.5 rounded-full font-bold">Đã đủ người</span>
+                {% else %}
+                    <span class="bg-surface-variant text-on-surface-variant px-2.5 py-0.5 rounded-full font-medium">Đã đóng</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Candidates list (Employer/Admin view only) -->
+        {% if is_owner or is_admin %}
+            {% if applications %}
+            <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 p-6 flex flex-col gap-4">
+                <h3 class="font-headline-md text-headline-md text-primary font-bold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">group</span>
+                    Danh sách ứng viên nhận ca
+                </h3>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-outline-variant/30 text-on-surface-variant font-label-caps text-label-caps">
+                                <th class="py-3 px-4 font-semibold uppercase tracking-wider">Sinh viên</th>
+                                <th class="py-3 px-4 font-semibold uppercase tracking-wider">MSV</th>
+                                <th class="py-3 px-4 font-semibold uppercase tracking-wider">Uy tín</th>
+                                <th class="py-3 px-4 font-semibold uppercase tracking-wider">Trạng thái</th>
+                                <th class="py-3 px-4 font-semibold uppercase tracking-wider">Check-in</th>
+                                <th class="py-3 px-4 font-semibold uppercase tracking-wider">Check-out</th>
+                                <th class="py-3 px-4 font-semibold uppercase tracking-wider">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            {% for app in applications %}
+                                <tr class="border-b border-outline-variant/10 hover:bg-surface-container-low transition-colors">
+                                    <td class="py-3.5 px-4 font-semibold text-text-rich">
+                                        <a href="{% url 'employer_student_profile' app.student.id %}" class="hover:text-primary hover:underline transition-colors">
+                                            {{ app.student.full_name }}
+                                        </a>
+                                    </td>
+                                    <td class="py-3.5 px-4 text-on-surface-variant">{{ app.student.student_code }}</td>
+                                    <td class="py-3.5 px-4">
+                                        <span class="bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded text-xs font-bold flex items-center gap-0.5 w-fit">
+                                            <span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+                                            {{ app.student.trust_score|floatformat:1 }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-4">
+                                        {% if app.status == 'Pending' %}
+                                            <span class="bg-amber-500/15 text-amber-700 px-2.5 py-0.5 rounded-full text-xs font-medium">Đã nhận</span>
+                                        {% elif app.status == 'CheckIn' %}
+                                            <span class="bg-primary-fixed text-on-primary-fixed px-2.5 py-0.5 rounded-full text-xs font-bold">Check-in</span>
+                                        {% elif app.status == 'CheckOut' %}
+                                            <span class="bg-error-container text-on-error-container px-2.5 py-0.5 rounded-full text-xs font-bold animate-pulse">Check-out</span>
+                                        {% elif app.status == 'Completed' %}
+                                            <span class="bg-tertiary-fixed/20 text-tertiary px-2.5 py-0.5 rounded-full text-xs font-bold">Xong</span>
+                                        {% elif app.status == 'Failed' %}
+                                            <span class="bg-red-100 text-red-700 px-2.5 py-0.5 rounded-full text-xs font-bold">Không hoàn thành</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="py-3.5 px-4 text-on-surface-variant">{{ app.check_in_time|date:"H:i"|default:"-" }}</td>
+                                    <td class="py-3.5 px-4 text-on-surface-variant">{{ app.check_out_time|date:"H:i"|default:"-" }}</td>
+                                    <td class="py-3.5 px-4">
+                                        <div class="flex flex-col gap-1.5 sm:flex-row sm:items-center">
+                                            {% if app.status == 'CheckOut' or app.status == 'Pending' or app.status == 'CheckIn' %}
+                                                <a href="{% url 'rate' app.id %}" class="bg-primary text-on-primary px-3 py-1 rounded-lg text-xs hover:bg-primary-container transition-colors font-bold inline-block text-center whitespace-nowrap">
+                                                    Duyệt &amp; Đánh giá
+                                                </a>
+                                            {% endif %}
+                                            {% if app.status == 'Pending' or app.status == 'CheckIn' %}
+                                                <a href="{% url 'employer_cancel_application' app.id %}" onclick="return confirm('Bạn có chắc chắn muốn hủy đăng ký ca của sinh viên này? Thao tác này không thể hoàn tác.')" class="text-error hover:text-error/80 text-xs font-bold flex items-center gap-1 whitespace-nowrap">
+                                                    <span class="material-symbols-outlined text-[16px]">cancel</span> Hủy đăng ký
+                                                </a>
+                                            {% endif %}
+                                            {% if app.status == 'Completed' or app.status == 'Failed' %}
+                                                <span class="text-outline-variant">-</span>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <!-- Right Panel (Actions & Employer profile) -->
+    <div class="col-span-1 lg:col-span-4 flex flex-col gap-6">
+        <!-- Actions Panel (Student view only) -->
+        {% if not is_employer and not is_admin %}
+            <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 p-6 flex flex-col gap-4 text-center">
+                {% if application %}
+                    <div class="space-y-4">
+                        {% if application.status == 'Pending' %}
+                            <div class="bg-amber-500/10 text-amber-700 py-3 px-4 rounded-xl flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-[20px] animate-spin">hourglass_empty</span>
+                                <span class="text-sm font-bold">Chờ đến giờ check-in</span>
+                            </div>
+                            <a href="{% url 'check_in' application.id %}" class="w-full btn-gradient text-on-primary font-bold py-3.5 rounded-xl shadow-[0_4px_15px_rgba(0,49,86,0.15)] flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined">login</span>
+                                Check-in ngay
+                            </a>
+                        {% elif application.status == 'CheckIn' %}
+                            <div class="bg-primary/5 text-primary py-3 px-4 rounded-xl flex items-center justify-center gap-2 border border-primary/10">
+                                <span class="material-symbols-outlined text-[20px] animate-pulse">work</span>
+                                <span class="text-sm font-bold">Đang trong giờ làm việc</span>
+                            </div>
+                            <p class="text-xs text-on-surface-variant mt-2 font-semibold">Check-in vào lúc: {{ application.check_in_time|date:"H:i d/m" }}</p>
+                            <a href="{% url 'check_out' application.id %}" class="w-full bg-error text-on-error font-bold py-3.5 rounded-xl shadow-sm hover:opacity-95 transition-opacity flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined">logout</span>
+                                Check-out (Hoàn thành)
+                            </a>
+                        {% elif application.status == 'CheckOut' %}
+                            <div class="bg-surface-container-low text-on-surface-variant py-4 px-4 rounded-xl flex flex-col items-center justify-center gap-2 border border-outline-variant/30">
+                                <span class="material-symbols-outlined text-outline-variant text-[28px]">pending_actions</span>
+                                <span class="text-sm font-bold">Chờ doanh nghiệp phê duyệt</span>
+                                <p class="text-xs text-outline">Hồ sơ đã được gửi. Bạn sẽ nhận được thông báo khi chấm công được duyệt.</p>
+                            </div>
+                        {% elif application.status == 'Completed' %}
+                            <div class="bg-tertiary-fixed/20 text-tertiary py-3 px-4 rounded-xl flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                <span class="text-sm font-bold">Ca làm hoàn thành</span>
+                            </div>
+                            {% if not application.rating_from_student %}
+                                <a href="{% url 'rate' application.id %}" class="w-full btn-gradient text-on-primary font-bold py-3.5 rounded-xl flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined">star</span>
+                                    Đánh giá Doanh nghiệp
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% elif shift.is_available %}
+                    <div class="space-y-4">
+                        <div class="space-y-1">
+                            <h4 class="font-label-md text-label-md font-bold text-primary">Nhận ca làm việc này?</h4>
+                            <p class="text-xs text-on-surface-variant">Lịch ca làm trống khớp với khung giờ rảnh của bạn.</p>
+                        </div>
+                        <a href="{% url 'apply_shift' shift.id %}" class="w-full btn-gradient text-on-primary font-bold py-3.5 rounded-xl shadow-[0_4px_15px_rgba(0,49,86,0.15)] flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined">done_all</span>
+                            Nhận ca ngay
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="py-4 text-center">
+                        <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-outline-variant/30 text-on-surface-variant text-sm font-bold border border-outline-variant/40">
+                            <span class="material-symbols-outlined text-sm">lock</span>
+                            Ca đã đầy hoặc đóng
+                        </span>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <!-- Employer info card -->
+        <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 p-6 space-y-4">
+            <h3 class="font-headline-md text-headline-md text-primary font-bold flex items-center gap-1">
+                <span class="material-symbols-outlined text-primary">corporate_fare</span>
+                Thông tin doanh nghiệp
+            </h3>
+            <div class="space-y-3 text-sm">
+                <p class="font-bold text-text-rich flex items-center gap-1.5">
+                    {{ shift.employer.company_name }}
+                    {% if shift.employer.is_verified %}
+                        <span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;" title="Đã xác minh">verified</span>
+                    {% endif %}
+                </p>
+                <p class="text-on-surface-variant flex items-start gap-1">
+                    <span class="material-symbols-outlined text-xs text-outline mt-0.5">location_on</span>
+                    {{ shift.employer.address }}
+                </p>
+                <div class="pt-2">
+                    <span class="bg-amber-500/10 text-amber-600 px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-0.5 w-fit">
+                        <span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+                        Uy tín doanh nghiệp: {{ shift.employer.trust_score|floatformat:1 }}/10
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

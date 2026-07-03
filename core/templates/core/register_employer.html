@@ -1,0 +1,150 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Đăng ký Doanh nghiệp - CareerAI{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ===== DARK TECH THEME FOR EMPLOYER REGISTRATION ===== */
+    body, .bg-background {
+        background-color: #0a0816 !important;
+        background-image: none !important;
+        color: #c8c2d0 !important;
+        font-family: 'Hanken Grotesk', 'Inter', sans-serif !important;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.03) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+        box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    /* Dark Input fields overrides */
+    .form-control, .form-select, input[type="text"], input[type="email"], input[type="password"], textarea, select {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #e0dce6 !important;
+        border-radius: 0.75rem !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.875rem !important;
+        transition: all 0.2s ease !important;
+        width: 100% !important;
+    }
+    
+    .form-control:focus, .form-select:focus, input:focus, textarea:focus, select:focus {
+        border-color: #db2777 !important;
+        box-shadow: 0 0 0 2px rgba(219, 39, 119, 0.2) !important;
+        outline: none !important;
+    }
+
+    .form-control option, .form-select option, select option {
+        background-color: #13131f !important;
+        color: #e0dce6 !important;
+    }
+
+    label {
+        color: #a1a1aa !important; /* zinc-400 */
+        font-weight: 700 !important;
+        font-size: 0.75rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+    }
+    
+    .glass-navbar {
+        background: rgba(13, 13, 20, 0.8) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+{% endblock %}
+
+{% block background_glow %}
+    <!-- ==================== DARK TECH BACKGROUND ==================== -->
+    <div class="fixed inset-0 pointer-events-none -z-50 overflow-hidden" style="background: linear-gradient(180deg, #0a0816 0%, #120b24 50%, #0a0816 100%);">
+        <!-- Very subtle pink ambient glow -->
+        <div class="absolute top-[20%] left-[30%] w-[500px] h-[500px] bg-pink-600/[0.09] rounded-full blur-[150px]"></div>
+        <div class="absolute bottom-[30%] right-[20%] w-[400px] h-[400px] bg-purple-600/[0.07] rounded-full blur-[130px]"></div>
+
+        <!-- Subtle tech grid SVG -->
+        <svg class="absolute inset-0 w-full h-full opacity-35" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <pattern id="techGrid" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+                    <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#techGrid)" />
+            <!-- Glowing nodes -->
+            <circle cx="15%" cy="20%" r="1.5" fill="#db2777" opacity="0.6" class="animate-pulse" />
+            <circle cx="85%" cy="15%" r="1.5" fill="#06b6d4" opacity="0.5" class="animate-pulse" />
+            <circle cx="50%" cy="50%" r="1" fill="#db2777" opacity="0.4" />
+            <circle cx="70%" cy="70%" r="1.5" fill="#8b5cf6" opacity="0.5" class="animate-pulse" />
+            <path d="M 15% 20% L 50% 50% L 85% 15%" stroke="rgba(219,39,119,0.12)" stroke-width="0.5" fill="none" />
+            <path d="M 50% 50% L 70% 70%" stroke="rgba(139,92,246,0.1)" stroke-width="0.5" fill="none" />
+        </svg>
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col bg-transparent">
+    <!-- Header -->
+    <header class="w-full glass-navbar py-4 px-margin-desktop flex items-center justify-between">
+        <a href="{% url 'home' %}" class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-pink-600 to-purple-600 flex items-center justify-center text-white shadow-md shadow-pink-600/20">
+                <i class="fa-solid fa-bolt text-xs"></i>
+            </div>
+            <span class="font-bold text-lg text-white">CareerAI</span>
+        </a>
+        <a href="{% url 'account_login' %}" class="text-pink-400 hover:text-pink-300 font-semibold text-sm transition-colors flex items-center gap-1">
+            <i class="fa-solid fa-arrow-left text-xs"></i> Quay lại Đăng nhập
+        </a>
+    </header>
+
+    <main class="flex-1 w-full max-w-xl mx-auto px-margin-mobile py-16 flex flex-col justify-center gap-6">
+        <div>
+            <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-white m-0">Đăng Ký Doanh Nghiệp</h2>
+            <p class="text-zinc-400 mt-1">Gửi thông tin doanh nghiệp để được xác thực tài khoản tuyển dụng.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+            <div class="p-4 rounded-xl text-xs bg-white/5 text-zinc-300 border border-white/10 flex gap-2">
+                <span class="material-symbols-outlined text-[18px] text-pink-400">info</span>
+                <p>Sau khi gửi thông tin, hồ sơ của bạn sẽ chuyển sang trạng thái <strong>Chờ kiểm duyệt</strong>. Quản trị viên hệ thống sẽ kiểm duyệt giấy phép và kích hoạt tài khoản của bạn trong 24 giờ.</p>
+            </div>
+
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+
+                {% if not user.is_authenticated %}
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-primary">Email Đăng Nhập</label>
+                        <input type="email" name="email" class="form-control" placeholder="employer@company.com" required />
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-primary">Mật Khẩu</label>
+                        <input type="password" name="password" class="form-control" placeholder="••••••••" required />
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="space-y-1">
+                        <label for="{{ field.id_for_label }}" class="block text-xs font-bold text-primary">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <p class="text-xs text-error font-medium">{{ field.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="w-full btn-gradient text-white font-bold py-3.5 rounded-xl shadow-[0_4px_15px_rgba(219,39,119,0.25)] flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] transition-all">
+                    <span class="material-symbols-outlined text-[18px]">business</span>
+                    Gửi hồ sơ đăng ký doanh nghiệp
+                </button>
+            </form>
+        </div>
+    </main>
+</div>
+{% endblock %}

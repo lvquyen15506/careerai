@@ -1,0 +1,132 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+
+{% block title %}CareerAI - {% trans "Sign In" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ===== DARK TECH THEME FOR SOCIAL LOGIN ===== */
+    body, .bg-background {
+        background-color: #0a0816 !important;
+        background-image: none !important;
+        color: #c8c2d0 !important;
+        font-family: 'Hanken Grotesk', 'Inter', sans-serif !important;
+    }
+
+    .text-gradient {
+        background: linear-gradient(135deg, #db2777 0%, #a855f7 50%, #06b6d4 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.03) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+        box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .btn-gradient {
+        background: linear-gradient(135deg, #db2777 0%, #9333ea 100%);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-gradient:hover {
+        opacity: 0.95;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(219, 39, 119, 0.3);
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+{% endblock %}
+
+{% block background_glow %}
+    <!-- ==================== DARK TECH BACKGROUND ==================== -->
+    <div class="fixed inset-0 pointer-events-none -z-50 overflow-hidden" style="background: linear-gradient(180deg, #0a0816 0%, #120b24 50%, #0a0816 100%);">
+        <!-- Very subtle pink ambient glow -->
+        <div class="absolute top-[20%] left-[30%] w-[500px] h-[500px] bg-pink-600/[0.09] rounded-full blur-[150px]"></div>
+        <div class="absolute bottom-[30%] right-[20%] w-[400px] h-[400px] bg-purple-600/[0.07] rounded-full blur-[130px]"></div>
+
+        <!-- Subtle tech grid SVG -->
+        <svg class="absolute inset-0 w-full h-full opacity-35" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <pattern id="techGrid" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+                    <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#techGrid)" />
+            <!-- Glowing nodes -->
+            <circle cx="15%" cy="20%" r="1.5" fill="#db2777" opacity="0.6" class="animate-pulse" />
+            <circle cx="85%" cy="15%" r="1.5" fill="#06b6d4" opacity="0.5" class="animate-pulse" />
+            <circle cx="50%" cy="50%" r="1" fill="#db2777" opacity="0.4" />
+            <circle cx="70%" cy="70%" r="1.5" fill="#8b5cf6" opacity="0.5" class="animate-pulse" />
+            <path d="M 15% 20% L 50% 50% L 85% 15%" stroke="rgba(219,39,119,0.12)" stroke-width="0.5" fill="none" />
+            <path d="M 50% 50% L 70% 70%" stroke="rgba(139,92,246,0.1)" stroke-width="0.5" fill="none" />
+        </svg>
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen w-full flex items-center justify-center py-12 px-6 sm:px-16 relative bg-transparent" style="background-image: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.05) 0%, transparent 80%);">
+    
+    <!-- Outer glass card wrapper -->
+    <div class="glass-card rounded-3xl p-8 sm:p-10 w-full max-w-md border border-white/10 shadow-2xl relative overflow-hidden">
+        
+        <!-- Subtle ambient accent glows -->
+        <div class="absolute -top-24 -left-24 w-48 h-48 bg-pink-500/5 rounded-full blur-3xl -z-10 animate-pulse"></div>
+        <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-purple-500/5 rounded-full blur-3xl -z-10 animate-pulse" style="animation-delay: 2s;"></div>
+
+        <div class="space-y-6 text-center">
+            <!-- Icon/Brand Display -->
+            <div class="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-600 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-pink-600/20 mb-6">
+                {% if provider.id == 'google' %}
+                    <i class="fa-brands fa-google text-2xl"></i>
+                {% elif provider.id == 'microsoft' %}
+                    <i class="fa-brands fa-windows text-2xl text-white"></i>
+                {% else %}
+                    <i class="fa-solid fa-shield-halved text-2xl"></i>
+                {% endif %}
+            </div>
+
+            <!-- Page Title -->
+            <div class="space-y-2">
+                {% if process == "connect" %}
+                    <h2 class="text-2xl font-extrabold text-white tracking-tight">
+                        {% blocktrans with provider.name as provider %}Kết nối tài khoản {{ provider }}{% endblocktrans %}
+                    </h2>
+                {% else %}
+                    <h2 class="text-2xl font-extrabold text-white tracking-tight">
+                        {% blocktrans with provider.name as provider %}Đăng nhập qua {{ provider }}{% endblocktrans %}
+                    </h2>
+                {% endif %}
+                
+                <p class="text-sm text-zinc-400 font-medium px-4 leading-relaxed">
+                    {% if process == "connect" %}
+                        {% blocktrans with provider.name as provider %}Bạn sắp kết nối tài khoản bên thứ ba từ {{ provider }} vào hồ sơ CareerAI của mình.{% endblocktrans %}
+                    {% else %}
+                        {% blocktrans with provider.name as provider %}Bạn sắp đăng nhập vào hệ thống CareerAI bằng tài khoản {{ provider }}.{% endblocktrans %}
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- SSO Action Form -->
+            <form method="post" class="space-y-4 pt-4">
+                {% csrf_token %}
+                
+                <button type="submit" class="w-full btn-gradient text-white py-3.5 px-6 rounded-xl font-extrabold text-sm shadow-lg transition-all duration-300 flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99]">
+                    {% trans "Tiếp tục đăng nhập" %} <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+                
+                <a href="{% url 'account_login' %}" class="block w-full py-3.5 px-6 rounded-xl text-xs font-bold text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 transition-all text-center">
+                    {% trans "Quay lại trang đăng nhập" %}
+                </a>
+            </form>
+
+            <div class="text-center text-[10px] text-zinc-500 pt-6 border-t border-white/5">
+                © 2026 CareerAI Platform. Powered by ICTU Intel Engine.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,272 @@
+{% extends 'core/base_student.html' %}
+{% load static %}
+
+{% block title %}Quản lý Lịch rảnh - CareerAI{% endblock %}
+
+{% block student_content %}
+        
+        <!-- Messages -->
+        {% if messages %}
+            <div class="space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-xl text-sm font-medium {% if message.tags == 'success' %}bg-tertiary-fixed/20 text-on-tertiary-fixed-variant border border-tertiary/20{% else %}bg-error-container text-on-error-container border border-error/20{% endif %} flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">
+                            {% if message.tags == 'success' %}check_circle{% else %}error{% endif %}
+                        </span>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div>
+            <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary m-0">Quản Lý Lịch Rảnh & TKB</h2>
+            <p class="text-on-surface-variant mt-1">Đồng bộ thời khóa biểu tự động hoặc nhập thủ công các khung giờ rảnh để thuật toán AI khớp nối lịch làm phù hợp.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Form Card (Left Side) -->
+            <div class="col-span-1 lg:col-span-7 bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 p-6 flex flex-col gap-6">
+                <!-- Custom Tabs Navigation -->
+                <div class="border-b border-outline-variant/30 pb-1 flex gap-6">
+                    <button id="tab-btn-sync" class="pb-3 text-sm font-bold border-b-2 border-primary text-primary transition-all flex items-center gap-2 outline-none">
+                        <span class="material-symbols-outlined text-[18px]">sync</span>
+                        Đồng bộ tự động
+                    </button>
+                    <button id="tab-btn-manual" class="pb-3 text-sm font-semibold border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-all flex items-center gap-2 outline-none">
+                        <span class="material-symbols-outlined text-[18px]">edit_note</span>
+                        Nhập thủ công
+                    </button>
+                </div>
+
+                <!-- Tab Content 1: Auto Sync -->
+                <div id="tab-pane-sync" class="space-y-5">
+                    <div class="p-4 rounded-xl text-xs bg-primary/5 text-on-primary-fixed-variant border border-primary/10 space-y-1">
+                        <p class="font-bold flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">info</span>
+                            Lấy thông tin tự động
+                        </p>
+                        <p>CareerAI sẽ kết nối tự động với Cổng Đăng ký tín chỉ của trường bạn để lấy Họ tên, lớp, ngành và Thời khóa biểu hiện tại. Lịch học sẽ tự động chuyển thành lịch rảnh.</p>
+                    </div>
+
+                    <form method="post" class="space-y-4">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="auto_sync" />
+
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-primary">Mã sinh viên</label>
+                            <input type="text" class="block w-full px-3 py-2.5 bg-surface-container-low border border-outline-variant/30 rounded-xl text-sm text-outline pointer-events-none" value="{{ user.student_profile.student_code }}" disabled />
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-primary">Trường đào tạo</label>
+                            <div class="relative">
+                                {{ sync_form.school }}
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-primary">Mật khẩu cổng trường/ĐKTC</label>
+                            {{ sync_form.portal_password }}
+                            <p class="text-[11px] text-outline flex items-center gap-1 mt-1">
+                                <span class="material-symbols-outlined text-xs">shield_lock</span>
+                                Cam kết mật khẩu chỉ dùng đồng bộ 1 lần, tuyệt đối không lưu giữ.
+                            </p>
+                        </div>
+
+                        <button type="submit" class="w-full btn-gradient text-on-primary font-bold py-3 rounded-xl shadow-[0_4px_15px_rgba(0,49,86,0.15)] flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">sync</span>
+                            Bắt đầu đồng bộ thông tin
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Tab Content 2: Manual Edit -->
+                <div id="tab-pane-manual" class="space-y-5 hidden">
+                    <form method="post" action="{% url 'add_time_block' %}" class="space-y-4">
+                        {% csrf_token %}
+                        <!-- Add free time blocks manually -->
+                        <h4 class="font-label-md text-label-md font-bold text-primary flex items-center gap-1">
+                            <span class="material-symbols-outlined text-secondary">add_circle</span>
+                            Thêm khung giờ rảnh mới
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="space-y-1">
+                                <label class="block text-[11px] font-bold text-primary">Thứ</label>
+                                {{ time_block_form.weekday }}
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[11px] font-bold text-primary">Từ giờ (Bắt đầu)</label>
+                                {{ time_block_form.start_time }}
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[11px] font-bold text-primary">Đến giờ (Kết thúc)</label>
+                                {{ time_block_form.end_time }}
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full btn-gradient text-on-primary font-bold py-3 rounded-xl shadow-[0_4px_15px_rgba(0,49,86,0.15)] mt-4">
+                            Thêm khung giờ rảnh
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- List TimeBlocks (Right Side) -->
+            <div class="col-span-1 lg:col-span-5 flex flex-col gap-6">
+                <!-- Active list -->
+                <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 p-6 flex flex-col gap-4">
+                    <div class="flex justify-between items-center pb-2 border-b border-outline-variant/30">
+                        <h3 class="font-headline-md text-headline-md text-primary font-bold flex items-center gap-1">
+                            <span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+                            Lịch rảnh hiện tại
+                        </h3>
+                        <span class="bg-primary/10 text-primary px-2.5 py-0.5 rounded-full text-xs font-bold">{{ existing_blocks|length }}</span>
+                    </div>
+
+                    <div class="overflow-y-auto max-h-[350px] divide-y divide-outline-variant/20 pr-1">
+                        {% for block in existing_blocks %}
+                            <div class="py-2.5 flex justify-between items-center group/item hover:bg-surface-container-low/30 rounded-xl px-2 -mx-2 transition-all">
+                                <div onclick="openEditTimeBlockModal('{{ block.id }}', '{{ block.weekday }}', '{{ block.start_time|time:"H:i" }}', '{{ block.end_time|time:"H:i" }}')" class="flex-1 cursor-pointer flex flex-col">
+                                    <p class="font-semibold text-text-rich text-sm flex items-center gap-1.5 group-hover/item:text-primary transition-colors">
+                                        {{ block.get_weekday_display }} {% if block.calendar_date %}({{ block.calendar_date }}){% endif %}
+                                        <span class="material-symbols-outlined text-[14px] text-[#868e96] opacity-0 group-hover/item:opacity-100 transition-opacity">edit</span>
+                                    </p>
+                                    <p class="text-xs text-on-surface-variant flex items-center gap-1 mt-0.5">
+                                        <span class="material-symbols-outlined text-xs">schedule</span>
+                                        {{ block.start_time|time:"H:i" }} - {{ block.end_time|time:"H:i" }}
+                                    </p>
+                                </div>
+                                <a href="{% url 'delete_time_block' block.id %}" onclick="return confirm('Xóa khung giờ này?')" class="p-1.5 rounded-lg border border-outline-variant/30 text-error hover:bg-error-container hover:text-on-error-container transition-colors shrink-0" title="Xóa">
+                                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                                </a>
+                            </div>
+                        {% empty %}
+                            <div class="py-8 text-center text-on-surface-variant flex flex-col items-center gap-2">
+                                <span class="material-symbols-outlined text-3xl text-outline-variant">calendar_today</span>
+                                <div>
+                                    <p class="font-bold text-xs">Chưa có lịch rảnh</p>
+                                    <p class="text-[11px] text-outline">Hãy đồng bộ hoặc thêm thủ công lịch rảnh để nhận đề xuất.</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Guidance Tips Card -->
+                <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 p-6 space-y-4">
+                    <h4 class="font-label-md text-label-md font-bold text-primary flex items-center gap-1">
+                        <span class="material-symbols-outlined text-amber-500">lightbulb</span>
+                        Mẹo nhỏ cho sinh viên
+                    </h4>
+                    <ul class="space-y-2 text-xs text-on-surface-variant list-disc pl-4 leading-relaxed">
+                        <li>Đồng bộ lại lịch học mỗi khi bạn thay đổi thời khóa biểu.</li>
+                        <li>Thêm nhiều khung giờ rảnh khác nhau sẽ giúp hệ thống đề xuất nhiều ca làm việc đa dạng hơn.</li>
+                        <li>Đảm bảo check-in/check-out ca đúng giờ để giữ điểm uy tín tối đa.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+<!-- Edit TimeBlock Modal -->
+<div id="editTimeBlockModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div class="bg-surface-container-lowest rounded-2xl p-6 w-full max-w-md border border-outline-variant/30 shadow-xl relative animate-fade-in mx-4">
+        <div class="flex justify-between items-center pb-3 border-b border-outline-variant/20 mb-4">
+            <h3 class="font-headline-md text-headline-md text-primary font-bold flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">edit_calendar</span>
+                Chỉnh Sửa Khung Giờ Rảnh
+            </h3>
+            <button onclick="closeEditTimeBlockModal()" class="text-[#868e96] hover:text-[#212529] transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        
+        <form method="post" action="{% url 'add_time_block' %}" class="space-y-4 text-left">
+            {% csrf_token %}
+            <input type="hidden" name="block_id" id="edit-block-id" value="" />
+
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-primary">Thứ</label>
+                <select name="weekday" id="edit-weekday" class="form-select" required>
+                    <option value="0">Thứ Hai</option>
+                    <option value="1">Thứ Ba</option>
+                    <option value="2">Thứ Tư</option>
+                    <option value="3">Thứ Năm</option>
+                    <option value="4">Thứ Sáu</option>
+                    <option value="5">Thứ Bảy</option>
+                    <option value="6">Chủ Nhật</option>
+                </select>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-primary">Giờ bắt đầu</label>
+                    <input type="time" name="start_time" id="edit-start-time" class="form-control" required />
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-primary">Giờ kết thúc</label>
+                    <input type="time" name="end_time" id="edit-end-time" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="flex gap-3 justify-end pt-4 border-t border-outline-variant/20 mt-6">
+                <button type="button" onclick="closeEditTimeBlockModal()" class="px-5 py-2.5 rounded-xl border border-outline-variant/30 text-xs font-semibold hover:bg-surface transition-colors">
+                    Hủy
+                </button>
+                <button type="submit" class="px-5 py-2.5 btn-gradient text-on-primary rounded-xl font-semibold text-xs shadow-sm hover:opacity-90 transition-opacity">
+                    Cập nhật
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function openEditTimeBlockModal(id, weekday, start, end) {
+        document.getElementById('edit-block-id').value = id;
+        document.getElementById('edit-weekday').value = weekday;
+        document.getElementById('edit-start-time').value = start;
+        document.getElementById('edit-end-time').value = end;
+        document.getElementById('editTimeBlockModal').classList.remove('hidden');
+    }
+
+    function closeEditTimeBlockModal() {
+        document.getElementById('editTimeBlockModal').classList.add('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabBtnSync = document.getElementById('tab-btn-sync');
+        const tabBtnManual = document.getElementById('tab-btn-manual');
+        const tabPaneSync = document.getElementById('tab-pane-sync');
+        const tabPaneManual = document.getElementById('tab-pane-manual');
+
+        if (tabBtnSync && tabBtnManual) {
+            tabBtnSync.addEventListener('click', function() {
+                // Style buttons
+                tabBtnSync.classList.add('border-primary', 'text-primary');
+                tabBtnSync.classList.remove('border-transparent', 'text-on-surface-variant');
+                tabBtnManual.classList.add('border-transparent', 'text-on-surface-variant');
+                tabBtnManual.classList.remove('border-primary', 'text-primary');
+
+                // Toggle tabs
+                tabPaneSync.classList.remove('hidden');
+                tabPaneManual.classList.add('hidden');
+            });
+
+            tabBtnManual.addEventListener('click', function() {
+                // Style buttons
+                tabBtnManual.classList.add('border-primary', 'text-primary');
+                tabBtnManual.classList.remove('border-transparent', 'text-on-surface-variant');
+                tabBtnSync.classList.add('border-transparent', 'text-on-surface-variant');
+                tabBtnSync.classList.remove('border-primary', 'text-primary');
+
+                // Toggle tabs
+                tabPaneManual.classList.remove('hidden');
+                tabPaneSync.classList.add('hidden');
+            });
+        }
+    });
+</script>
+{% endblock %}

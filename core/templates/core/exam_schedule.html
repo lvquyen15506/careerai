@@ -1,0 +1,75 @@
+{% extends 'core/base_student.html' %}
+{% load static %}
+
+{% block title %}Lịch thi - CareerAI{% endblock %}
+
+{% block student_content %}
+<div class="flex flex-col gap-6">
+    <!-- Header Card -->
+    <div class="bg-white rounded-2xl p-6 border border-[#e9ecef] shadow-sm flex flex-col gap-2">
+        <h2 class="font-headline-md text-headline-md text-primary m-0">Lịch Thi Học Phần</h2>
+        <p class="text-xs text-[#868e96] mt-1">Danh sách các ca thi và lịch thi học kỳ của bạn được đồng bộ tự động</p>
+    </div>
+
+    <!-- Exam Table / Grid -->
+    <div class="bg-white rounded-2xl border border-[#e9ecef] shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-[#e9ecef] bg-[#f8f9fa] text-[#495057] font-label-caps text-label-caps">
+                        <th class="py-4 px-6 font-semibold uppercase tracking-wider text-xs">Môn thi</th>
+                        <th class="py-4 px-6 font-semibold uppercase tracking-wider text-xs">Ngày thi</th>
+                        <th class="py-4 px-6 font-semibold uppercase tracking-wider text-xs">Giờ thi</th>
+                        <th class="py-4 px-6 font-semibold uppercase tracking-wider text-xs">Phòng thi</th>
+                        <th class="py-4 px-6 font-semibold uppercase tracking-wider text-xs">Hình thức</th>
+                        <th class="py-4 px-6 font-semibold uppercase tracking-wider text-xs">Số báo danh</th>
+                        <th class="py-4 px-6 font-semibold uppercase tracking-wider text-xs">Ghi chú</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm divide-y divide-[#e9ecef]">
+                    {% for exam in exams %}
+                        <tr class="hover:bg-[#f8f9fa] transition-colors">
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-[#212529]">{{ exam.course_name }}</p>
+                                <p class="text-[10px] text-[#868e96] font-semibold mt-0.5">{{ exam.course_code }}</p>
+                            </td>
+                            <td class="py-4 px-6 font-semibold text-[#495057]">
+                                {{ exam.exam_date|date:"d/m/Y" }}
+                            </td>
+                            <td class="py-4 px-6 font-semibold text-[#495057]">
+                                {{ exam.exam_time|time:"H:i" }}
+                            </td>
+                            <td class="py-4 px-6">
+                                <span class="bg-[#5f3dc4]/10 text-[#5f3dc4] px-2.5 py-1 rounded-lg text-xs font-bold whitespace-nowrap">
+                                    {{ exam.room }}
+                                </span>
+                            </td>
+                            <td class="py-4 px-6 text-[#495057] font-medium">
+                                {{ exam.exam_format }}
+                            </td>
+                            <td class="py-4 px-6 font-bold text-secondary">
+                                {{ exam.sbd|default:"-" }}
+                            </td>
+                            <td class="py-4 px-6 text-xs text-[#868e96] max-w-xs leading-relaxed">
+                                {{ exam.notes|default:"-" }}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="py-16 text-center">
+                                <div class="flex flex-col items-center gap-3">
+                                    <span class="material-symbols-outlined text-4xl text-[#868e96]">event_busy</span>
+                                    <div>
+                                        <p class="font-bold text-[#212529]">Không có lịch thi sắp tới</p>
+                                        <p class="text-xs text-[#868e96] mt-1">Lịch thi của bạn sẽ được hiển thị khi được đồng bộ từ cổng ĐKTC.</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

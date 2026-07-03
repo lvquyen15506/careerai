@@ -1,0 +1,309 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    @media (min-width: 768px) {
+        #sidebar {
+            transition: width 0.2s ease-in-out, padding 0.2s ease-in-out;
+        }
+        #sidebar.collapsed {
+            width: 4.75rem !important; /* ~76px */
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+        }
+        #sidebar.collapsed .sidebar-text,
+        #sidebar.collapsed .sidebar-header-title,
+        #sidebar.collapsed .sidebar-chevron,
+        #sidebar.collapsed .sidebar-footer-text {
+            display: none !important;
+        }
+        #sidebar.collapsed .logo-container {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 0.75rem !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+        #sidebar.collapsed nav a, 
+        #sidebar.collapsed nav button {
+            justify-content: center !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            height: 2.75rem;
+        }
+        #sidebar.collapsed .sidebar-item-content {
+            justify-content: center !important;
+            gap: 0 !important;
+            width: 100% !important;
+        }
+        #sidebar.collapsed .profile-footer-container {
+            justify-content: center !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            gap: 0 !important;
+        }
+        #sidebar.collapsed #profile-dropdown {
+            width: 11rem !important;
+            right: auto !important;
+            left: 0.5rem !important;
+        }
+    }
+    .sidebar-link.active {
+        background-color: #f1f3f5 !important;
+        color: #212529 !important;
+        font-weight: 700 !important;
+    }
+    .sidebar-link.active .material-symbols-outlined {
+        color: #db2777 !important;
+    }
+</style>
+<div class="flex flex-col md:flex-row h-screen bg-background relative overflow-hidden">
+    <!-- Backdrop Overlay for Mobile Drawer -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 hidden transition-opacity duration-300 opacity-0"></div>
+
+    <!-- TopNavBar (Mobile Only) -->
+    <nav class="md:hidden glass-nav sticky top-0 border-b border-on-surface/10 shadow-sm z-40 flex justify-between items-center w-full px-4 h-16 bg-white">
+        <a href="{% url 'employer_dashboard' %}" class="flex items-center gap-2 hover:opacity-85 transition-opacity">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white shadow-sm shrink-0">
+                <span class="material-symbols-outlined text-[18px]">corporate_fare</span>
+            </div>
+            <div class="font-display-lg-mobile text-lg font-bold text-primary">CareerAI DN</div>
+        </a>
+        <button id="mobile-menu-toggle" class="text-primary p-2 hover:bg-surface-container-high rounded-lg transition-colors flex items-center justify-center">
+            <span class="material-symbols-outlined text-[24px]">menu</span>
+        </button>
+    </nav>
+
+    <!-- SideNavBar (Desktop & Mobile Drawer) -->
+    <aside id="sidebar" class="bg-white border-r border-[#e9ecef] w-64 flex-col p-4 gap-2 z-50 fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 md:translate-x-0 md:sticky md:top-0 md:h-screen md:flex hidden shadow-xl md:shadow-none">
+        <script>
+            if (localStorage.getItem('sidebar-collapsed') === 'true') {
+                document.getElementById('sidebar').classList.add('collapsed');
+            }
+        </script>
+        <!-- Logo and Toggle Button Header -->
+        <div class="logo-container flex items-center justify-between mb-6 px-2 mt-2">
+            <a href="{% url 'employer_dashboard' %}" class="flex items-center gap-3 hover:opacity-85 transition-opacity">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white shadow-sm shrink-0">
+                    <span class="material-symbols-outlined text-[22px]">corporate_fare</span>
+                </div>
+                <div class="sidebar-header-title">
+                    <h1 class="text-sm font-bold text-[#212529] leading-tight">CareerAI</h1>
+                    <p class="text-[10px] text-[#868e96] font-semibold tracking-wider uppercase">Employer Suite</p>
+                </div>
+            </a>
+            <button id="sidebar-close-btn" class="w-8 h-8 border border-[#e9ecef] rounded-lg flex items-center justify-center text-[#868e96] hover:bg-[#f1f3f5] transition-colors md:hidden shrink-0">
+                <span class="material-symbols-outlined text-[16px]">close</span>
+            </button>
+            <button id="sidebar-collapse-toggle" class="hidden md:flex w-8 h-8 border border-[#e9ecef] rounded-lg items-center justify-center text-[#868e96] hover:bg-[#f1f3f5] transition-colors shrink-0" title="Thu gọn Sidebar">
+                <span class="material-symbols-outlined text-[18px]">menu</span>
+            </button>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="flex-1 flex flex-col gap-1 font-label-md text-label-md">
+            {% if is_employer_dashboard %}
+                <button onclick="showTab('tab-employer-dashboard')" data-tab-target="tab-employer-dashboard" class="sidebar-link w-full text-[#495057] hover:bg-[#f8f9fa] hover:text-[#212529] rounded-lg flex items-center justify-between px-3 py-2.5 transition-all duration-200 text-left">
+                    <div class="sidebar-item-content flex items-center gap-3">
+                        <span class="material-symbols-outlined text-[20px] shrink-0">dashboard</span>
+                        <span class="sidebar-text text-sm">Dashboard</span>
+                    </div>
+                    <span class="sidebar-chevron material-symbols-outlined text-[#868e96] text-[16px]">chevron_right</span>
+                </button>
+                <button onclick="showTab('tab-employer-workers')" data-tab-target="tab-employer-workers" class="sidebar-link w-full text-[#495057] hover:bg-[#f8f9fa] hover:text-[#212529] rounded-lg flex items-center justify-between px-3 py-2.5 transition-all duration-200 text-left">
+                    <div class="sidebar-item-content flex items-center gap-3">
+                        <span class="material-symbols-outlined text-[20px] shrink-0">badge</span>
+                        <span class="sidebar-text text-sm">Quản lý nhân công</span>
+                    </div>
+                    <span class="sidebar-chevron material-symbols-outlined text-[#868e96] text-[16px]">chevron_right</span>
+                </button>
+            {% else %}
+                <a href="{% url 'employer_dashboard' %}?tab=tab-employer-dashboard" data-tab-target="tab-employer-dashboard" class="sidebar-link w-full text-[#495057] hover:bg-[#f8f9fa] hover:text-[#212529] rounded-lg flex items-center justify-between px-3 py-2.5 transition-all duration-200 text-left {% if active_tab == 'tab-employer-dashboard' %}active{% endif %}">
+                    <div class="sidebar-item-content flex items-center gap-3">
+                        <span class="material-symbols-outlined text-[20px] shrink-0">dashboard</span>
+                        <span class="sidebar-text text-sm">Dashboard</span>
+                    </div>
+                    <span class="sidebar-chevron material-symbols-outlined text-[#868e96] text-[16px]">chevron_right</span>
+                </a>
+                <a href="{% url 'employer_dashboard' %}?tab=tab-employer-workers" data-tab-target="tab-employer-workers" class="sidebar-link w-full text-[#495057] hover:bg-[#f8f9fa] hover:text-[#212529] rounded-lg flex items-center justify-between px-3 py-2.5 transition-all duration-200 text-left {% if active_tab == 'tab-employer-workers' %}active{% endif %}">
+                    <div class="sidebar-item-content flex items-center gap-3">
+                        <span class="material-symbols-outlined text-[20px] shrink-0">badge</span>
+                        <span class="sidebar-text text-sm">Quản lý nhân công</span>
+                    </div>
+                    <span class="sidebar-chevron material-symbols-outlined text-[#868e96] text-[16px]">chevron_right</span>
+                </a>
+            {% endif %}
+
+
+            <a id="nav-export-csv" class="sidebar-link w-full text-[#495057] hover:bg-[#f8f9fa] hover:text-[#212529] rounded-lg flex items-center justify-between px-3 py-2.5 transition-all duration-200 text-left" href="{% url 'employer_export_csv' %}">
+                <div class="sidebar-item-content flex items-center gap-3">
+                    <span class="material-symbols-outlined text-[20px] shrink-0">download</span>
+                    <span class="sidebar-text text-sm">Xuất báo cáo CSV</span>
+                </div>
+                <span class="sidebar-chevron material-symbols-outlined text-[#868e96] text-[16px]">download</span>
+            </a>
+        </nav>
+
+        <!-- Profile / Settings Footer -->
+        <div class="relative mt-auto">
+            <!-- Profile Dropdown Menu -->
+            <div id="profile-dropdown" class="absolute bottom-16 left-0 right-0 bg-white border border-[#e9ecef] rounded-xl shadow-lg p-1.5 hidden z-50 flex flex-col gap-1">
+                <a href="/accounts/logout/" class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-red-600 hover:bg-red-50 rounded-lg transition-colors whitespace-nowrap">
+                    <span class="material-symbols-outlined text-[16px]">logout</span>
+                    Đăng xuất
+                </a>
+            </div>
+
+            <div id="profile-footer-btn" class="profile-footer-container pt-4 border-t border-[#e9ecef] flex items-center gap-3 cursor-pointer hover:bg-[#f8f9fa] rounded-xl p-2 -mx-2 transition-colors">
+                <div class="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden">
+                    {{ user.employer_profile.company_name|slice:":1"|upper }}
+                </div>
+                <div class="sidebar-footer-text flex-1 min-w-0">
+                    <p class="text-xs font-semibold text-[#212529] truncate">{{ user.employer_profile.company_name }}</p>
+                    <p class="text-[10px] text-[#868e96] truncate">Doanh nghiệp</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 h-screen flex flex-col overflow-y-auto">
+        <!-- Top Header for Desktop -->
+        <header class="hidden md:flex justify-between items-center px-6 py-4 bg-white border-b border-[#e9ecef] shrink-0">
+            <div class="flex items-center gap-3">
+                <span class="text-sm font-semibold text-[#212529]">Hệ sinh thái CareerAI</span>
+                <span class="text-[#868e96] text-xs">•</span>
+                <span class="text-xs text-[#868e96]">Portal Recruiter Suite</span>
+            </div>
+            <div class="flex items-center gap-4 text-left">
+                <div class="text-right">
+                    <p class="text-xs font-bold text-[#212529]">{{ user.employer_profile.company_name }}</p>
+                    <p class="text-[9px] text-[#868e96] tracking-wider font-semibold uppercase">Doanh nghiệp tuyển dụng</p>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-[#f1f3f5] flex items-center justify-center text-primary font-bold text-xs border border-[#e9ecef] shrink-0">
+                    {{ user.employer_profile.company_name|slice:":1"|upper }}
+                </div>
+            </div>
+        </header>
+        
+        <!-- Render page content inside here -->
+        <div class="flex-1 p-4 md:p-6 flex flex-col gap-6 max-w-container-max mx-auto w-full">
+            {% block employer_content %}{% endblock %}
+        </div>
+    </main>
+</div>
+
+<script>
+    // Responsive Mobile Sidebar Drawer Toggle and Backdrop Overlay
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggle = document.getElementById('mobile-menu-toggle');
+        const closeBtn = document.getElementById('sidebar-close-btn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        
+        function openSidebar() {
+            sidebar.classList.remove('hidden');
+            setTimeout(() => {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => {
+                    overlay.classList.add('opacity-100');
+                }, 10);
+            }, 10);
+        }
+
+        function closeSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.remove('opacity-100');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => {
+                sidebar.classList.add('hidden');
+                overlay.classList.add('hidden');
+            }, 300);
+        }
+
+        if (toggle && sidebar && overlay) {
+            toggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (sidebar.classList.contains('hidden')) {
+                    openSidebar();
+                } else {
+                    closeSidebar();
+                }
+            });
+            
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    closeSidebar();
+                });
+            }
+            
+            overlay.addEventListener('click', closeSidebar);
+        }
+
+        // Desktop toggle collapse sidebar
+        const sidebarCollapseToggle = document.getElementById('sidebar-collapse-toggle');
+
+        if (sidebarCollapseToggle && sidebar) {
+            sidebarCollapseToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                sidebar.classList.toggle('collapsed');
+                // Save state to localStorage
+                const collapsedState = sidebar.classList.contains('collapsed');
+                localStorage.setItem('sidebar-collapsed', collapsedState);
+            });
+        }
+
+        // Profile footer dropdown toggle
+        const profileFooterBtn = document.getElementById('profile-footer-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+
+        if (profileFooterBtn && profileDropdown) {
+            profileFooterBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!profileDropdown.classList.contains('hidden') && !profileDropdown.contains(e.target) && e.target !== profileFooterBtn) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+        }
+
+        // Set Active Menu CSS class based on active URL
+        const path = window.location.pathname;
+        const navDashboard = document.getElementById('nav-dashboard');
+        const navWorkers = document.getElementById('nav-workers');
+        const navExportCsv = document.getElementById('nav-export-csv');
+
+        // Reset all to inactive look first
+        [navDashboard, navWorkers, navExportCsv].forEach(el => {
+            if (el) {
+                el.className = "text-[#495057] hover:bg-[#f8f9fa] hover:text-[#212529] rounded-lg flex items-center justify-between px-3 py-2.5 transition-all duration-200";
+                const icon = el.querySelector('.material-symbols-outlined');
+                if (icon) icon.className = "material-symbols-outlined text-[#868e96] text-[20px]";
+            }
+        });
+
+        // Set active menu item style matching mockup
+        let activeEl = null;
+        if (path.includes('/employer/dashboard/')) {
+            activeEl = navDashboard;
+        } else if (path.includes('/employer/workers/')) {
+            activeEl = navWorkers;
+        } else if (path.includes('/employer/export-csv/')) {
+            activeEl = navExportCsv;
+        }
+
+        if (activeEl) {
+            activeEl.className = "bg-[#f1f3f5] text-[#212529] font-bold rounded-lg flex items-center justify-between px-3 py-2.5 transition-all duration-200";
+            const icon = activeEl.querySelector('.material-symbols-outlined');
+            if (icon) icon.className = "material-symbols-outlined text-primary text-[20px]";
+        }
+    });
+</script>
+{% endblock %}

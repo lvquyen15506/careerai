@@ -1,0 +1,8 @@
+"""
+ASGI config cho Student Job Platform project.
+"""
+import os
+from django.core.asgi import get_asgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'student_job_platform.settings')
+application = get_asgi_application()

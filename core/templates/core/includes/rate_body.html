@@ -1,0 +1,61 @@
+<div class="bg-surface-container-lowest rounded-2xl shadow-md border border-outline-variant/30 p-8 text-center space-y-6 max-w-md mx-auto w-full">
+    <div class="w-16 h-16 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mx-auto">
+        <span class="material-symbols-outlined text-[36px]" style="font-variation-settings: 'FILL' 1;">star</span>
+    </div>
+
+    <div class="space-y-2">
+        <h3 class="font-headline-md text-headline-md text-primary font-bold">Đánh Giá Hiệu Suất</h3>
+        <p class="text-xs text-outline uppercase tracking-wider font-bold">Ca: {{ application.shift.title }}</p>
+        <p class="text-sm text-on-surface-variant pt-2">
+            {% if user.employer_profile %}
+                Đánh giá và xác nhận hoàn thành cho sinh viên <strong class="text-primary">{{ application.student.full_name }}</strong>
+            {% else %}
+                Đánh giá doanh nghiệp liên kết <strong class="text-primary">{{ application.shift.employer.company_name }}</strong>
+            {% endif %}
+        </p>
+    </div>
+
+    <form method="post" class="space-y-6 pt-4">
+        {% csrf_token %}
+
+        <div class="space-y-4">
+            <label class="block text-xs font-bold text-primary uppercase tracking-wider">Chọn số sao đánh giá (1-5)</label>
+            
+            <!-- Star selector -->
+            <div class="flex justify-center gap-2" id="star-container">
+                {% for i in "12345" %}
+                    <button type="button" class="star-btn outline-none focus:outline-none transition-all duration-200" 
+                            data-value="{{ forloop.counter }}"
+                            onmouseover="highlightStars({{ forloop.counter }})"
+                            onmouseout="resetStars()"
+                            onclick="selectStar({{ forloop.counter }})">
+                        <span class="material-symbols-outlined text-[42px] text-outline-variant select-none transition-all duration-200" style="font-variation-settings: 'FILL' 0;">
+                            star
+                        </span>
+                    </button>
+                {% endfor %}
+            </div>
+
+            <input type="hidden" name="rating" id="rating-input" value="" />
+            {% if form.rating.errors %}
+                <p class="text-xs text-error font-medium">{{ form.rating.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        {% if user.employer_profile %}
+            <div class="space-y-2 text-left pt-2 border-t border-outline-variant/10">
+                <label class="block text-xs font-bold text-primary uppercase tracking-wider">Xác nhận kết quả ca làm</label>
+                <select name="status" class="form-select text-sm rounded-xl">
+                    <option value="Completed" selected>Hoàn thành ca</option>
+                    <option value="Failed">Không hoàn thành</option>
+                </select>
+            </div>
+        {% endif %}
+
+        <div class="pt-4 border-t border-outline-variant/30 flex gap-3">
+            <button type="submit" id="submit-btn" class="w-full btn-gradient text-on-primary font-bold py-3.5 rounded-xl shadow-[0_4px_15px_rgba(0,49,86,0.15)] disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none transition-all" disabled>
+                Gửi đánh giá &amp; Duyệt
+            </button>
+        </div>
+    </form>
+</div>

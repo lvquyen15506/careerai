@@ -1,0 +1,704 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}CareerAI - Nền tảng AI kết nối và quản trị việc làm sinh viên{% endblock %}
+
+{% block extra_css %}
+    /* ===== DARK TECH THEME ===== */
+    body, .bg-background {
+        background-color: #0a0816 !important;
+        background-image: none !important;
+        color: #c8c2d0 !important;
+        font-family: 'Hanken Grotesk', 'Inter', sans-serif !important;
+    }
+    
+    .text-gradient {
+        background: linear-gradient(135deg, #db2777 0%, #a855f7 50%, #06b6d4 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    /* --- Dark Glassmorphism Navbar --- */
+    .glass-navbar {
+        background: rgba(13, 13, 20, 0.85) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    }
+    
+    .nav-link {
+        position: relative;
+        color: #a0a0b0;
+        transition: color 0.3s ease;
+    }
+    
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        transform: scaleX(0);
+        height: 2px;
+        bottom: -6px;
+        left: 0;
+        background: linear-gradient(90deg, #db2777, #a855f7);
+        transform-origin: bottom right;
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .nav-link:hover {
+        color: #e0e0f0 !important;
+    }
+    
+    .nav-link:hover::after {
+        transform: scaleX(1);
+        transform-origin: bottom left;
+    }
+    
+    /* --- Dark Glass Cards --- */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.03) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+        box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.4) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    
+    .glass-card:hover {
+        border-color: rgba(219, 39, 119, 0.25) !important;
+        transform: translateY(-4px) !important;
+        box-shadow: 0 15px 35px -10px rgba(219, 39, 119, 0.12) !important;
+    }
+
+    .form-input-dark {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #e0dce6 !important;
+        transition: all 0.2s ease;
+    }
+    
+    .form-input-dark:focus {
+        border-color: #db2777 !important;
+        box-shadow: 0 0 0 2px rgba(219, 39, 119, 0.2) !important;
+    }
+
+    .form-input-dark::placeholder {
+        color: #6b6580 !important;
+    }
+
+    /* --- Hero Slider --- */
+    .hero-slider {
+        position: relative;
+        width: 100%;
+        height: 85vh;
+        min-height: 500px;
+        max-height: 800px;
+        overflow: hidden;
+        background: #0a0816;
+    }
+    
+    .hero-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 1.2s ease-in-out;
+        z-index: 1;
+    }
+    
+    .hero-slide.active {
+        opacity: 1;
+    }
+    
+    .hero-slide img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+    
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(13,13,20,0.4) 0%, rgba(13,13,20,0.6) 40%, rgba(13,13,20,0.92) 100%);
+        z-index: 2;
+    }
+    
+    .slider-dots {
+        display: flex;
+        gap: 10px;
+        z-index: 10;
+    }
+    
+    .slider-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.25);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .slider-dot.active {
+        background: #db2777;
+        width: 32px;
+    }
+
+    /* --- Section dividers --- */
+    .section-dark {
+        background: rgba(255, 255, 255, 0.02);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+{% endblock %}
+
+{% block background_glow %}
+    <!-- ==================== DARK TECH BACKGROUND ==================== -->
+    <div class="fixed inset-0 pointer-events-none -z-50 overflow-hidden" style="background: linear-gradient(180deg, #0a0816 0%, #120b24 50%, #0a0816 100%);">
+        <!-- Very subtle pink ambient glow -->
+        <div class="absolute top-[20%] left-[30%] w-[500px] h-[500px] bg-pink-600/[0.09] rounded-full blur-[150px]"></div>
+        <div class="absolute bottom-[30%] right-[20%] w-[400px] h-[400px] bg-purple-600/[0.07] rounded-full blur-[130px]"></div>
+
+        <!-- Subtle tech grid SVG -->
+        <svg class="absolute inset-0 w-full h-full opacity-35" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <pattern id="techGrid" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+                    <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#techGrid)" />
+            <!-- Glowing nodes -->
+            <circle cx="15%" cy="20%" r="1.5" fill="#db2777" opacity="0.6" class="animate-pulse" />
+            <circle cx="85%" cy="15%" r="1.5" fill="#06b6d4" opacity="0.5" class="animate-pulse" />
+            <circle cx="50%" cy="50%" r="1" fill="#db2777" opacity="0.4" />
+            <circle cx="70%" cy="70%" r="1.5" fill="#8b5cf6" opacity="0.5" class="animate-pulse" />
+            <path d="M 15% 20% L 50% 50% L 85% 15%" stroke="rgba(219,39,119,0.12)" stroke-width="0.5" fill="none" />
+            <path d="M 50% 50% L 70% 70%" stroke="rgba(139,92,246,0.1)" stroke-width="0.5" fill="none" />
+        </svg>
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen w-full text-[#c8c2d0] overflow-x-hidden flex flex-col justify-between bg-transparent">
+    
+    <!-- ==================== TOP NAVIGATION BAR ==================== -->
+    <header class="glass-navbar sticky top-0 z-50 transition-all duration-300 w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="{% url 'home' %}" class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-pink-600 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-pink-600/20">
+                    <i class="fa-solid fa-bolt text-sm"></i>
+                </div>
+                <span class="font-bold text-xl text-white tracking-wide">Career<span class="text-pink-500">AI</span></span>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#features" class="text-sm font-semibold nav-link">Tính năng</a>
+                <a href="#timeline-matching" class="text-sm font-semibold nav-link">Lịch trình AI</a>
+                <a href="#trustscore" class="text-sm font-semibold nav-link">Điểm uy tín</a>
+                <a href="#shifts" class="text-sm font-semibold nav-link">Ca làm việc</a>
+                <a href="#pricing" class="text-sm font-semibold nav-link">Báo giá</a>
+            </nav>
+
+            <!-- Auth Buttons -->
+            <div class="flex items-center gap-4">
+                {% if user.is_authenticated %}
+                    {% if user.employer_profile %}
+                        <a href="{% url 'employer_dashboard' %}" class="px-5 py-2.5 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold text-xs rounded-xl shadow-lg shadow-pink-600/20 transition-all hover:shadow-pink-600/30">
+                            Dashboard Tuyển dụng
+                        </a>
+                    {% else %}
+                        <a href="{% url 'student_dashboard' %}" class="px-5 py-2.5 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold text-xs rounded-xl shadow-lg shadow-pink-600/20 transition-all hover:shadow-pink-600/30">
+                            Dashboard Sinh viên
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'account_login' %}" class="text-sm font-semibold nav-link px-3 py-2">
+                        Đăng nhập
+                    </a>
+                    <a href="{% url 'account_signup' %}" class="px-5 py-2.5 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold text-xs rounded-xl shadow-lg shadow-pink-600/20 transition-all hover:shadow-pink-600/30">
+                        Tham gia ngay
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1">
+        <!-- ==================== HERO SLIDER SECTION ==================== -->
+        <section class="relative overflow-hidden">
+            <div class="hero-slider">
+                <!-- Slide Images -->
+                <div class="hero-slide active" data-slide="0">
+                    <img src="{% static 'images/hero_slide_1.png' %}" alt="AI Career Platform" />
+                </div>
+                <div class="hero-slide" data-slide="1">
+                    <img src="{% static 'images/hero_slide_2.png' %}" alt="Neural Network AI" />
+                </div>
+                <div class="hero-slide" data-slide="2">
+                    <img src="{% static 'images/hero_slide_3.png' %}" alt="Future of Work" />
+                </div>
+                
+                <!-- Dark Gradient Overlay -->
+                <div class="hero-overlay"></div>
+                
+                <!-- Hero Content -->
+                <div class="absolute inset-0 z-20 flex items-center">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                        <div class="max-w-2xl space-y-6">
+                            <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-pink-500/15 border border-pink-500/25 text-pink-400 text-xs font-extrabold rounded-full uppercase tracking-wider">
+                                <i class="fa-solid fa-bolt text-[10px]"></i> Hệ sinh thái việc làm thông minh
+                            </span>
+                            
+                            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-none">
+                                Nền tảng AI kết nối <br/>
+                                <span class="text-gradient">và quản trị việc làm sinh viên</span>
+                            </h1>
+                            
+                            <p class="text-zinc-300 text-sm md:text-base leading-relaxed font-medium max-w-lg">
+                                Giải pháp thông minh đầu tiên tại ICTU hỗ trợ sinh viên tự động điền kịch bản lịch rảnh và khớp nối ca làm phù hợp tức thì với doanh nghiệp địa phương.
+                            </p>
+                            
+                            <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                                {% if user.is_authenticated %}
+                                    <a href="{% url 'home' %}" class="px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-pink-600/20 transition-all text-center flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]">
+                                        Truy cập Dashboard của bạn <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'account_signup' %}" class="px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-pink-600/20 transition-all text-center flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]">
+                                        Tìm việc làm ngay <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                    <a href="{% url 'register_employer' %}" class="px-8 py-4 bg-white/10 hover:bg-white/15 border border-white/15 text-white font-extrabold text-sm rounded-xl text-center flex items-center justify-center hover:scale-[1.02] active:scale-[0.98] backdrop-blur-sm">
+                                        Dành cho Doanh nghiệp
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slider Dots -->
+                <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 slider-dots">
+                    <div class="slider-dot active" data-dot="0"></div>
+                    <div class="slider-dot" data-dot="1"></div>
+                    <div class="slider-dot" data-dot="2"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== CORE FEATURES SECTION ==================== -->
+        <section id="features" class="py-20 section-dark relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-pink-400 font-bold text-xs uppercase tracking-widest block mb-2">Đột phá công nghệ</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-white leading-tight">Giải pháp kết nối tối ưu</h2>
+                    <p class="text-zinc-400 text-sm mt-3 font-medium">Các mảnh ghép cốt lõi giúp hệ thống kết nối sinh viên và doanh nghiệp một cách tin cậy.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Feature Card 1 -->
+                    <div class="glass-card rounded-2xl p-8 transition-all duration-300 group">
+                        <div class="w-14 h-14 rounded-2xl bg-orange-500/15 text-orange-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-3">Lịch rảnh động (Time Slots)</h3>
+                        <p class="text-sm text-zinc-400 leading-relaxed font-medium">
+                            Đồng bộ thời khóa biểu thực tế từ trường học, tự động lọc và đề xuất ca làm việc tương thích, bao gồm cả ca đêm mặc định tự do.
+                        </p>
+                    </div>
+                    <!-- Feature Card 2 -->
+                    <div class="glass-card rounded-2xl p-8 transition-all duration-300 group">
+                        <div class="w-14 h-14 rounded-2xl bg-pink-500/15 text-pink-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-3">Xác thực Giấy phép GPKD</h3>
+                        <p class="text-sm text-zinc-400 leading-relaxed font-medium">
+                            Cổng xét duyệt thông tin doanh nghiệp đóng dấu pháp lý chặt chẽ thông qua GPKD, bảo vệ quyền lợi và sự tin cậy.
+                        </p>
+                    </div>
+                    <!-- Feature Card 3 -->
+                    <div class="glass-card rounded-2xl p-8 transition-all duration-300 group">
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-3">Chỉ số uy tín (Trust Score)</h3>
+                        <p class="text-sm text-zinc-400 leading-relaxed font-medium">
+                            Hệ thống xếp hạng sao và điểm tín nhiệm dựa trên mức độ chuyên cần, hoàn thành công việc và phản hồi thực tế từ các ca làm trước.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TIMELINE SHOWCASE SECTION ==================== -->
+        <section id="timeline-matching" class="py-20 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Graphic Left -->
+                    <div class="lg:col-span-6 flex justify-center order-2 lg:order-1">
+                        <div class="relative w-full max-w-xl rounded-3xl p-3 bg-white/5 border border-white/10 shadow-2xl group overflow-hidden">
+                            <img src="{% static 'images/careerai_timeline.png' %}" alt="Timeline Match Mockup" class="w-full h-auto rounded-2xl border border-white/10" />
+                        </div>
+                    </div>
+
+                    <!-- Content Right -->
+                    <div class="lg:col-span-6 space-y-6 order-1 lg:order-2">
+                        <span class="text-pink-400 font-bold text-xs uppercase tracking-widest block">Khớp ca thời gian</span>
+                        <h2 class="text-3xl md:text-5xl font-extrabold text-white leading-tight">Định cấu hình lịch tự do & khớp nối ca đêm</h2>
+                        <p class="text-zinc-400 text-sm leading-relaxed font-medium">
+                            Sinh viên không còn lo lắng về việc đăng ký ca làm trùng với lịch học trên giảng đường. Thuật toán CareerAI tự động chuyển dịch các khung giờ nghỉ và ca đêm thành trạng thái "Rảnh", từ đó tối ưu tỷ lệ khớp nối công việc lên đến 95%.
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-2.5 text-sm font-bold text-zinc-300">
+                                <i class="fa-solid fa-circle-check text-pink-400"></i> Ca đêm (22:00 - 06:00) mặc định rảnh hỗ trợ tối đa việc làm.
+                            </div>
+                            <div class="flex items-center gap-2.5 text-sm font-bold text-zinc-300">
+                                <i class="fa-solid fa-circle-check text-pink-400"></i> Quét lịch học trực tiếp qua cổng thông tin SV.
+                            </div>
+                            <div class="flex items-center gap-2.5 text-sm font-bold text-zinc-300">
+                                <i class="fa-solid fa-circle-check text-pink-400"></i> Khớp nối thông minh gợi ý ca làm tức thì.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TRUST SCORE SHOWCASE SECTION ==================== -->
+        <section id="trustscore" class="py-20 section-dark relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Content Left -->
+                    <div class="lg:col-span-6 space-y-6">
+                        <span class="text-pink-400 font-bold text-xs uppercase tracking-widest block">Hệ thống xếp hạng tín nhiệm</span>
+                        <h2 class="text-3xl md:text-5xl font-extrabold text-white leading-tight">Điểm uy tín (Trust Score) định vị hồ sơ năng lực</h2>
+                        <p class="text-zinc-400 text-sm leading-relaxed font-medium">
+                            Mỗi sinh viên và nhà tuyển dụng đều sở hữu chỉ số tín nhiệm độc quyền. Hoàn thành ca làm đúng giờ, chấm công đầy đủ, và nhận đánh giá 5 sao sẽ đẩy điểm tín nhiệm của bạn lên cao, mở khóa các ca làm việc lương cao nhất trên hệ thống.
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-2.5 text-sm font-bold text-zinc-300">
+                                <i class="fa-solid fa-circle-check text-pink-400"></i> Chấm điểm sao minh bạch cho từng phiên check-in/out.
+                            </div>
+                            <div class="flex items-center gap-2.5 text-sm font-bold text-zinc-300">
+                                <i class="fa-solid fa-circle-check text-pink-400"></i> Xử phạt và hạn chế tài khoản trốn ca hoặc thanh toán chậm.
+                            </div>
+                            <div class="flex items-center gap-2.5 text-sm font-bold text-zinc-300">
+                                <i class="fa-solid fa-circle-check text-pink-400"></i> Ưu tiên hiển thị hồ sơ có điểm uy tín xuất sắc.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Graphic Right -->
+                    <div class="lg:col-span-6 flex justify-center">
+                        <div class="relative w-full max-w-xl rounded-3xl p-3 bg-white/5 border border-white/10 shadow-2xl group overflow-hidden">
+                            <img src="{% static 'images/careerai_trust.png' %}" alt="Trust Score Mockup" class="w-full h-auto rounded-2xl border border-white/10" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== POPULAR SHIFTS DEMO GRID ==================== -->
+        <section id="shifts" class="py-20 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-pink-400 font-bold text-xs uppercase tracking-widest block mb-2">Việc làm nổi bật</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-white">Các ca làm việc đang tuyển sinh</h2>
+                    <p class="text-zinc-400 text-sm mt-3 font-medium">Các ca làm tiêu biểu được các đối tác tin cậy phát hành gần đây.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Shift 1 -->
+                    <div class="glass-card rounded-2xl p-6 flex flex-col justify-between h-full">
+                        <div>
+                            <span class="px-2.5 py-1 bg-purple-500/10 border border-purple-500/20 text-purple-400 text-[10px] font-bold rounded-lg uppercase">Ca đêm</span>
+                            <h4 class="text-base font-bold text-white mt-3">Ca đêm: Hỗ trợ kỹ thuật IT</h4>
+                            <p class="text-xs text-zinc-400/80 mt-1">Cửa hàng công nghệ Thái Nguyên</p>
+                            <div class="flex items-center gap-2 mt-4 text-xs font-mono text-zinc-500">
+                                <i class="fa-solid fa-clock"></i> 22:00 - 06:00
+                            </div>
+                            <div class="flex items-center gap-2 mt-2 text-xs font-mono text-zinc-500">
+                                <i class="fa-solid fa-location-dot"></i> Tân Thịnh, Thái Nguyên
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mt-6 pt-4 border-t border-white/10">
+                            <span class="font-bold text-gradient text-sm">35.000đ/h</span>
+                            <a href="{% url 'account_login' %}" class="px-3.5 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold text-xs rounded-xl transition-all">Ứng tuyển</a>
+                        </div>
+                    </div>
+                    <!-- Shift 2 -->
+                    <div class="glass-card rounded-2xl p-6 flex flex-col justify-between h-full">
+                        <div>
+                            <span class="px-2.5 py-1 bg-pink-500/10 border border-pink-500/20 text-pink-400 text-[10px] font-bold rounded-lg uppercase">Ca sáng</span>
+                            <h4 class="text-base font-bold text-white mt-3">Ca sáng: Hỗ trợ tư vấn tuyển sinh</h4>
+                            <p class="text-xs text-zinc-400/80 mt-1">Phòng Đào Tạo ICTU</p>
+                            <div class="flex items-center gap-2 mt-4 text-xs font-mono text-zinc-500">
+                                <i class="fa-solid fa-clock"></i> 08:00 - 12:00
+                            </div>
+                            <div class="flex items-center gap-2 mt-2 text-xs font-mono text-zinc-500">
+                                <i class="fa-solid fa-location-dot"></i> Trường CNTT & TT (ICTU)
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mt-6 pt-4 border-t border-white/10">
+                            <span class="font-bold text-gradient text-sm">25.000đ/h</span>
+                            <a href="{% url 'account_login' %}" class="px-3.5 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold text-xs rounded-xl transition-all">Ứng tuyển</a>
+                        </div>
+                    </div>
+                    <!-- Shift 3 -->
+                    <div class="glass-card rounded-2xl p-6 flex flex-col justify-between h-full">
+                        <div>
+                            <span class="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded-lg uppercase">Ca chiều</span>
+                            <h4 class="text-base font-bold text-white mt-3">Nhân viên phục vụ Cà phê Cozy</h4>
+                            <p class="text-xs text-zinc-400/80 mt-1">Cozy Coffee Hub</p>
+                            <div class="flex items-center gap-2 mt-4 text-xs font-mono text-zinc-500">
+                                <i class="fa-solid fa-clock"></i> 18:00 - 22:00
+                            </div>
+                            <div class="flex items-center gap-2 mt-2 text-xs font-mono text-zinc-500">
+                                <i class="fa-solid fa-location-dot"></i> Phường Tân Thịnh, TP. Thái Nguyên
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mt-6 pt-4 border-t border-white/10">
+                            <span class="font-bold text-gradient text-sm">22.000đ/h</span>
+                            <a href="{% url 'account_login' %}" class="px-3.5 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold text-xs rounded-xl transition-all">Ứng tuyển</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PRICING SECTION ==================== -->
+        <section id="pricing" class="py-20 section-dark relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-pink-400 font-bold text-xs uppercase tracking-widest block mb-2">Báo giá dịch vụ doanh nghiệp</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-white">Đăng ký gói đăng tin ca làm việc</h2>
+                    <p class="text-zinc-400 text-sm mt-3 font-medium">Giúp kết nối với lực lượng lao động sinh viên chất lượng nhất tại tỉnh.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Starter Plan -->
+                    <div class="glass-card rounded-3xl p-8 flex flex-col justify-between h-full">
+                        <div>
+                            <span class="text-[10px] font-bold tracking-wider text-zinc-500 uppercase">Doanh nghiệp nhỏ</span>
+                            <h3 class="text-lg font-bold text-white mt-1">Gói Khởi Đầu</h3>
+                            <div class="my-6">
+                                <span class="text-2xl font-extrabold text-white">Miễn phí</span>
+                            </div>
+                            <p class="text-xs text-zinc-400 leading-relaxed mb-6 font-medium">
+                                Phù hợp cho các cửa hàng nhỏ, quán cà phê địa phương cần đăng tin ca lẻ để tuyển gấp 1-2 sinh viên thời vụ.
+                            </p>
+                            <hr class="border-white/10 mb-6" />
+                            <ul class="space-y-3 text-xs text-zinc-400 font-bold">
+                                <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-pink-400"></i> Đăng tối đa 3 ca làm việc/tháng</li>
+                                <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-pink-400"></i> Quản lý danh sách ứng tuyển cơ bản</li>
+                                <li class="flex items-center gap-2.5 text-zinc-400"><i class="fa-solid fa-xmark text-zinc-300"></i> Không ưu tiên hiển thị đề xuất AI</li>
+                                <li class="flex items-center gap-2.5 text-zinc-400"><i class="fa-solid fa-xmark text-zinc-300"></i> Không có quản lý chỉ số Trust Score sâu</li>
+                            </ul>
+                        </div>
+                        <a href="{% url 'register_employer' %}" class="block w-full text-center py-3 bg-white/10 hover:bg-white/15 text-zinc-300 font-bold text-xs rounded-xl mt-8 transition-colors">
+                            Đăng ký miễn phí
+                        </a>
+                    </div>
+
+                    <!-- Business Plan -->
+                    <div class="glass-card border-2 border-pink-500/50 rounded-3xl p-8 relative flex flex-col justify-between h-full shadow-lg shadow-pink-500/10">
+                        <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 bg-pink-500 text-white text-[9px] font-bold rounded-full uppercase tracking-widest">Phổ biến nhất</span>
+                        <div>
+                            <span class="text-[10px] font-bold tracking-wider text-pink-400 uppercase">Đối tác tuyển dụng</span>
+                            <h3 class="text-lg font-bold text-white mt-1">Gói Doanh Nghiệp</h3>
+                            <div class="my-6">
+                                <span class="text-2xl font-extrabold text-gradient">299.000đ / tháng</span>
+                            </div>
+                            <p class="text-xs text-zinc-400 leading-relaxed mb-6 font-medium">
+                                Dành cho các chuỗi cửa hàng tiện lợi, nhà hàng ẩm thực cần tuyển nhân sự ca kíp cố định liên tục theo tuần.
+                            </p>
+                            <hr class="border-white/10 mb-6" />
+                            <ul class="space-y-3 text-xs text-zinc-400 font-bold">
+                                <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-pink-400"></i> Đăng không giới hạn ca làm việc</li>
+                                <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-pink-400"></i> Ưu tiên khớp ca tự động bằng AI thông minh</li>
+                                <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-pink-400"></i> Xem báo cáo chỉ số Trust Score chi tiết ứng viên</li>
+                                <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-pink-400"></i> Hỗ trợ kỹ thuật ưu tiên 24/7</li>
+                            </ul>
+                        </div>
+                        <a href="{% url 'register_employer' %}" class="block w-full text-center py-3 bg-gradient-to-r from-pink-600 to-pink-500 text-white font-bold text-xs rounded-xl mt-8 shadow-md transition-all">
+                            Chọn Gói Doanh Nghiệp
+                        </a>
+                    </div>
+
+                    <!-- Enterprise Plan -->
+                    <div class="glass-card rounded-3xl p-8 flex flex-col justify-between h-full">
+                        <div>
+                            <span class="text-[10px] font-bold tracking-wider text-zinc-500 uppercase">Tập đoàn lớn</span>
+                            <h3 class="text-lg font-bold text-white mt-1">Gói VIP / Hợp tác</h3>
+                            <div class="my-6">
+                                <span class="text-2xl font-extrabold text-white">Liên hệ trực tiếp</span>
+                            </div>
+                            <p class="text-xs text-zinc-400 leading-relaxed mb-6 font-medium">
+                                Dành riêng cho các tập đoàn, khu công nghiệp có nhu cầu thuê khoán trọn gói số lượng lớn hàng trăm sinh viên/ngày.
+                            </p>
+                            <hr class="border-white/10 mb-6" />
+                            <ul class="space-y-3 text-xs text-zinc-400 font-bold">
+                                <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-pink-400"></i> Giải pháp tuyển chọn trực tiếp từ các khoa</li>
+                                <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-pink-400"></i> API đồng bộ lịch kiểm tra và học của trường</li>
+                                <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-pink-400"></i> Ký kết hợp đồng bảo lãnh lao động trọn gói</li>
+                                <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-pink-400"></i> Xuất hóa đơn VAT và báo cáo tài chính</li>
+                            </ul>
+                        </div>
+                        <a href="#contact" class="block w-full text-center py-3 bg-white/10 hover:bg-white/15 text-zinc-300 font-bold text-xs rounded-xl mt-8 transition-colors">
+                            Liên hệ ký kết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== CONTACT FORM SECTION ==================== -->
+        <section id="contact" class="py-20 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    
+                    <!-- Info Left -->
+                    <div class="space-y-6">
+                        <span class="text-pink-400 font-bold text-xs uppercase tracking-widest block">Kết nối ngay</span>
+                        <h2 class="text-4xl font-extrabold text-white">Bạn cần hỗ trợ thêm về CareerAI?</h2>
+                        <p class="text-zinc-400 text-sm leading-relaxed font-medium">
+                            Đội ngũ điều hành dự án của chúng tôi (kết hợp hỗ trợ từ ICTU) luôn sẵn sàng giải đáp thắc mắc của bạn về cơ chế chấm điểm, khớp ca, hay hướng dẫn tích hợp tài khoản tuyển dụng.
+                        </p>
+                        <div class="space-y-4 pt-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-pink-500/15 text-pink-400 flex items-center justify-center"><i class="fa-solid fa-envelope"></i></div>
+                                <div>
+                                    <p class="text-[10px] text-zinc-500 font-bold uppercase">Email hỗ trợ</p>
+                                    <p class="text-sm font-bold text-white">support@careerai.vn</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center"><i class="fa-solid fa-building"></i></div>
+                                <div>
+                                    <p class="text-[10px] text-zinc-500 font-bold uppercase">Địa chỉ văn phòng</p>
+                                    <p class="text-sm font-bold text-white">Tòa nhà C1 - Trường CNTT & TT Thái Nguyên</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Right -->
+                    <div class="bg-white/5 border border-white/10 rounded-3xl p-8 shadow-xl backdrop-blur-sm">
+                        <h3 class="text-base font-bold text-white mb-6 flex items-center gap-2">
+                            <i class="fa-regular fa-envelope-open text-pink-400"></i> Gửi Thư Góp Ý & Liên Hệ
+                        </h3>
+                        <form onsubmit="handleContactSubmit(event)" class="space-y-4">
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-zinc-500">Họ và tên *</label>
+                                <input type="text" required class="form-input-dark block w-full px-4 py-3 rounded-xl text-sm focus:outline-none" placeholder="Nguyễn Văn A" />
+                            </div>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="space-y-1.5">
+                                    <label class="block text-xs font-bold text-zinc-500">Email liên hệ *</label>
+                                    <input type="email" required class="form-input-dark block w-full px-4 py-3 rounded-xl text-sm focus:outline-none" placeholder="email@gmail.com" />
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="block text-xs font-bold text-zinc-500">Số điện thoại *</label>
+                                    <input type="tel" required class="form-input-dark block w-full px-4 py-3 rounded-xl text-sm focus:outline-none" placeholder="0356xxxxxx" />
+                                </div>
+                            </div>
+
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-zinc-500">Nội dung thư liên hệ</label>
+                                <textarea rows="3" class="form-input-dark block w-full px-4 py-3 rounded-xl text-sm focus:outline-none resize-none" placeholder="Mô tả chi tiết câu hỏi hoặc ý kiến đóng góp của bạn..."></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-4 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-extrabold text-sm rounded-xl shadow-lg transition-all hover:opacity-95">
+                                Gửi thư liên hệ
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-white/[0.03] border-t border-white/10 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-pink-600 to-purple-600 flex items-center justify-center text-white shadow-md shadow-pink-600/20">
+                    <span class="material-symbols-outlined font-bold text-[14px]">bolt</span>
+                </div>
+                <span class="font-bold text-lg text-white">CareerAI</span>
+            </div>
+            
+            <p class="text-xs text-zinc-500 text-center">
+                &copy; 2026 CareerAI. Nền tảng AI kết nối và quản trị việc làm sinh viên.
+            </p>
+            
+            <div class="flex items-center gap-6">
+                <a href="#" class="text-xs text-zinc-500 hover:text-pink-400 transition-colors">Điều khoản</a>
+                <a href="#" class="text-xs text-zinc-500 hover:text-pink-400 transition-colors">Bảo mật</a>
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+{% block extra_js %}
+<script>
+    function handleContactSubmit(e) {
+        e.preventDefault();
+        alert("🎉 Cảm ơn ý kiến của bạn! Đội ngũ điều hành CareerAI đã nhận được thư liên hệ và sẽ sớm gửi phản hồi lại cho bạn.");
+        e.target.reset();
+    }
+
+    // ===== HERO SLIDER AUTO-PLAY =====
+    (function() {
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+        let autoPlayTimer;
+
+        function goToSlide(index) {
+            slides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            goToSlide((currentSlide + 1) % totalSlides);
+        }
+
+        function startAutoPlay() {
+            autoPlayTimer = setInterval(nextSlide, 5000);
+        }
+
+        // Dot click navigation
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                clearInterval(autoPlayTimer);
+                goToSlide(parseInt(dot.dataset.dot));
+                startAutoPlay();
+            });
+        });
+
+        startAutoPlay();
+    })();
+</script>
+{% endblock %}
+{% endblock %}

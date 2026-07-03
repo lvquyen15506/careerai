@@ -1,0 +1,22 @@
+{% extends 'core/base_employer.html' %}
+{% load static %}
+
+{% block title %}Tạo ca làm mới - CareerAI{% endblock %}
+
+{% block employer_content %}
+<div class="max-w-2xl mx-auto w-full space-y-6">
+    <div class="flex items-center justify-between pb-4 border-b border-outline-variant/30">
+        <div>
+            <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary font-bold m-0">Tạo Ca Làm Mới</h2>
+            <p class="text-on-surface-variant mt-1 text-sm">Đăng tải thông tin chi tiết và thời gian làm việc để tuyển sinh viên phù hợp.</p>
+        </div>
+        <a href="{% url 'employer_dashboard' %}" class="text-secondary font-semibold text-sm hover:underline flex items-center gap-1 shrink-0">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span> Quay lại
+        </a>
+    </div>
+
+    <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-sm p-6">
+        {% include "core/includes/create_shift_body.html" %}
+    </div>
+</div>
+{% endblock %}

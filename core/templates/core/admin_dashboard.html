@@ -1,0 +1,1265 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+
+{% block admin_title %}Quản trị CareerAI - Portal Suite{% endblock %}
+
+{% block admin_content %}
+            {% if messages %}
+            <div class="space-y-2">
+                {% for message in messages %}
+                <div
+                    class="p-4 rounded-xl text-sm font-medium {% if 'success' in message.tags %}bg-emerald-50 text-emerald-800 border border-emerald-200{% else %}bg-rose-50 text-rose-800 border border-rose-200{% endif %} flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">
+                        {% if 'success' in message.tags %}check_circle{% else %}error{% endif %}
+                    </span>
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- TAB 1: DASHBOARD & GPKD -->
+            <div id="tab-dashboard" class="admin-tab-content space-y-8">
+                <!-- Top KPI Cards -->
+                <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Active Users -->
+                    <div
+                        class="bg-white rounded-2xl p-6 shadow-sm border border-[#e9ecef] flex items-center justify-between relative overflow-hidden group">
+                        <div
+                            class="absolute -right-8 -top-8 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors">
+                        </div>
+                        <div class="z-10">
+                            <p class="text-[10px] text-[#868e96] font-semibold tracking-wider uppercase mb-2">Người dùng
+                                hoạt động</p>
+                            <h3 class="text-3xl font-bold text-[#212529]">{{ active_users_count }}</h3>
+                            <p class="text-xs text-emerald-600 font-medium mt-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">trending_up</span> Hệ thống ổn định
+                            </p>
+                        </div>
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-indigo-50 text-[#5f3dc4] flex items-center justify-center z-10 shadow-sm border border-indigo-100">
+                            <span class="material-symbols-outlined text-[24px]">group</span>
+                        </div>
+                    </div>
+                    <!-- Matches Today -->
+                    <div
+                        class="bg-white rounded-2xl p-6 shadow-sm border border-[#e9ecef] flex items-center justify-between relative overflow-hidden group">
+                        <div
+                            class="absolute -right-8 -top-8 w-32 h-32 bg-[#8455ef]/5 rounded-full blur-2xl group-hover:bg-[#8455ef]/10 transition-colors">
+                        </div>
+                        <div class="z-10">
+                            <p class="text-[10px] text-[#868e96] font-semibold tracking-wider uppercase mb-2">Đơn ứng
+                                tuyển / Khớp nối</p>
+                            <h3 class="text-3xl font-bold text-[#212529]">{{ matches_today_count }}</h3>
+                            <div class="mt-2 flex items-center gap-2">
+                                <span
+                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> AI
+                                    Engine Active
+                                </span>
+                            </div>
+                        </div>
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-[#f3f0ff] text-[#8455ef] flex items-center justify-center z-10 shadow-sm border border-[#e5dbff]">
+                            <span class="material-symbols-outlined text-[24px]">handshake</span>
+                        </div>
+                    </div>
+                    <!-- Est Revenue -->
+                    <div
+                        class="bg-white rounded-2xl p-6 shadow-sm border border-[#e9ecef] flex items-center justify-between relative overflow-hidden group">
+                        <div
+                            class="absolute -right-8 -top-8 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-colors">
+                        </div>
+                        <div class="z-10">
+                            <p class="text-[10px] text-[#868e96] font-semibold tracking-wider uppercase mb-2">Tổng giá
+                                trị giao dịch</p>
+                            <h3 class="text-3xl font-bold text-[#212529]">{{ total_revenue|floatformat:0 }}đ</h3>
+                            <p class="text-xs text-emerald-600 font-medium mt-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">trending_up</span> Lương sinh viên nhận
+                            </p>
+                        </div>
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center z-10 shadow-sm border border-emerald-100">
+                            <span class="material-symbols-outlined text-[24px]">payments</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Charts Section -->
+                <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Bar Chart -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-[#e9ecef] flex flex-col h-96">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-base font-bold text-[#212529]">Việc làm theo khối ngành</h3>
+                        </div>
+                        <div class="flex-1 flex items-end justify-between gap-4 relative pb-6">
+                            <div class="absolute inset-0 flex flex-col justify-between pb-12 pointer-events-none">
+                                <div class="w-full h-px bg-[#e9ecef]"></div>
+                                <div class="w-full h-px bg-[#e9ecef]"></div>
+                                <div class="w-full h-px bg-[#e9ecef]"></div>
+                                <div class="w-full h-px bg-[#e9ecef]"></div>
+                                <div class="w-full h-px bg-[#ced4da]"></div>
+                            </div>
+                            <div
+                                class="relative w-1/5 h-[{{ cntt_h }}%] bg-[#e5dbff] rounded-t-xl hover:bg-[#d3c2ff] transition-colors group z-10">
+                                <div class="absolute bottom-0 w-full bg-[#7048e8] rounded-t-xl transition-all duration-500"
+                                    style="height: 100%;"></div>
+                                <div
+                                    class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-[#495057] text-center whitespace-nowrap">
+                                    CNTT</div>
+                            </div>
+                            <div
+                                class="relative w-1/5 h-[{{ kinhte_h }}%] bg-[#e5dbff] rounded-t-xl hover:bg-[#d3c2ff] transition-colors group z-10">
+                                <div class="absolute bottom-0 w-full bg-[#7048e8] rounded-t-xl transition-all duration-500"
+                                    style="height: 100%;"></div>
+                                <div
+                                    class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-[#495057] text-center whitespace-nowrap">
+                                    Kinh tế</div>
+                            </div>
+                            <div
+                                class="relative w-1/5 h-[{{ kythuat_h }}%] bg-[#e5dbff] rounded-t-xl hover:bg-[#d3c2ff] transition-colors group z-10">
+                                <div class="absolute bottom-0 w-full bg-[#7048e8] rounded-t-xl transition-all duration-500"
+                                    style="height: 100%;"></div>
+                                <div
+                                    class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-[#495057] text-center whitespace-nowrap">
+                                    Kỹ thuật</div>
+                            </div>
+                            <div
+                                class="relative w-1/5 h-[{{ supham_h }}%] bg-[#e5dbff] rounded-t-xl hover:bg-[#d3c2ff] transition-colors group z-10">
+                                <div class="absolute bottom-0 w-full bg-[#7048e8] rounded-t-xl transition-all duration-500"
+                                    style="height: 100%;"></div>
+                                <div
+                                    class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-[#495057] text-center whitespace-nowrap">
+                                    Sư phạm</div>
+                            </div>
+                            <div
+                                class="relative w-1/5 h-[{{ yduoc_h }}%] bg-[#e5dbff] rounded-t-xl hover:bg-[#d3c2ff] transition-colors group z-10">
+                                <div class="absolute bottom-0 w-full bg-[#7048e8] rounded-t-xl transition-all duration-500"
+                                    style="height: 100%;"></div>
+                                <div
+                                    class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-[#495057] text-center whitespace-nowrap">
+                                    Y Dược</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Pie Chart -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-[#e9ecef] flex flex-col h-96">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-base font-bold text-[#212529]">Lĩnh vực Phổ biến</h3>
+                        </div>
+                        <div class="flex-1 flex items-center justify-center relative">
+                            <div class="w-48 h-48 rounded-full relative overflow-hidden shadow-sm" style="background: conic-gradient(
+                                #003156 0deg {{ fb_deg }}deg, 
+                                #8455ef {{ fb_deg }}deg {{ retail_deg }}deg, 
+                                #33ca91 {{ retail_deg }}deg 360deg
+                            );">
+                                <div
+                                    class="absolute inset-0 m-auto w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-inner">
+                                    <div class="text-center">
+                                        <span class="text-2xl font-bold text-[#212529]">{{ total_sectors }}</span>
+                                        <span
+                                            class="text-[9px] font-bold text-[#868e96] uppercase tracking-wider block">Công
+                                            việc</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-center gap-6 mt-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2.5 h-2.5 rounded-full bg-[#003156]"></div>
+                                <span class="text-xs font-semibold text-[#495057]">F&amp;B ({{ fb_pct }}%)</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-2.5 h-2.5 rounded-full bg-[#8455ef]"></div>
+                                <span class="text-xs font-semibold text-[#495057]">Bán lẻ / CSKH ({{ retail_pct
+                                    }}%)</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-2.5 h-2.5 rounded-full bg-[#33ca91]"></div>
+                                <span class="text-xs font-semibold text-[#495057]">Kỹ thuật / IT ({{ tech_pct
+                                    }}%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Business License Approval -->
+                <section class="bg-white rounded-2xl shadow-sm border border-[#e9ecef] overflow-hidden flex flex-col">
+                    <div class="p-6 border-b border-[#e9ecef] flex justify-between items-center bg-[#f8f9fa]">
+                        <div>
+                            <h3 class="text-base font-bold text-[#212529]">Duyệt Doanh nghiệp đăng ký</h3>
+                            <p class="text-xs text-[#868e96] mt-0.5">Kiểm duyệt và kích hoạt tài khoản liên kết của các
+                                doanh nghiệp đăng ký mới.</p>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        {% if pending_employers %}
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-[#f8f9fa] border-b border-[#e9ecef]">
+                                    <th
+                                        class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider w-1/3">
+                                        Tên Công ty / Doanh nghiệp</th>
+                                    <th
+                                        class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider w-1/4">
+                                        Ngày đăng ký</th>
+                                    <th
+                                        class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider w-1/4">
+                                        Mã số đăng ký / GPKD</th>
+                                    <th
+                                        class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider text-right">
+                                        Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-[#e9ecef]">
+                                {% for employer in pending_employers %}
+                                <tr class="hover:bg-[#f8f9fa]/50 transition-colors">
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-10 h-10 rounded-xl bg-indigo-50 text-[#7048e8] flex items-center justify-center font-bold shadow-sm border border-indigo-100">
+                                                {{ employer.company_name|slice:":1" }}
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-bold text-[#212529]">{{ employer.company_name }}
+                                                </p>
+                                                <p class="text-[10px] text-[#868e96] font-medium">Đại diện: {{
+                                                    employer.user.username }}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6 text-sm text-[#495057]">{{ employer.created_at|date:"d/m/Y H:i"
+                                        }}</td>
+                                    <td class="py-4 px-6">
+                                        <span
+                                            class="font-mono text-xs bg-[#f8f9fa] px-2.5 py-1 rounded-lg border border-[#e9ecef] text-[#2b6195] font-semibold">
+                                            {{ employer.business_license }}
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <form method="post" action="{% url 'verify_employer' employer.id %}"
+                                            class="inline-flex gap-2">
+                                            {% csrf_token %}
+                                            <button type="submit" name="action" value="reject"
+                                                class="p-2 rounded-xl text-red-600 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100 shadow-sm"
+                                                title="Từ chối">
+                                                <span class="material-symbols-outlined text-[18px]">close</span>
+                                            </button>
+                                            <button type="submit" name="action" value="approve"
+                                                class="p-2 rounded-xl text-emerald-600 hover:bg-emerald-50 transition-colors border border-transparent hover:border-emerald-100 shadow-sm"
+                                                title="Duyệt">
+                                                <span class="material-symbols-outlined text-[18px]">check</span>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <div class="text-center py-10 text-[#868e96] flex flex-col items-center gap-2">
+                            <span class="material-symbols-outlined text-4xl text-[#ced4da]">check_circle</span>
+                            <div>
+                                <p class="font-bold text-[#495057]">Không có doanh nghiệp nào chờ phê duyệt.</p>
+                                <p class="text-xs text-[#868e96] mt-1">Tất cả tài khoản liên kết đã được xác minh.</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </section>
+            </div>
+
+            <!-- TAB 2: QUẢN LÝ SINH VIÊN -->
+            <div id="tab-students" class="admin-tab-content space-y-6 hidden">
+                <section class="bg-white rounded-2xl shadow-sm border border-[#e9ecef] overflow-hidden flex flex-col">
+                    <div class="p-6 border-b border-[#e9ecef] bg-[#f8f9fa] flex justify-between items-center">
+                        <div>
+                            <h3 class="text-base font-bold text-[#212529]">Danh sách Sinh viên</h3>
+                            <p class="text-xs text-[#868e96] mt-0.5">Danh sách các sinh viên đang hoạt động trong hệ
+                                thống.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span
+                                class="px-3 py-1 bg-indigo-50 text-[#7048e8] text-xs font-bold rounded-full border border-indigo-100">
+                                {{ students|length }} Sinh viên
+                            </span>
+                            <button onclick="openAddStudentModal()"
+                                class="px-3.5 py-1.5 bg-[#5f3dc4] hover:bg-[#4c2bb3] text-white font-bold text-xs rounded-xl shadow-sm transition-colors flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">person_add</span> Thêm Sinh viên
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-[#f8f9fa] border-b border-[#e9ecef]">
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">
+                                        Mã SV / Họ Tên</th>
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">
+                                        Lớp / Ngành</th>
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">
+                                        Email liên hệ</th>
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">
+                                        Điểm uy tín</th>
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">
+                                        Hồ sơ</th>
+                                    <th
+                                        class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider text-right">
+                                        Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-[#e9ecef]">
+                                {% for student in students %}
+                                <tr class="hover:bg-[#f8f9fa]/50 transition-colors">
+                                    <td class="py-4 px-6">
+                                        <div class="font-bold text-[#212529]">{{ student.full_name }}</div>
+                                        <div class="font-mono text-xs text-[#868e96] font-semibold">{{
+                                            student.student_code }}</div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <div class="text-sm text-[#495057] font-semibold">{{ student.class_name }}</div>
+                                        <div class="text-xs text-[#868e96] font-medium">{{ student.major }}</div>
+                                    </td>
+                                    <td class="py-4 px-6 text-sm font-mono text-[#2b6195]">{{ student.user.email }}</td>
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center gap-1.5 text-amber-500 font-bold text-sm">
+                                            <span class="material-symbols-outlined text-[16px]">stars</span>
+                                            {{ student.trust_score|floatformat:1 }} / 10.0
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        {% if student.is_profile_complete %}
+                                        <span
+                                            class="px-2.5 py-1 text-xs font-bold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">Đã
+                                            hoàn thiện</span>
+                                        {% else %}
+                                        <span
+                                            class="px-2.5 py-1 text-xs font-bold rounded-full bg-[#f1f3f5] text-[#868e96] border border-[#e9ecef]">Chưa
+                                            hoàn thiện</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <div class="inline-flex gap-2">
+                                            <button
+                                                onclick="openEditStudentModal('{{ student.id }}', '{{ student.full_name|escapejs }}', '{{ student.student_code|escapejs }}', '{{ student.class_name|escapejs }}', '{{ student.major|escapejs }}', '{{ student.trust_score }}')"
+                                                class="p-2 rounded-xl text-blue-600 hover:bg-blue-50 transition-colors border border-transparent hover:border-blue-100 shadow-sm"
+                                                title="Sửa thông tin">
+                                                <span class="material-symbols-outlined text-[18px]">edit</span>
+                                            </button>
+                                            <form method="post" action="{% url 'admin_delete_student' student.id %}"
+                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản của sinh viên {{ student.full_name|escapejs }}? Điều này sẽ xóa vĩnh viễn tài khoản người dùng tương ứng.');"
+                                                class="inline">
+                                                {% csrf_token %}
+                                                <button type="submit"
+                                                    class="p-2 rounded-xl text-red-600 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100 shadow-sm"
+                                                    title="Xóa tài khoản">
+                                                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="py-10 text-center text-[#868e96]">Chưa có sinh viên nào đăng
+                                        ký.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- TAB 3: QUẢN LÝ DOANH NGHIỆP -->
+            <div id="tab-employers" class="admin-tab-content space-y-6 hidden">
+                <section class="bg-white rounded-2xl shadow-sm border border-[#e9ecef] overflow-hidden flex flex-col">
+                    <div class="p-6 border-b border-[#e9ecef] bg-[#f8f9fa] flex justify-between items-center">
+                        <div>
+                            <h3 class="text-base font-bold text-[#212529]">Danh sách Doanh nghiệp</h3>
+                            <p class="text-xs text-[#868e96] mt-0.5">Danh sách các doanh nghiệp đang tuyển dụng trên hệ
+                                thống.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span
+                                class="px-3 py-1 bg-indigo-50 text-[#7048e8] text-xs font-bold rounded-full border border-indigo-100">
+                                {{ employers|length }} Doanh nghiệp
+                            </span>
+                            <button onclick="openAddEmployerModal()"
+                                class="px-3.5 py-1.5 bg-[#5f3dc4] hover:bg-[#4c2bb3] text-white font-bold text-xs rounded-xl shadow-sm transition-colors flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">domain_add</span> Thêm Doanh nghiệp
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-[#f8f9fa] border-b border-[#e9ecef]">
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">
+                                        Tên Doanh nghiệp</th>
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">
+                                        Giấy phép GPKD</th>
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">
+                                        Địa chỉ</th>
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">
+                                        Trạng thái</th>
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">
+                                        Điểm uy tín</th>
+                                    <th
+                                        class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider text-right">
+                                        Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-[#e9ecef]">
+                                {% for employer in employers %}
+                                <tr class="hover:bg-[#f8f9fa]/50 transition-colors">
+                                    <td class="py-4 px-6">
+                                        <div class="font-bold text-[#212529]">{{ employer.company_name }}</div>
+                                        <div class="text-xs text-[#868e96] font-medium">Đại diện: {{
+                                            employer.user.username }} ({{ employer.user.email }})</div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span
+                                            class="font-mono text-xs bg-[#f8f9fa] border border-[#e9ecef] px-2.5 py-1 rounded-lg text-[#2b6195] font-semibold">
+                                            {{ employer.business_license }}
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-sm text-[#495057]">{{ employer.address }}</td>
+                                    <td class="py-4 px-6">
+                                        {% if employer.is_verified %}
+                                        <span
+                                            class="px-2.5 py-1 text-xs font-bold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 flex items-center gap-1 w-fit">
+                                            <span class="material-symbols-outlined text-[14px]">verified</span> Đã xác
+                                            minh
+                                        </span>
+                                        {% else %}
+                                        <span
+                                            class="px-2.5 py-1 text-xs font-bold rounded-full bg-rose-50 text-rose-700 border border-rose-100 flex items-center gap-1 w-fit">
+                                            <span class="material-symbols-outlined text-[14px]">schedule</span> Chờ
+                                            duyệt
+                                        </span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center gap-1 text-amber-500 font-bold text-sm">
+                                            <span class="material-symbols-outlined text-[16px]">stars</span>
+                                            {{ employer.trust_score|floatformat:1 }} / 10.0
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <div class="inline-flex gap-2">
+                                            <button
+                                                onclick="openEditEmployerModal('{{ employer.id }}', '{{ employer.company_name|escapejs }}', '{{ employer.business_license|escapejs }}', '{{ employer.address|escapejs }}', '{{ employer.trust_score }}', '{{ employer.is_verified|yesno:'true,false' }}')"
+                                                class="p-2 rounded-xl text-blue-600 hover:bg-blue-50 transition-colors border border-transparent hover:border-blue-100 shadow-sm"
+                                                title="Sửa thông tin">
+                                                <span class="material-symbols-outlined text-[18px]">edit</span>
+                                            </button>
+                                            <form method="post" action="{% url 'admin_delete_employer' employer.id %}"
+                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản doanh nghiệp {{ employer.company_name|escapejs }}? Điều này sẽ xóa vĩnh viễn tài khoản người dùng tương ứng.');"
+                                                class="inline">
+                                                {% csrf_token %}
+                                                <button type="submit"
+                                                    class="p-2 rounded-xl text-red-600 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100 shadow-sm"
+                                                    title="Xóa tài khoản">
+                                                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="py-10 text-center text-[#868e96]">Chưa có doanh nghiệp nào
+                                        đăng ký.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- TAB 4: KHỚP CA THỦ CÔNG -->
+            <div id="tab-matching" class="admin-tab-content space-y-8 hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Manual Match Form -->
+                    <div
+                        class="bg-white rounded-2xl shadow-sm border border-[#e9ecef] p-6 flex flex-col gap-6 lg:col-span-1 h-fit">
+                        <div class="flex justify-between items-start gap-4">
+                            <div>
+                                <h3 class="text-base font-bold text-primary">Khớp Ca &amp; Tạo Ca</h3>
+                                <p class="text-xs text-[#868e96] mt-0.5">Gán sinh viên vào ca làm hoặc tạo ca làm mới.</p>
+                            </div>
+                            <a href="{% url 'admin_create_shift' %}" class="px-3 py-1.5 bg-[#5f3dc4] hover:bg-[#4c2bb3] text-white font-bold text-xs rounded-xl shadow-sm transition-colors flex items-center gap-1 whitespace-nowrap">
+                                <span class="material-symbols-outlined text-[16px]">add_circle</span> Tạo Ca
+                            </a>
+                        </div>
+
+                        <form method="post" action="{% url 'manual_match' %}" class="space-y-4">
+                            {% csrf_token %}
+
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-[#495057]">Chọn Sinh Viên</label>
+                                <select name="student_id" class="form-select w-full" required>
+                                    <option value="" disabled selected>-- Chọn sinh viên --</option>
+                                    {% for student in students %}
+                                    <option value="{{ student.id }}">{{ student.student_code }} - {{ student.full_name
+                                        }} ({{ student.major }})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-[#495057]">Chọn Ca Làm Việc Trống</label>
+                                <select name="shift_id" class="form-select w-full" required>
+                                    <option value="" disabled selected>-- Chọn ca làm việc --</option>
+                                    {% for shift in open_shifts %}
+                                    <option value="{{ shift.id }}">{{ shift.title }} - {{ shift.employer.company_name }}
+                                        (Cần: {{ shift.required_students }} - Đã nhận: {{ shift.accepted_count }})
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <button type="submit"
+                                class="w-full bg-[#5f3dc4] text-white font-bold py-3 rounded-xl shadow-sm hover:opacity-95 transition-opacity flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined">handshake</span>
+                                Khớp Ca Ngay
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Match History Logs -->
+                    <div
+                        class="bg-white rounded-2xl shadow-sm border border-[#e9ecef] overflow-hidden flex flex-col lg:col-span-2">
+                        <div class="p-6 border-b border-[#e9ecef] bg-[#f8f9fa]">
+                            <h3 class="text-base font-bold text-[#212529]">Lịch sử Khớp Ca & Ứng Tuyển</h3>
+                            <p class="text-xs text-[#868e96] mt-0.5">Theo dõi lịch sử khớp nối ca làm việc thủ công và
+                                ứng tuyển của sinh viên.</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-[#f8f9fa] border-b border-[#e9ecef]">
+                                        <th
+                                            class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">
+                                            Sinh viên</th>
+                                        <th
+                                            class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">
+                                            Ca làm việc / Doanh nghiệp</th>
+                                        <th
+                                            class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">
+                                            Lương/giờ</th>
+                                        <th
+                                            class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">
+                                            Trạng thái</th>
+                                        <th
+                                            class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider text-right">
+                                            Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-[#e9ecef]">
+                                    {% for app in all_applications %}
+                                    <tr class="hover:bg-[#f8f9fa]/50 transition-colors">
+                                        <td class="py-4 px-6">
+                                            <div class="font-bold text-[#212529]">{{ app.student.full_name }}</div>
+                                            <div class="text-xs text-[#868e96] font-semibold">{{
+                                                app.student.student_code }}</div>
+                                        </td>
+                                        <td class="py-4 px-6">
+                                            <div class="text-sm font-bold text-primary">{{ app.shift.title }}</div>
+                                            <div class="text-xs text-[#868e96] font-medium">{{
+                                                app.shift.employer.company_name }}</div>
+                                        </td>
+                                        <td class="py-4 px-6 font-mono text-sm font-bold text-[#212529]">{{
+                                            app.shift.wage_per_hour|floatformat:0 }}đ/h</td>
+                                        <td class="py-4 px-6">
+                                            {% if app.status == 'Pending' %}
+                                            <span
+                                                class="px-2.5 py-1 text-xs font-bold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">Đã
+                                                khớp / Chờ làm</span>
+                                            {% elif app.status == 'CheckIn' %}
+                                            <span
+                                                class="px-2.5 py-1 text-xs font-bold rounded-full bg-blue-50 text-blue-700 border border-blue-100">Đang
+                                                làm việc</span>
+                                            {% elif app.status == 'CheckOut' %}
+                                            <span
+                                                class="px-2.5 py-1 text-xs font-bold rounded-full bg-amber-50 text-amber-700 border border-amber-100">Chờ
+                                                chấm công</span>
+                                            {% elif app.status == 'Completed' %}
+                                            <span
+                                                class="px-2.5 py-1 text-xs font-bold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">Hoàn
+                                                thành</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="py-4 px-6 text-right">
+                                            <form method="post" action="{% url 'admin_delete_application' app.id %}"
+                                                onsubmit="return confirm('Bạn có chắc chắn muốn hủy khớp ca làm việc này? Ca làm của sinh viên {{ app.student.full_name|escapejs }} sẽ bị hủy bỏ.');"
+                                                class="inline">
+                                                {% csrf_token %}
+                                                <button type="submit"
+                                                    class="p-2 rounded-xl text-red-600 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100 shadow-sm"
+                                                    title="Hủy khớp ca">
+                                                    <span class="material-symbols-outlined text-[18px]">link_off</span>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="py-10 text-center text-[#868e96]">Hệ thống chưa ghi nhận
+                                            đơn ứng tuyển hay khớp ca nào.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: QUẢN LÝ CA LÀM -->
+            <div id="tab-shifts" class="admin-tab-content space-y-6 hidden">
+                <section class="bg-white rounded-2xl shadow-sm border border-[#e9ecef] overflow-hidden flex flex-col">
+                    <div class="p-6 border-b border-[#e9ecef] bg-[#f8f9fa] flex justify-between items-center">
+                        <div>
+                            <h3 class="text-base font-bold text-[#212529]">Danh sách Ca làm việc</h3>
+                            <p class="text-xs text-[#868e96] mt-0.5">Danh sách toàn bộ các ca làm việc đang hoạt động và lịch sử trong hệ thống.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="px-3 py-1 bg-indigo-50 text-[#7048e8] text-xs font-bold rounded-full border border-indigo-100">
+                                {{ all_shifts|length }} Ca làm
+                            </span>
+                            <button onclick="openAdminCreateShiftModal()" class="px-3.5 py-1.5 bg-[#5f3dc4] hover:bg-[#4c2bb3] text-white font-bold text-xs rounded-xl shadow-sm transition-colors flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">add_circle</span> Tạo Ca Mới
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-[#f8f9fa] border-b border-[#e9ecef]">
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">Tên ca làm</th>
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">Doanh nghiệp</th>
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">Thời gian</th>
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">Lương/giờ</th>
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">Số lượng SV</th>
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider">Trạng thái</th>
+                                    <th class="py-4 px-6 text-[10px] font-bold text-[#868e96] uppercase tracking-wider text-right">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-[#e9ecef]">
+                                {% for shift in all_shifts %}
+                                <tr class="hover:bg-[#f8f9fa]/50 transition-colors">
+                                    <td class="py-4 px-6 font-bold text-[#212529]">
+                                        <button onclick="openAdminShiftDetailModal('{{ shift.title|escapejs }}', '{{ shift.employer.company_name|escapejs }}', '{{ shift.wage_per_hour|floatformat:0 }}', '{{ shift.start_time|date:"d/m/Y H:i" }} - {{ shift.end_time|time:"H:i" }}', '{{ shift.target_school|escapejs }}', '{{ shift.target_major|escapejs }}', '{{ shift.description|escapejs }}', '{{ shift.required_students }}', '{{ shift.accepted_count }}', '{{ shift.applications.count }}')" class="hover:text-[#5f3dc4] hover:underline font-bold text-[#212529] text-left">
+                                            {{ shift.title }}
+                                        </button>
+                                    </td>
+                                    <td class="py-4 px-6 font-semibold text-sm text-[#495057]">{{ shift.employer.company_name }}</td>
+                                    <td class="py-4 px-6 text-xs text-[#868e96] font-medium">
+                                        <div>{{ shift.start_time|date:"d/m/Y" }}</div>
+                                        <div class="mt-0.5">{{ shift.start_time|time:"H:i" }} - {{ shift.end_time|time:"H:i" }}</div>
+                                    </td>
+                                    <td class="py-4 px-6 font-bold text-emerald-600 text-sm">
+                                        {{ shift.wage_per_hour|floatformat:0 }}đ/h
+                                    </td>
+                                    <td class="py-4 px-6 text-xs text-[#495057]">
+                                        <div>Cần {{ shift.required_students }} SV</div>
+                                        <div class="text-[#868e96] mt-0.5">Nhận: {{ shift.accepted_count }} &middot; Ứng tuyển: {{ shift.applications.count }}</div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        {% if shift.status == 'Open' %}
+                                            {% if shift.end_time < now %}
+                                                <span class="px-2.5 py-1 text-xs font-bold rounded-full bg-red-50 text-red-600 border border-red-100">Đã hết hạn</span>
+                                            {% else %}
+                                                <span class="px-2.5 py-1 text-xs font-bold rounded-full bg-blue-50 text-blue-700 border border-blue-100">Đang tuyển</span>
+                                            {% endif %}
+                                        {% elif shift.status == 'Filled' %}
+                                            <span class="px-2.5 py-1 text-xs font-bold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">Đủ người</span>
+                                        {% elif shift.status == 'Closed' %}
+                                            <span class="px-2.5 py-1 text-xs font-bold rounded-full bg-[#f1f3f5] text-[#868e96] border border-[#e9ecef]">Đã đóng</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <div class="inline-flex gap-2">
+                                            <button onclick="openAdminShiftDetailModal('{{ shift.title|escapejs }}', '{{ shift.employer.company_name|escapejs }}', '{{ shift.wage_per_hour|floatformat:0 }}', '{{ shift.start_time|date:"d/m/Y H:i" }} - {{ shift.end_time|time:"H:i" }}', '{{ shift.target_school|escapejs }}', '{{ shift.target_major|escapejs }}', '{{ shift.description|escapejs }}', '{{ shift.required_students }}', '{{ shift.accepted_count }}', '{{ shift.applications.count }}')" class="p-2 rounded-xl text-[#5f3dc4] hover:bg-indigo-50 transition-colors border border-transparent hover:border-indigo-100 shadow-sm" title="Chi tiết">
+                                                <span class="material-symbols-outlined text-[18px]">visibility</span>
+                                            </button>
+                                            {% if shift.end_time >= now %}
+                                                <button onclick="openAdminEditShiftModal('{{ shift.id }}', '{{ shift.title|escapejs }}', '{{ shift.description|escapejs }}', '{{ shift.start_time|date:"Y-m-d\TH:i" }}', '{{ shift.end_time|date:"Y-m-d\TH:i" }}', '{{ shift.wage_per_hour }}', '{{ shift.required_students }}', '{{ shift.target_school|escapejs }}', '{{ shift.target_major|escapejs }}', '{{ shift.registration_deadline|date:"Y-m-d\TH:i" }}', '{{ shift.status }}')" class="p-2 rounded-xl text-blue-600 hover:bg-blue-50 transition-colors border border-transparent hover:border-blue-100 shadow-sm" title="Sửa ca làm">
+                                                    <span class="material-symbols-outlined text-[18px]">edit</span>
+                                                </button>
+                                                <a href="{% url 'admin_delete_shift' shift.id %}" onclick="return confirm('Bạn có chắc chắn muốn xóa ca làm này? Thao tác này sẽ hủy tất cả đăng ký liên quan.');" class="p-2 rounded-xl text-red-600 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100 shadow-sm" title="Xóa ca làm">
+                                                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                                                </a>
+                                            {% else %}
+                                                <span class="text-[#868e96] text-xs font-bold italic px-2">Hết hạn can thiệp</span>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="py-10 text-center text-[#868e96]">Hệ thống chưa có ca làm việc nào.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- Modal Area -->
+<!-- Modal: Create Shift -->
+<div id="adminCreateShiftModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div class="bg-white max-w-2xl w-full rounded-2xl p-6 shadow-2xl border border-gray-100 m-4 flex flex-col max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-4">
+            <h3 class="text-base font-bold text-primary flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">add_circle</span>
+                <span>Tạo Ca Làm Mới</span>
+            </h3>
+            <button onclick="closeAdminCreateShiftModal()" class="text-[#868e96] hover:text-[#212529] transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form method="post" action="{% url 'admin_create_shift' %}" class="space-y-4 text-left">
+            {% csrf_token %}
+            <div class="space-y-1">
+                <label for="id_employer" class="block text-xs font-bold text-primary">Doanh nghiệp tuyển dụng <span class="text-error">*</span></label>
+                <select name="employer" id="id_employer" class="form-select text-sm rounded-xl w-full" required>
+                    <option value="">-- Chọn doanh nghiệp --</option>
+                    {% for emp in employers %}
+                        <option value="{{ emp.id }}">{{ emp.company_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% for field in form %}
+                <div class="space-y-1">
+                    <label for="create_shift_{{ field.name }}" class="block text-xs font-bold text-primary">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <div class="flex gap-3 justify-end pt-4 border-t border-gray-100 mt-6">
+                <button type="button" onclick="closeAdminCreateShiftModal()" class="px-5 py-2.5 rounded-xl border border-gray-200 text-xs font-semibold hover:bg-gray-55 transition-colors">Hủy</button>
+                <button type="submit" class="px-5 py-2.5 btn-gradient text-on-primary rounded-xl font-semibold text-xs shadow-sm hover:opacity-90 transition-opacity">Tạo ca làm</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Edit Shift -->
+<div id="adminEditShiftModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div class="bg-white max-w-2xl w-full rounded-2xl p-6 shadow-2xl border border-gray-100 m-4 flex flex-col max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-4">
+            <h3 class="text-base font-bold text-primary flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">edit</span>
+                <span>Chỉnh Sửa Ca Làm Việc</span>
+            </h3>
+            <button onclick="closeAdminEditShiftModal()" class="text-[#868e96] hover:text-[#212529] transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form method="post" id="adminEditShiftForm" action="" class="space-y-4 text-left">
+            {% csrf_token %}
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-primary">Tiêu đề ca làm <span class="text-error">*</span></label>
+                <input type="text" name="title" id="edit_shift_title" class="form-control" required />
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-primary">Mô tả công việc</label>
+                <textarea name="description" id="edit_shift_description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-primary">Thời gian bắt đầu <span class="text-error">*</span></label>
+                    <input type="datetime-local" name="start_time" id="edit_shift_start_time" class="form-control" required />
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-primary">Thời gian kết thúc <span class="text-error">*</span></label>
+                    <input type="datetime-local" name="end_time" id="edit_shift_end_time" class="form-control" required />
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-primary">Lương / giờ (VNĐ) <span class="text-error">*</span></label>
+                    <input type="number" name="wage_per_hour" id="edit_shift_wage_per_hour" class="form-control" required />
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-primary">Số sinh viên cần tuyển <span class="text-error">*</span></label>
+                    <input type="number" name="required_students" id="edit_shift_required_students" class="form-control" required />
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-primary">Trường yêu cầu</label>
+                    <input type="text" name="target_school" id="edit_shift_target_school" class="form-control" />
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-primary">Ngành yêu cầu</label>
+                    <input type="text" name="target_major" id="edit_shift_target_major" class="form-control" />
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-primary">Hạn đăng ký ca làm</label>
+                    <input type="datetime-local" name="registration_deadline" id="edit_shift_registration_deadline" class="form-control" />
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-primary">Trạng thái ca làm</label>
+                    <select name="status" id="edit_shift_status" class="form-select text-sm rounded-xl w-full">
+                        <option value="Open">Đang mở (Open)</option>
+                        <option value="Filled">Đủ người (Filled)</option>
+                        <option value="Closed">Đã đóng (Closed)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex gap-3 justify-end pt-4 border-t border-gray-100 mt-6">
+                <button type="button" onclick="closeAdminEditShiftModal()" class="px-5 py-2.5 rounded-xl border border-gray-200 text-xs font-semibold hover:bg-gray-55 transition-colors">Hủy</button>
+                <button type="submit" class="px-5 py-2.5 btn-gradient text-on-primary rounded-xl font-semibold text-xs shadow-sm hover:opacity-90 transition-opacity">Cập nhật ca làm</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Shift Detail -->
+<div id="adminShiftDetailModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div class="bg-white max-w-lg w-full rounded-2xl p-6 shadow-2xl border border-gray-100 m-4 flex flex-col max-h-[85vh] animate-fade-in-up">
+        <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-4">
+            <h3 class="text-base font-bold text-primary flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">work</span>
+                <span>Chi Tiết Ca Làm Việc</span>
+            </h3>
+            <button onclick="closeAdminShiftDetailModal()" class="text-[#868e96] hover:text-[#212529] transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="space-y-4 overflow-y-auto pr-1 flex-1 text-left" id="adminShiftDetailContent">
+            <!-- Dynamically populated -->
+        </div>
+        <div class="flex justify-end pt-4 border-t border-gray-100 mt-4">
+            <button onclick="closeAdminShiftDetailModal()" class="px-5 py-2.5 rounded-xl border border-gray-200 text-xs font-semibold hover:bg-gray-55 transition-colors">Đóng</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Add Student -->
+<div id="addStudentModal"
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div class="bg-white max-w-md w-full rounded-2xl p-6 shadow-2xl border border-gray-100 m-4">
+        <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-4">
+            <h3 class="text-base font-bold text-primary flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">person_add</span>
+                <span>Thêm Sinh Viên Mới</span>
+            </h3>
+            <button onclick="closeAddStudentModal()" class="text-[#868e96] hover:text-[#212529] transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form method="post" action="{% url 'admin_create_student' %}" class="space-y-4 text-left">
+            {% csrf_token %}
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-[#495057]">Tên đăng nhập</label>
+                    <input type="text" name="username"
+                        class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                        required placeholder="datnv" />
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-[#495057]">Mật khẩu</label>
+                    <input type="password" name="password"
+                        class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                        required placeholder="••••••••" />
+                </div>
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-[#495057]">Họ và tên</label>
+                <input type="text" name="full_name"
+                    class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                    required placeholder="Nguyễn Văn Đạt" />
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-[#495057]">Email sinh viên</label>
+                <input type="email" name="email"
+                    class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                    required placeholder="dat.nv@gmail.com" />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-[#495057]">Mã sinh viên</label>
+                    <input type="text" name="student_code"
+                        class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                        required placeholder="DTC2452..." />
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-[#495057]">Lớp sinh hoạt</label>
+                    <input type="text" name="class_name"
+                        class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                        required placeholder="K20A CNTT" />
+                </div>
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-[#495057]">Ngành học</label>
+                <input type="text" name="major"
+                    class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                    required placeholder="Công nghệ thông tin" />
+            </div>
+            <div class="flex gap-3 justify-end pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeAddStudentModal()"
+                    class="px-4 py-2.5 rounded-xl border border-[#e9ecef] text-sm font-semibold hover:bg-gray-50 transition-colors">Đóng</button>
+                <button type="submit"
+                    class="px-6 py-2.5 bg-[#5f3dc4] hover:bg-[#4c2bb3] text-white rounded-xl font-semibold text-sm shadow-sm transition-colors">Tạo
+                    tài khoản</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Edit Student -->
+<div id="editStudentModal"
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div class="bg-white max-w-md w-full rounded-2xl p-6 shadow-2xl border border-gray-100 m-4">
+        <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-4">
+            <h3 class="text-base font-bold text-primary flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">edit_square</span>
+                <span>Sửa Thông Tin Sinh Viên</span>
+            </h3>
+            <button onclick="closeEditStudentModal()" class="text-[#868e96] hover:text-[#212529] transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form id="editStudentForm" method="post" action="" class="space-y-4 text-left">
+            {% csrf_token %}
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-[#495057]">Họ và tên</label>
+                <input type="text" id="edit_student_full_name" name="full_name"
+                    class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                    required />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-[#495057]">Mã sinh viên</label>
+                    <input type="text" id="edit_student_code" name="student_code"
+                        class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                        required />
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-[#495057]">Lớp sinh hoạt</label>
+                    <input type="text" id="edit_student_class_name" name="class_name"
+                        class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                        required />
+                </div>
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-[#495057]">Ngành học</label>
+                <input type="text" id="edit_student_major" name="major"
+                    class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                    required />
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-[#495057]">Điểm uy tín (0.0 - 10.0)</label>
+                <input type="number" step="0.1" min="0" max="10" id="edit_student_trust_score" name="trust_score"
+                    class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                    required />
+            </div>
+            <div class="flex gap-3 justify-end pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeEditStudentModal()"
+                    class="px-4 py-2.5 rounded-xl border border-[#e9ecef] text-sm font-semibold hover:bg-gray-50 transition-colors">Đóng</button>
+                <button type="submit"
+                    class="px-6 py-2.5 bg-[#5f3dc4] hover:bg-[#4c2bb3] text-white rounded-xl font-semibold text-sm shadow-sm transition-colors">Lưu
+                    thay đổi</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Add Employer -->
+<div id="addEmployerModal"
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div class="bg-white max-w-md w-full rounded-2xl p-6 shadow-2xl border border-gray-100 m-4">
+        <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-4">
+            <h3 class="text-base font-bold text-primary flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">domain_add</span>
+                <span>Thêm Doanh Nghiệp Mới</span>
+            </h3>
+            <button onclick="closeAddEmployerModal()" class="text-[#868e96] hover:text-[#212529] transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form method="post" action="{% url 'admin_create_employer' %}" class="space-y-4 text-left">
+            {% csrf_token %}
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-[#495057]">Tên đăng nhập</label>
+                    <input type="text" name="username"
+                        class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                        required placeholder="aitech" />
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-[#495057]">Mật khẩu</label>
+                    <input type="password" name="password"
+                        class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                        required placeholder="••••••••" />
+                </div>
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-[#495057]">Tên công ty / tuyển dụng</label>
+                <input type="text" name="company_name"
+                    class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                    required placeholder="Công ty TNHH AI Tech" />
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-[#495057]">Email doanh nghiệp</label>
+                <input type="email" name="email"
+                    class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                    required placeholder="contact@aitech.vn" />
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-[#495057]">Mã giấy phép GPKD</label>
+                <input type="text" name="business_license"
+                    class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                    required placeholder="GPKD-88992..." />
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-[#495057]">Địa chỉ trụ sở</label>
+                <textarea name="address" rows="2"
+                    class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                    required placeholder="Thái Nguyên, Việt Nam"></textarea>
+            </div>
+            <div class="flex gap-3 justify-end pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeAddEmployerModal()"
+                    class="px-4 py-2.5 rounded-xl border border-[#e9ecef] text-sm font-semibold hover:bg-gray-50 transition-colors">Đóng</button>
+                <button type="submit"
+                    class="px-6 py-2.5 bg-[#5f3dc4] hover:bg-[#4c2bb3] text-white rounded-xl font-semibold text-sm shadow-sm transition-colors">Đăng
+                    ký doanh nghiệp</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Edit Employer -->
+<div id="editEmployerModal"
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div class="bg-white max-w-md w-full rounded-2xl p-6 shadow-2xl border border-gray-100 m-4">
+        <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-4">
+            <h3 class="text-base font-bold text-primary flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">edit_square</span>
+                <span>Sửa Thông Tin Doanh Nghiệp</span>
+            </h3>
+            <button onclick="closeEditEmployerModal()" class="text-[#868e96] hover:text-[#212529] transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form id="editEmployerForm" method="post" action="" class="space-y-4 text-left">
+            {% csrf_token %}
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-[#495057]">Tên doanh nghiệp</label>
+                <input type="text" id="edit_employer_company_name" name="company_name"
+                    class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                    required />
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-[#495057]">Giấy phép GPKD</label>
+                <input type="text" id="edit_employer_business_license" name="business_license"
+                    class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                    required />
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-[#495057]">Địa chỉ</label>
+                <textarea id="edit_employer_address" name="address" rows="2"
+                    class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                    required></textarea>
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-[#495057]">Điểm uy tín (0.0 - 10.0)</label>
+                <input type="number" step="0.1" min="0" max="10" id="edit_employer_trust_score" name="trust_score"
+                    class="block w-full px-3 py-2 bg-white border border-[#e9ecef] rounded-xl text-sm focus:border-[#7048e8] focus:ring-1 focus:ring-[#7048e8] transition-colors"
+                    required />
+            </div>
+            <div class="flex items-center gap-2 pt-2">
+                <input type="checkbox" id="edit_employer_is_verified" name="is_verified" value="true"
+                    class="rounded text-[#5f3dc4] focus:ring-[#5f3dc4]" />
+                <label for="edit_employer_is_verified" class="text-xs font-bold text-[#495057]">Đã xác minh kiểm
+                    duyệt</label>
+            </div>
+            <div class="flex gap-3 justify-end pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeEditEmployerModal()"
+                    class="px-4 py-2.5 rounded-xl border border-[#e9ecef] text-sm font-semibold hover:bg-gray-50 transition-colors">Đóng</button>
+                <button type="submit"
+                    class="px-6 py-2.5 bg-[#5f3dc4] hover:bg-[#4c2bb3] text-white rounded-xl font-semibold text-sm shadow-sm transition-colors">Lưu
+                    thay đổi</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function showTab(tabId) {
+        // Hide all tabs
+        document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+
+        // Show selected tab
+        const activeTab = document.getElementById(tabId);
+        if (activeTab) {
+            activeTab.classList.remove('hidden');
+        }
+
+        // Remove active styling from all sidebar button links
+        document.querySelectorAll('.sidebar-link').forEach(el => {
+            el.classList.remove('active');
+        });
+
+        // Add active styling to clicked button
+        const activeLink = document.querySelector(`[data-tab-target="${tabId}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+
+        // Store tab in localStorage to persist on refresh
+        localStorage.setItem('activeAdminTab', tabId);
+
+        // Update URL query parameters without page reload
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?tab=' + tabId;
+        window.history.replaceState({path: newUrl}, '', newUrl);
+    }
+
+    // Modal Student controls
+    function openAddStudentModal() {
+        document.getElementById('addStudentModal').classList.remove('hidden');
+    }
+    function closeAddStudentModal() {
+        document.getElementById('addStudentModal').classList.add('hidden');
+    }
+    function openEditStudentModal(id, fullName, code, className, major, trustScore) {
+        document.getElementById('editStudentForm').action = `/portal-admin/student/${id}/edit/`;
+        document.getElementById('edit_student_full_name').value = fullName;
+        document.getElementById('edit_student_code').value = code;
+        document.getElementById('edit_student_class_name').value = className;
+        document.getElementById('edit_student_major').value = major;
+        document.getElementById('edit_student_trust_score').value = parseFloat(trustScore).toFixed(1);
+        document.getElementById('editStudentModal').classList.remove('hidden');
+    }
+    function closeEditStudentModal() {
+        document.getElementById('editStudentModal').classList.add('hidden');
+    }
+
+    // Modal Employer controls
+    function openAddEmployerModal() {
+        document.getElementById('addEmployerModal').classList.remove('hidden');
+    }
+    function closeAddEmployerModal() {
+        document.getElementById('addEmployerModal').classList.add('hidden');
+    }
+    function openEditEmployerModal(id, companyName, businessLicense, address, trustScore, isVerified) {
+        document.getElementById('editEmployerForm').action = `/portal-admin/employer/${id}/edit/`;
+        document.getElementById('edit_employer_company_name').value = companyName;
+        document.getElementById('edit_employer_business_license').value = businessLicense;
+        document.getElementById('edit_employer_address').value = address;
+        document.getElementById('edit_employer_trust_score').value = parseFloat(trustScore).toFixed(1);
+        document.getElementById('edit_employer_is_verified').checked = (isVerified === 'true');
+        document.getElementById('editEmployerModal').classList.remove('hidden');
+    }
+    function closeEditEmployerModal() {
+        document.getElementById('editEmployerModal').classList.add('hidden');
+    }
+
+    // Modal Shift controls
+    function openAdminCreateShiftModal() {
+        document.getElementById('adminCreateShiftModal').classList.remove('hidden');
+    }
+    function closeAdminCreateShiftModal() {
+        document.getElementById('adminCreateShiftModal').classList.add('hidden');
+    }
+    function openAdminEditShiftModal(id, title, description, start_time, end_time, wage, required, target_school, target_major, deadline, status) {
+        document.getElementById('adminEditShiftForm').action = `/portal-admin/shift/${id}/edit/`;
+        document.getElementById('edit_shift_title').value = title;
+        document.getElementById('edit_shift_description').value = description;
+        document.getElementById('edit_shift_start_time').value = start_time;
+        document.getElementById('edit_shift_end_time').value = end_time;
+        document.getElementById('edit_shift_wage_per_hour').value = wage;
+        document.getElementById('edit_shift_required_students').value = required;
+        document.getElementById('edit_shift_target_school').value = target_school;
+        document.getElementById('edit_shift_target_major').value = target_major;
+        document.getElementById('edit_shift_registration_deadline').value = deadline;
+        document.getElementById('edit_shift_status').value = status;
+        document.getElementById('adminEditShiftModal').classList.remove('hidden');
+    }
+    function closeAdminEditShiftModal() {
+        document.getElementById('adminEditShiftModal').classList.add('hidden');
+    }
+    function openAdminShiftDetailModal(title, employer, wage, time, target_school, target_major, description, required, accepted, applicationsCount) {
+        document.getElementById('adminShiftDetailContent').innerHTML = `
+            <div class="space-y-3">
+                <div>
+                    <span class="text-[10px] uppercase font-bold text-outline">Tiêu đề ca làm</span>
+                    <p class="text-sm font-bold text-primary">${title}</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-outline">Doanh nghiệp</span>
+                        <p class="text-xs text-on-surface font-semibold">${employer}</p>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-outline font-bold">Mức lương</span>
+                        <p class="text-xs text-emerald-600 font-bold">${wage}đ/giờ</p>
+                    </div>
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase font-bold text-outline">Thời gian làm việc</span>
+                    <p class="text-xs text-on-surface font-semibold">${time}</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-outline">Yêu cầu trường</span>
+                        <p class="text-xs text-on-surface font-semibold">${target_school || 'Tất cả'}</p>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-outline font-bold">Yêu cầu ngành</span>
+                        <p class="text-xs text-on-surface font-semibold">${target_major || 'Tất cả'}</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-outline">Cần tuyển</span>
+                        <p class="text-xs text-on-surface font-semibold">${required} SV</p>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-outline font-bold">Đã nhận</span>
+                        <p class="text-xs text-indigo-600 font-bold">${accepted} SV</p>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-outline font-bold">Đơn ứng tuyển</span>
+                        <p class="text-xs text-on-surface font-semibold">${applicationsCount} đơn</p>
+                    </div>
+                </div>
+                <div class="pt-2 border-t border-outline-variant/10">
+                    <span class="text-[10px] uppercase font-bold text-outline font-bold">Mô tả chi tiết</span>
+                    <p class="text-xs text-on-surface-variant font-medium leading-relaxed">${description || 'Không có mô tả chi tiết.'}</p>
+                </div>
+            </div>
+        `;
+        document.getElementById('adminShiftDetailModal').classList.remove('hidden');
+    }
+    function closeAdminShiftDetailModal() {
+        document.getElementById('adminShiftDetailModal').classList.add('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Active tab restoration from URL or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlTab = urlParams.get('tab');
+        const activeAdminTab = urlTab || localStorage.getItem('activeAdminTab');
+        if (activeAdminTab && document.getElementById(activeAdminTab)) {
+            showTab(activeAdminTab);
+        } else {
+            showTab('tab-dashboard');
+        }
+    });
+</script>
+{% endblock %}

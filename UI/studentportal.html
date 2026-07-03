@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Dashboard - CareerAI</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-fixed": "#e9ddff",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "primary-container": "#00487a",
+                        "primary": "#003156",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "surface-bright": "#f7f9fb",
+                        "inverse-primary": "#9dcaff",
+                        "on-primary-fixed-variant": "#03497b",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#003723",
+                        "on-tertiary-fixed": "#002113",
+                        "surface-dim": "#d8dadc",
+                        "accent-electric": "#A855F7",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#9dcaff",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-container-high": "#e6e8ea",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#005035",
+                        "on-secondary-container": "#fffbff",
+                        "surface-glass": "rgba(255, 255, 255, 0.7)",
+                        "surface-tint": "#2b6195",
+                        "background": "#f7f9fb",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#001d35",
+                        "text-rich": "#333333",
+                        "on-secondary": "#ffffff",
+                        "outline": "#727780",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#42474f",
+                        "on-tertiary-container": "#33ca91",
+                        "on-secondary-fixed": "#23005c",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary-fixed": "#6ffbbe",
+                        "inverse-surface": "#2d3133",
+                        "surface": "#f7f9fb",
+                        "surface-container": "#eceef0",
+                        "outline-variant": "#c2c7d0",
+                        "primary-fixed": "#d1e4ff",
+                        "on-background": "#191c1e",
+                        "secondary-container": "#8455ef",
+                        "on-primary-container": "#86b7f0",
+                        "secondary": "#6b38d4"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        gutter: "24px",
+                        base: "8px",
+                        "container-max": "1280px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px"
+                    },
+                    fontFamily: {
+                        "display-lg": ["Hanken Grotesk"],
+                        "label-md": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "display-lg-mobile": ["Hanken Grotesk"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "label-caps": ["JetBrains Mono"],
+                        "headline-md": ["Hanken Grotesk"]
+                    },
+                    fontSize: {
+                        "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "label-md": ["14px", { lineHeight: "20px", fontWeight: "500" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "display-lg-mobile": ["36px", { lineHeight: "42px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "500" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Ambient depth for cards */
+        .ambient-shadow {
+            box-shadow: 0 4px 20px rgba(0, 49, 86, 0.08);
+            /* Primary navy tint */
+        }
+
+        .pulse-glow {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(105, 251, 190, 0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(105, 251, 190, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(105, 251, 190, 0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased min-h-screen flex flex-col md:flex-row">
+    <!-- TopNavBar (Mobile Only) -->
+    <nav
+        class="md:hidden glass-nav docked full-width top-0 sticky border-b border-on-surface/10 shadow-sm z-50 flex justify-between items-center w-full px-margin-mobile h-16">
+        <div class="font-display-lg-mobile text-display-lg-mobile font-bold text-primary">CareerAI</div>
+        <button class="text-primary p-2">
+            <span class="material-symbols-outlined" data-icon="menu">menu</span>
+        </button>
+    </nav>
+    <!-- SideNavBar (Desktop) -->
+    <aside
+        class="bg-surface-container-lowest text-secondary docked left-0 h-full w-64 border-r border-outline-variant shadow-md hidden lg:flex flex-col sticky top-0 p-4 gap-2 z-40">
+        <div class="flex items-center gap-3 mb-8 px-4 mt-4">
+            <img class="w-10 h-10 rounded-lg object-cover"
+                data-alt="A small, professional abstract logo representing a university tech portal. High-tech minimalist aesthetic, deep navy and electric purple accents. Clean white background."
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDupcx4fznnhpzpnHId9j2YnXLCl0D9rO8I8AMcXJnLgH_Ihn9Xuu7UdtgxEBBO9K5QscMypasFW8s0Mo21wVeumT5C43LOJ941SKP9LAItcFgPgFtcRet6lP7ehs_UevpBXJDa3U-2ug64R8BrAF54zzdgUGrZOlF46Mi8F89KJu1I6IExsB8uK3XPO6-sWcTRickTJ4Vhk_5FReKQwvJD7sNFGc1xFOCRsm0bOlT1nahTlA0kWuC4_3iEf9g51r0tnO0M-q7TRKo4" />
+            <div>
+                <h1 class="font-headline-md text-headline-md text-primary m-0 p-0 leading-tight">ICTU Portal</h1>
+                <p class="font-label-caps text-label-caps text-on-surface-variant m-0 p-0">Student Career Suite</p>
+            </div>
+        </div>
+        <nav class="flex-1 flex flex-col gap-2 font-label-md text-label-md">
+            <a class="bg-secondary-container text-on-secondary-container rounded-xl font-bold flex items-center gap-3 px-4 py-3 translate-x-1 duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+            <a class="text-on-surface-variant hover:bg-surface-container-high rounded-xl flex items-center gap-3 px-4 py-3 transition-all duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="calendar_view_month">calendar_view_month</span>
+                Time Matrix
+            </a>
+            <a class="text-on-surface-variant hover:bg-surface-container-high rounded-xl flex items-center gap-3 px-4 py-3 transition-all duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+                Match Center
+            </a>
+            <a class="text-on-surface-variant hover:bg-surface-container-high rounded-xl flex items-center gap-3 px-4 py-3 transition-all duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+                Messages
+            </a>
+            <a class="text-on-surface-variant hover:bg-surface-container-high rounded-xl flex items-center gap-3 px-4 py-3 transition-all duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                Analytics
+            </a>
+        </nav>
+        <div class="mt-auto flex flex-col gap-2 mb-4">
+            <button
+                class="w-full bg-gradient-to-r from-accent-electric to-primary text-white font-label-md text-label-md py-3 rounded-lg flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity">
+                <span class="material-symbols-outlined text-[18px]" data-icon="auto_awesome">auto_awesome</span>
+                AI Search
+            </button>
+        </div>
+        <div class="pt-4 border-t border-outline-variant/30 flex flex-col gap-1 font-label-md text-label-md">
+            <a class="text-on-surface-variant hover:bg-surface-container-high rounded-xl flex items-center gap-3 px-4 py-2 transition-all duration-200"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+                Settings
+            </a>
+            <a class="text-on-surface-variant hover:bg-surface-container-high rounded-xl flex items-center gap-3 px-4 py-2 transition-all duration-200"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+                Support
+            </a>
+        </div>
+    </aside>
+    <!-- Main Content Area -->
+    <main
+        class="flex-1 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 flex flex-col gap-10">
+        <header class="flex justify-between items-end">
+            <div>
+                <h2 class="font-display-lg text-display-lg text-primary m-0">Welcome back, Student</h2>
+                <p class="text-on-surface-variant mt-2">Your AI-driven career dashboard is optimized for today.</p>
+            </div>
+            <div class="hidden md:flex items-center gap-4">
+                <div
+                    class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/50">
+                    <div class="w-2 h-2 rounded-full bg-tertiary-fixed pulse-glow"></div>
+                    <span class="font-label-caps text-label-caps text-tertiary">AI Engine Active</span>
+                </div>
+            </div>
+        </header>
+        <!-- Bento Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <!-- Check-in Ca làm (Left Column on Desktop) -->
+            <section
+                class="col-span-1 md:col-span-4 bg-surface-container-lowest rounded-xl ambient-shadow p-6 flex flex-col items-center justify-center text-center relative overflow-hidden border border-outline-variant/20">
+                <h3 class="font-headline-md text-headline-md text-primary w-full text-left mb-6">Next Shift</h3>
+                <div class="relative w-48 h-48 mb-6 flex items-center justify-center">
+                    <svg class="absolute inset-0 w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+                        <circle cx="50" cy="50" fill="none" r="45" stroke="#e0e3e5" stroke-width="6"></circle>
+                        <circle class="transition-all duration-1000" cx="50" cy="50" fill="none" r="45" stroke="#A855F7"
+                            stroke-dasharray="283" stroke-dashoffset="70" stroke-width="6"></circle>
+                    </svg>
+                    <div class="flex flex-col items-center">
+                        <span class="font-display-lg text-display-lg text-primary m-0 leading-none">01:45</span>
+                        <span class="font-label-caps text-label-caps text-on-surface-variant mt-1">HOURS LEFT</span>
+                    </div>
+                </div>
+                <div class="mb-6 w-full bg-surface-container-low rounded-lg p-3 text-left">
+                    <p class="font-label-md text-label-md text-primary font-bold">Event Staff ICTU</p>
+                    <p class="text-sm text-on-surface-variant">14:00 - 18:00 • Hall A</p>
+                </div>
+                <button
+                    class="w-full bg-primary text-on-primary font-label-md text-label-md py-3 rounded-lg shadow-sm hover:bg-primary-container transition-colors font-bold">
+                    Check-in Now
+                </button>
+            </section>
+            <!-- Time-Block Matrix (Middle/Wide Column) -->
+            <section
+                class="col-span-1 md:col-span-8 bg-surface-container-lowest rounded-xl ambient-shadow p-6 border border-outline-variant/20">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-headline-md text-headline-md text-primary">Time-Block Matrix</h3>
+                    <button class="text-secondary font-label-md text-label-md flex items-center gap-1 hover:underline">
+                        Edit Schedule
+                        <span class="material-symbols-outlined text-[16px]" data-icon="edit">edit</span>
+                    </button>
+                </div>
+                <!-- Simple Calendar Grid representation -->
+                <div class="w-full overflow-x-auto">
+                    <div class="min-w-[600px] grid grid-cols-8 gap-1 text-center">
+                        <!-- Header -->
+                        <div class="p-2 text-xs text-outline font-label-caps"></div>
+                        <div class="p-2 text-xs text-outline font-label-caps">MON</div>
+                        <div class="p-2 text-xs text-outline font-label-caps">TUE</div>
+                        <div class="p-2 text-xs text-outline font-label-caps">WED</div>
+                        <div class="p-2 text-xs text-outline font-label-caps">THU</div>
+                        <div
+                            class="p-2 text-xs text-outline font-label-caps text-primary font-bold bg-surface-container-low rounded-t-md">
+                            FRI</div>
+                        <div class="p-2 text-xs text-outline font-label-caps">SAT</div>
+                        <div class="p-2 text-xs text-outline font-label-caps">SUN</div>
+                        <!-- Rows -->
+                        <div class="p-2 text-xs text-outline flex items-center justify-end pr-4">08:00</div>
+                        <div
+                            class="bg-surface-container-low rounded-md h-10 border border-transparent hover:border-outline-variant transition-colors">
+                        </div>
+                        <div
+                            class="bg-surface-container-low rounded-md h-10 border border-transparent hover:border-outline-variant transition-colors">
+                        </div>
+                        <div
+                            class="bg-surface-container-low rounded-md h-10 border border-transparent hover:border-outline-variant transition-colors">
+                        </div>
+                        <div
+                            class="bg-tertiary-fixed/30 border border-tertiary-fixed rounded-md h-10 flex items-center justify-center text-tertiary text-xs">
+                            Free</div>
+                        <div
+                            class="bg-surface-container-low rounded-md h-10 border border-transparent hover:border-outline-variant transition-colors">
+                        </div>
+                        <div
+                            class="bg-tertiary-fixed/30 border border-tertiary-fixed rounded-md h-10 flex items-center justify-center text-tertiary text-xs">
+                            Free</div>
+                        <div
+                            class="bg-surface-container-low rounded-md h-10 border border-transparent hover:border-outline-variant transition-colors">
+                        </div>
+                        <div class="p-2 text-xs text-outline flex items-center justify-end pr-4">12:00</div>
+                        <div
+                            class="bg-surface-container-low rounded-md h-10 border border-transparent hover:border-outline-variant transition-colors">
+                        </div>
+                        <div
+                            class="bg-tertiary-fixed/30 border border-tertiary-fixed rounded-md h-10 flex items-center justify-center text-tertiary text-xs">
+                            Free</div>
+                        <div
+                            class="bg-surface-container-low rounded-md h-10 border border-transparent hover:border-outline-variant transition-colors">
+                        </div>
+                        <div
+                            class="bg-surface-container-low rounded-md h-10 border border-transparent hover:border-outline-variant transition-colors">
+                        </div>
+                        <div
+                            class="bg-primary/10 border border-primary/20 rounded-md h-10 flex items-center justify-center text-primary text-xs font-bold">
+                            Class</div>
+                        <div
+                            class="bg-tertiary-fixed/30 border border-tertiary-fixed rounded-md h-10 flex items-center justify-center text-tertiary text-xs">
+                            Free</div>
+                        <div
+                            class="bg-surface-container-low rounded-md h-10 border border-transparent hover:border-outline-variant transition-colors">
+                        </div>
+                        <div class="p-2 text-xs text-outline flex items-center justify-end pr-4">16:00</div>
+                        <div
+                            class="bg-tertiary-fixed/30 border border-tertiary-fixed rounded-md h-10 flex items-center justify-center text-tertiary text-xs">
+                            Free</div>
+                        <div
+                            class="bg-surface-container-low rounded-md h-10 border border-transparent hover:border-outline-variant transition-colors">
+                        </div>
+                        <div
+                            class="bg-primary/10 border border-primary/20 rounded-md h-10 flex items-center justify-center text-primary text-xs font-bold">
+                            Class</div>
+                        <div
+                            class="bg-surface-container-low rounded-md h-10 border border-transparent hover:border-outline-variant transition-colors">
+                        </div>
+                        <div
+                            class="bg-accent-electric/20 border border-accent-electric/40 rounded-md h-10 flex items-center justify-center text-secondary text-xs font-bold">
+                            Event</div>
+                        <div
+                            class="bg-surface-container-low rounded-md h-10 border border-transparent hover:border-outline-variant transition-colors">
+                        </div>
+                        <div
+                            class="bg-surface-container-low rounded-md h-10 border border-transparent hover:border-outline-variant transition-colors">
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 flex gap-4 text-xs">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-tertiary-fixed/50 border border-tertiary-fixed"></div>
+                        Available
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-primary/20 border border-primary/30"></div> Busy
+                    </div>
+                </div>
+            </section>
+            <!-- Smart Job Hub (Full width bottom row) -->
+            <section class="col-span-1 md:col-span-12 mt-4">
+                <div class="flex justify-between items-end mb-6">
+                    <div>
+                        <h3 class="font-headline-md text-headline-md text-primary m-0">Smart Job Hub</h3>
+                        <p class="text-on-surface-variant text-sm mt-1">Roles matching your matrix &amp; skills.</p>
+                    </div>
+                    <a class="text-secondary font-label-md text-label-md hover:underline" href="#">View All Matches</a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Job Card 1 -->
+                    <div
+                        class="bg-surface-container-lowest rounded-xl ambient-shadow p-5 border border-outline-variant/20 flex flex-col relative overflow-hidden group">
+                        <div
+                            class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent-electric to-tertiary-fixed">
+                        </div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 bg-surface-container-low rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-primary text-[28px]"
+                                    data-icon="coffee">coffee</span>
+                            </div>
+                            <div
+                                class="bg-tertiary-fixed/20 text-tertiary-container px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 border border-tertiary-fixed/30">
+                                <span class="material-symbols-outlined text-[14px]"
+                                    data-icon="auto_awesome">auto_awesome</span>
+                                AI Match 100%
+                            </div>
+                        </div>
+                        <h4 class="font-body-lg text-body-lg font-bold text-primary mb-1">Pha chế Coffee House</h4>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-surface-container text-on-surface-variant px-2 py-1 rounded-md text-xs">2km
+                                away</span>
+                            <span
+                                class="bg-surface-container text-on-surface-variant px-2 py-1 rounded-md text-xs">25k/hr</span>
+                        </div>
+                        <div class="mb-6 flex flex-col gap-1">
+                            <div class="flex items-center gap-2 text-sm text-on-surface-variant">
+                                <span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span>
+                                Fits: Tue, Thu 08:00-12:00
+                            </div>
+                        </div>
+                        <div class="mt-auto pt-4 border-t border-outline-variant/20">
+                            <button
+                                class="w-full bg-transparent border border-primary text-primary font-label-md text-label-md py-2 rounded-lg hover:bg-primary/5 transition-colors">
+                                Nhận ca
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Job Card 2 -->
+                    <div
+                        class="bg-surface-container-lowest rounded-xl ambient-shadow p-5 border border-outline-variant/20 flex flex-col relative overflow-hidden group">
+                        <div
+                            class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent-electric to-tertiary-fixed">
+                        </div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 bg-surface-container-low rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-primary text-[28px]"
+                                    data-icon="celebration">celebration</span>
+                            </div>
+                            <div
+                                class="bg-tertiary-fixed/20 text-tertiary-container px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 border border-tertiary-fixed/30">
+                                <span class="material-symbols-outlined text-[14px]"
+                                    data-icon="auto_awesome">auto_awesome</span>
+                                AI Match 95%
+                            </div>
+                        </div>
+                        <h4 class="font-body-lg text-body-lg font-bold text-primary mb-1">Event Staff ICTU</h4>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-surface-container text-on-surface-variant px-2 py-1 rounded-md text-xs">On
+                                Campus</span>
+                            <span
+                                class="bg-surface-container text-on-surface-variant px-2 py-1 rounded-md text-xs">30k/hr</span>
+                        </div>
+                        <div class="mb-6 flex flex-col gap-1">
+                            <div class="flex items-center gap-2 text-sm text-on-surface-variant">
+                                <span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span>
+                                Fits: Fri 14:00-18:00
+                            </div>
+                        </div>
+                        <div class="mt-auto pt-4 border-t border-outline-variant/20">
+                            <button
+                                class="w-full bg-transparent border border-primary text-primary font-label-md text-label-md py-2 rounded-lg hover:bg-primary/5 transition-colors">
+                                Nhận ca
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+
+</html>

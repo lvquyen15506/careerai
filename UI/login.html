@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CareerAI - Login</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#e9ddff",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "primary-container": "#00487a",
+                        "primary": "#003156",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "surface-bright": "#f7f9fb",
+                        "inverse-primary": "#9dcaff",
+                        "on-primary-fixed-variant": "#03497b",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#003723",
+                        "on-tertiary-fixed": "#002113",
+                        "surface-dim": "#d8dadc",
+                        "accent-electric": "#A855F7",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#9dcaff",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-container-high": "#e6e8ea",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#005035",
+                        "on-secondary-container": "#fffbff",
+                        "surface-glass": "rgba(255, 255, 255, 0.7)",
+                        "surface-tint": "#2b6195",
+                        "background": "#f7f9fb",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#001d35",
+                        "text-rich": "#333333",
+                        "on-secondary": "#ffffff",
+                        "outline": "#727780",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#42474f",
+                        "on-tertiary-container": "#33ca91",
+                        "on-secondary-fixed": "#23005c",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary-fixed": "#6ffbbe",
+                        "inverse-surface": "#2d3133",
+                        "surface": "#f7f9fb",
+                        "surface-container": "#eceef0",
+                        "outline-variant": "#c2c7d0",
+                        "primary-fixed": "#d1e4ff",
+                        "on-background": "#191c1e",
+                        "secondary-container": "#8455ef",
+                        "on-primary-container": "#86b7f0",
+                        "secondary": "#6b38d4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "8px",
+                        "container-max": "1280px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Hanken Grotesk"],
+                        "label-md": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "display-lg-mobile": ["Hanken Grotesk"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "label-caps": ["JetBrains Mono"],
+                        "headline-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["36px", { "lineHeight": "42px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body class="bg-surface-container-lowest text-on-surface antialiased overflow-hidden">
+    <div class="flex h-screen w-full">
+        <div class="hidden lg:flex lg:w-[40%] relative overflow-hidden bg-primary">
+            <div class="absolute inset-0 bg-cover bg-center opacity-90 mix-blend-luminosity"
+                data-alt="A high-quality, professional photograph of diverse, energetic university students collaborating enthusiastically around a sleek table in a modern, high-tech campus hub. The environment features expansive glass walls, minimalist architecture, and glowing digital screens displaying futuristic data visualizations in the background. The lighting is bright, high-key, and optimistic, creating a pristine light-mode aesthetic. The color palette emphasizes clean whites, deep navy blues, and subtle neon green accents, perfectly reflecting a sophisticated, AI-driven intelligent career platform."
+                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAFpJhzRKhckv6KLRetvTIm7ETrTV0z60-bfR_uJRxjpHjZC5DBrpqYc14dHrtBnU7WoJQWy3OY6Xd39ybM0-NpKi4V6rXVKB0UyIh418XgdNVvCpd1qNn_tOcGCefigxIHfbE2dU91Qbd2bz4kp4P4bxcBgR5uNKoKMOIy0kRf1BRrcgDP88AyFZIS5K-78YKcCz4gRU86zgEEquhFBU0N6UgH6LxPcijdwhcyzDST3zIXeO3OUN191wn_SwEVt0XvNcF5-zZrZoG8')">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent"></div>
+            <div class="absolute bottom-12 left-12 right-12 z-10 flex flex-col gap-4">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-tertiary-fixed text-4xl"
+                        style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                    <h1 class="font-display-lg text-display-lg text-on-primary">CareerAI</h1>
+                </div>
+                <p class="font-body-lg text-body-lg text-primary-fixed">The Intelligent Career Partner. Accelerating
+                    student trajectories with precision AI matching.</p>
+            </div>
+        </div>
+        <div
+            class="flex flex-col w-full lg:w-[60%] items-center justify-center p-8 sm:p-16 relative bg-surface-container-lowest">
+            <div class="lg:hidden absolute top-8 left-8 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-3xl"
+                    style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                <h1 class="font-headline-md text-headline-md font-bold text-primary">CareerAI</h1>
+            </div>
+            <div class="w-full max-w-md space-y-12">
+                <div class="text-center space-y-4">
+                    <h2
+                        class="font-display-lg-mobile text-display-lg-mobile lg:font-display-lg lg:text-display-lg text-primary">
+                        Khởi Đầu Tương Lai</h2>
+                    <p class="font-body-md text-body-md text-on-surface-variant">Truy cập hệ sinh thái nghề nghiệp thông
+                        minh dành riêng cho sinh viên.</p>
+                </div>
+                <div class="space-y-8">
+                    <button
+                        class="relative w-full flex items-center justify-center gap-3 bg-primary text-on-primary py-4 px-6 rounded-xl shadow-[0_4px_20px_rgba(0,49,86,0.15)] hover:shadow-[0_6px_25px_rgba(0,49,86,0.2)] hover:-translate-y-0.5 transition-all duration-300 group overflow-hidden"
+                        id="loginBtn">
+                        <div
+                            class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        </div>
+                        <div class="flex items-center justify-center gap-3 transition-opacity duration-300"
+                            id="btnContent">
+                            <span class="material-symbols-outlined text-on-primary"
+                                style="font-variation-settings: 'FILL' 1;">school</span>
+                            <span class="font-label-md text-label-md font-bold">Đăng nhập qua cổng Sinh viên
+                                (@ictu.edu.vn)</span>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center gap-3 opacity-0 transition-opacity duration-300 pointer-events-none"
+                            id="btnLoading">
+                            <span
+                                class="material-symbols-outlined text-tertiary-fixed animate-spin">progress_activity</span>
+                            <span class="font-label-md text-label-md font-bold text-tertiary-fixed">Đang xác
+                                thực...</span>
+                        </div>
+                    </button>
+                    <div class="flex items-center gap-4 w-full opacity-60">
+                        <div class="h-px bg-outline-variant flex-1"></div>
+                        <span class="font-label-caps text-label-caps text-on-surface-variant">HOẶC</span>
+                        <div class="h-px bg-outline-variant flex-1"></div>
+                    </div>
+                    <div class="text-center bg-surface px-6 py-4 rounded-xl border border-outline-variant/30">
+                        <p class="font-body-md text-body-md text-on-surface-variant">
+                            Bạn là Nhà tuyển dụng?
+                            <a class="text-secondary font-bold hover:text-secondary-fixed transition-colors underline underline-offset-4 ml-1"
+                                href="#">Đăng nhập tại đây</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-8 text-center w-full">
+                <p class="font-label-caps text-label-caps text-outline">© 2024 CareerAI Platform. Powered by ICTU Intel
+                    Engine.</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('loginBtn').addEventListener('click', function () {
+            const btnContent = document.getElementById('btnContent');
+            const btnLoading = document.getElementById('btnLoading');
+
+            this.classList.add('pointer-events-none');
+
+            btnContent.classList.add('opacity-0');
+            btnLoading.classList.remove('opacity-0');
+            btnLoading.classList.add('opacity-100');
+
+            setTimeout(() => {
+                btnContent.classList.remove('opacity-0');
+                btnLoading.classList.remove('opacity-100');
+                btnLoading.classList.add('opacity-0');
+                this.classList.remove('pointer-events-none');
+            }, 3000);
+        });
+    </script>
+</body>
+
+</html>

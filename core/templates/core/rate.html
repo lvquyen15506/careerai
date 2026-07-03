@@ -1,0 +1,64 @@
+{% extends base_template|default:'core/base.html' %}
+{% load static %}
+
+{% block title %}Đánh giá ca làm - CareerAI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col bg-background">
+    <!-- Header -->
+    <header class="w-full bg-surface-container-lowest border-b border-outline-variant/30 py-4 px-margin-desktop shadow-sm flex items-center justify-between">
+        <a href="{% url 'home' %}" class="font-display-lg text-headline-md font-bold text-primary">CareerAI</a>
+        {% if user.employer_profile %}
+            <a href="{% url 'employer_dashboard' %}" class="text-secondary font-semibold text-sm hover:underline flex items-center gap-1">
+                <span class="material-symbols-outlined text-[18px]">arrow_back</span> Quay lại Dashboard
+            </a>
+        {% else %}
+            <a href="{% url 'student_dashboard' %}" class="text-secondary font-semibold text-sm hover:underline flex items-center gap-1">
+                <span class="material-symbols-outlined text-[18px]">arrow_back</span> Quay lại Dashboard
+            </a>
+        {% endif %}
+    </header>
+
+    <main class="flex-1 w-full max-w-md mx-auto px-margin-mobile py-16 flex flex-col justify-center gap-6">
+        {% include "core/includes/rate_body.html" %}
+    </main>
+</div>
+{% endblock %}
+
+{% block student_content %}
+<div class="py-12 flex flex-col justify-center">
+    {% include "core/includes/rate_body.html" %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let selectedRating = 0;
+
+    function highlightStars(count) {
+        const buttons = document.querySelectorAll('.star-btn span');
+        buttons.forEach((span, index) => {
+            if (index < count) {
+                span.style.color = '#f59e0b';
+                span.style.fontVariationSettings = "'FILL' 1";
+                span.style.transform = 'scale(1.15)';
+            } else {
+                span.style.color = '';
+                span.style.fontVariationSettings = "'FILL' 0";
+                span.style.transform = 'scale(1)';
+            }
+        });
+    }
+
+    function resetStars() {
+        highlightStars(selectedRating);
+    }
+
+    function selectStar(rating) {
+        selectedRating = rating;
+        document.getElementById('rating-input').value = rating;
+        highlightStars(rating);
+        document.getElementById('submit-btn').removeAttribute('disabled');
+    }
+</script>
+{% endblock %}

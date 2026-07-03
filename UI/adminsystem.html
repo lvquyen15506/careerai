@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CareerAI Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#e9ddff",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "primary-container": "#00487a",
+                        "primary": "#003156",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "surface-bright": "#f7f9fb",
+                        "inverse-primary": "#9dcaff",
+                        "on-primary-fixed-variant": "#03497b",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#003723",
+                        "on-tertiary-fixed": "#002113",
+                        "surface-dim": "#d8dadc",
+                        "accent-electric": "#A855F7",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#9dcaff",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-container-high": "#e6e8ea",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#005035",
+                        "on-secondary-container": "#fffbff",
+                        "surface-glass": "rgba(255, 255, 255, 0.7)",
+                        "surface-tint": "#2b6195",
+                        "background": "#f7f9fb",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#001d35",
+                        "text-rich": "#333333",
+                        "on-secondary": "#ffffff",
+                        "outline": "#727780",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#42474f",
+                        "on-tertiary-container": "#33ca91",
+                        "on-secondary-fixed": "#23005c",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary-fixed": "#6ffbbe",
+                        "inverse-surface": "#2d3133",
+                        "surface": "#f7f9fb",
+                        "surface-container": "#eceef0",
+                        "outline-variant": "#c2c7d0",
+                        "primary-fixed": "#d1e4ff",
+                        "on-background": "#191c1e",
+                        "secondary-container": "#8455ef",
+                        "on-primary-container": "#86b7f0",
+                        "secondary": "#6b38d4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "8px",
+                        "container-max": "1280px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "display-lg": [
+                            "Hanken Grotesk"
+                        ],
+                        "label-md": [
+                            "Hanken Grotesk"
+                        ],
+                        "body-md": [
+                            "Hanken Grotesk"
+                        ],
+                        "display-lg-mobile": [
+                            "Hanken Grotesk"
+                        ],
+                        "body-lg": [
+                            "Hanken Grotesk"
+                        ],
+                        "label-caps": [
+                            "JetBrains Mono"
+                        ],
+                        "headline-md": [
+                            "Hanken Grotesk"
+                        ]
+                    },
+                    "fontSize": {
+                        "display-lg": [
+                            "48px",
+                            {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                            }
+                        ],
+                        "label-md": [
+                            "14px",
+                            {
+                                "lineHeight": "20px",
+                                "fontWeight": "500"
+                            }
+                        ],
+                        "body-md": [
+                            "16px",
+                            {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                            }
+                        ],
+                        "display-lg-mobile": [
+                            "36px",
+                            {
+                                "lineHeight": "42px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                            }
+                        ],
+                        "body-lg": [
+                            "18px",
+                            {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                            }
+                        ],
+                        "label-caps": [
+                            "12px",
+                            {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                            }
+                        ],
+                        "headline-md": [
+                            "24px",
+                            {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                            }
+                        ]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-background text-on-background min-h-screen flex">
+    <!-- SideNavBar -->
+    <aside
+        class="hidden lg:flex flex-col h-screen sticky top-0 p-4 gap-2 bg-surface-container-lowest border-r border-outline-variant shadow-md docked left-0 w-64 z-20">
+        <div class="mb-8 px-4 flex items-center gap-4">
+            <img alt="Institution Logo" class="w-10 h-10 object-contain"
+                data-alt="A minimalist logo for an institution suite, featuring a stylized abstract crest in navy blue and silver. The design is clean, corporate, and high-tech, perfect for an academic or professional dashboard."
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCE-xacBRymeuuK4NgZQcudfb7CjhsOGjfdhqwRProZgy0qslUA1OlTh-8cN8SzSN_sFDsLgZwsGB0fUEK-fhHCKNJ4J3le52iP1BBC4vwpa2ZKFk5IO8FcuNVgN5jpyBOrBukzt-mOZge3H_m6pwNZA9mgu7G7zopZI-L-tM8_3WXz7MSXwghUcgqCqx2OwxaNjLkkLLTPpTGkU58yqfU2KcRTWtoT6Z4wHz56L5LnVLyIT9JGQ_LUmidUDe3SElFagIqqQhiiQIW" />
+            <div>
+                <h1 class="font-headline-md text-headline-md text-primary font-bold">ICTU Portal</h1>
+                <p class="font-label-caps text-label-caps text-on-surface-variant">Student Career Suite</p>
+            </div>
+        </div>
+        <nav class="flex-1 flex flex-col gap-2">
+            <a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-xl font-bold font-label-md text-label-md"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="dashboard"
+                    style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                Dashboard
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl font-medium font-label-md text-label-md transition-all duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="calendar_view_month">calendar_view_month</span>
+                Time Matrix
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl font-medium font-label-md text-label-md transition-all duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+                Match Center
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl font-medium font-label-md text-label-md transition-all duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+                Messages
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl font-medium font-label-md text-label-md transition-all duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                Analytics
+            </a>
+        </nav>
+        <div class="mt-auto flex flex-col gap-2">
+            <button
+                class="w-full py-3 bg-gradient-to-r from-accent-electric to-primary text-on-primary rounded-xl font-label-md text-label-md font-bold shadow-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">smart_toy</span> AI Search
+            </button>
+            <div class="h-px bg-outline-variant/30 my-2 w-full"></div>
+            <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl font-medium font-label-md text-label-md transition-all duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl font-medium font-label-md text-label-md transition-all duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="help">help</span>
+                Support
+            </a>
+        </div>
+    </aside>
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col min-h-screen">
+        <!-- TopNavBar -->
+        <header
+            class="bg-surface-glass text-primary docked full-width top-0 sticky backdrop-blur-xl border-b border-on-surface/10 shadow-sm z-10">
+            <div class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-20">
+                <div class="flex items-center gap-8 lg:hidden">
+                    <span class="font-display-lg text-display-lg font-bold text-primary">CareerAI</span>
+                </div>
+                <nav class="hidden md:flex items-center gap-8">
+                    <!-- Navigation links suppressed as this is a high-density admin dashboard, focusing on internal tools rather than student browsing -->
+                    <h2 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Admin Overview
+                    </h2>
+                </nav>
+                <div class="flex items-center gap-4">
+                    <div class="relative hidden sm:block">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+                        <input
+                            class="pl-10 pr-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full text-body-md font-body-md focus:border-accent-electric focus:ring-1 focus:ring-accent-electric transition-colors outline-none w-64"
+                            placeholder="Search system..." type="text" />
+                    </div>
+                    <button
+                        class="p-2 text-on-surface-variant hover:text-secondary transition-colors duration-200 relative">
+                        <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+                    </button>
+                    <button class="p-2 text-on-surface-variant hover:text-secondary transition-colors duration-200">
+                        <span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+                    </button>
+                    <div
+                        class="w-10 h-10 rounded-full border border-outline-variant/50 overflow-hidden ml-2 cursor-pointer">
+                        <img alt="User profile" class="w-full h-full object-cover"
+                            data-alt="A professional headshot of a female system administrator in her 30s. She is wearing a dark navy blazer over a crisp white shirt, standing in a well-lit modern office environment. High-tech, clean corporate style."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPNmKcaTMGUIed-MtvxszBqbDDl3aRHOoYcvpBhIm5vscv5PAbF9Ti5Dn9jQaibL_R51rjTCnyQAYLYZQW8vomUEhs5ldOWI7MaJM-pk7ZykadnUlV_olFBZyO8Iab4a-GU9-LwzzRqrLvDDz0xxdBd8z5exs74Hn7HDWZivlhGubJvDwPW1jXp9qLT6JTZOtHqE8c_PZQ3SMUiw44NTVoZXG8RZN1t-FeJ91T9bH93RMFvgU9sQ37WTWBPShLKE00Z9A8msXZp-Kz" />
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div
+            class="flex-1 p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto w-full flex flex-col gap-gutter">
+            <!-- Top KPI Cards -->
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Active Users -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30 flex items-center justify-between relative overflow-hidden group">
+                    <div
+                        class="absolute -right-8 -top-8 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors">
+                    </div>
+                    <div class="z-10">
+                        <p
+                            class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">
+                            Active Users</p>
+                        <h3 class="font-display-lg-mobile text-display-lg-mobile font-bold text-text-rich">2,450</h3>
+                        <p class="font-body-md text-body-md text-tertiary-container mt-2 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">trending_up</span> +12% from last week
+                        </p>
+                    </div>
+                    <div
+                        class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center z-10">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+                    </div>
+                </div>
+                <!-- Matches Today -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30 flex items-center justify-between relative overflow-hidden group">
+                    <div
+                        class="absolute -right-8 -top-8 w-32 h-32 bg-secondary/5 rounded-full blur-2xl group-hover:bg-secondary/10 transition-colors">
+                    </div>
+                    <div class="z-10">
+                        <p
+                            class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">
+                            Matches Today</p>
+                        <h3 class="font-display-lg-mobile text-display-lg-mobile font-bold text-text-rich">185</h3>
+                        <div class="mt-2 flex items-center gap-2">
+                            <span
+                                class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-secondary-container/20 text-secondary font-label-caps text-label-caps">
+                                <span class="w-2 h-2 rounded-full bg-accent-electric animate-pulse"></span> AI Active
+                            </span>
+                        </div>
+                    </div>
+                    <div
+                        class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center z-10">
+                        <span class="material-symbols-outlined"
+                            style="font-variation-settings: 'FILL' 1;">handshake</span>
+                    </div>
+                </div>
+                <!-- Est Revenue -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30 flex items-center justify-between relative overflow-hidden group">
+                    <div
+                        class="absolute -right-8 -top-8 w-32 h-32 bg-tertiary/5 rounded-full blur-2xl group-hover:bg-tertiary/10 transition-colors">
+                    </div>
+                    <div class="z-10">
+                        <p
+                            class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">
+                            Est. Revenue</p>
+                        <h3 class="font-display-lg-mobile text-display-lg-mobile font-bold text-text-rich">$12,000</h3>
+                        <p class="font-body-md text-body-md text-tertiary-container mt-2 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">trending_up</span> +5.2% this month
+                        </p>
+                    </div>
+                    <div
+                        class="w-12 h-12 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center z-10">
+                        <span class="material-symbols-outlined"
+                            style="font-variation-settings: 'FILL' 1;">payments</span>
+                    </div>
+                </div>
+            </section>
+            <!-- Charts Section -->
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Bar Chart: Student Employment by Major -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30 flex flex-col h-96">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-headline-md text-headline-md font-semibold text-text-rich">Employment by Major
+                        </h3>
+                        <button class="p-1 text-outline hover:text-primary transition-colors"><span
+                                class="material-symbols-outlined">more_horiz</span></button>
+                    </div>
+                    <div class="flex-1 flex items-end justify-between gap-4 relative pb-6">
+                        <!-- Y Axis Lines -->
+                        <div class="absolute inset-0 flex flex-col justify-between pb-12 pointer-events-none">
+                            <div class="w-full h-px bg-outline-variant/20"></div>
+                            <div class="w-full h-px bg-outline-variant/20"></div>
+                            <div class="w-full h-px bg-outline-variant/20"></div>
+                            <div class="w-full h-px bg-outline-variant/20"></div>
+                            <div class="w-full h-px bg-outline-variant/50"></div>
+                        </div>
+                        <!-- Y Axis Labels -->
+                        <div
+                            class="absolute left-0 top-0 h-full flex flex-col justify-between pb-12 pointer-events-none text-outline font-label-caps text-label-caps -ml-6 text-right w-5">
+                            <span>100</span>
+                            <span>75</span>
+                            <span>50</span>
+                            <span>25</span>
+                            <span>0</span>
+                        </div>
+                        <!-- Bars -->
+                        <div
+                            class="relative w-1/5 h-[85%] bg-primary/20 rounded-t-md hover:bg-primary/30 transition-colors group z-10">
+                            <div class="absolute bottom-0 w-full bg-primary rounded-t-md transition-all duration-500"
+                                style="height: 100%;"></div>
+                            <div
+                                class="absolute -bottom-8 left-1/2 -translate-x-1/2 font-label-caps text-label-caps text-on-surface-variant text-center">
+                                CS</div>
+                        </div>
+                        <div
+                            class="relative w-1/5 h-[65%] bg-primary/20 rounded-t-md hover:bg-primary/30 transition-colors group z-10">
+                            <div class="absolute bottom-0 w-full bg-primary rounded-t-md transition-all duration-500"
+                                style="height: 100%;"></div>
+                            <div
+                                class="absolute -bottom-8 left-1/2 -translate-x-1/2 font-label-caps text-label-caps text-on-surface-variant text-center">
+                                Bus</div>
+                        </div>
+                        <div
+                            class="relative w-1/5 h-[40%] bg-primary/20 rounded-t-md hover:bg-primary/30 transition-colors group z-10">
+                            <div class="absolute bottom-0 w-full bg-primary rounded-t-md transition-all duration-500"
+                                style="height: 100%;"></div>
+                            <div
+                                class="absolute -bottom-8 left-1/2 -translate-x-1/2 font-label-caps text-label-caps text-on-surface-variant text-center">
+                                Eng</div>
+                        </div>
+                        <div
+                            class="relative w-1/5 h-[75%] bg-primary/20 rounded-t-md hover:bg-primary/30 transition-colors group z-10">
+                            <div class="absolute bottom-0 w-full bg-primary rounded-t-md transition-all duration-500"
+                                style="height: 100%;"></div>
+                            <div
+                                class="absolute -bottom-8 left-1/2 -translate-x-1/2 font-label-caps text-label-caps text-on-surface-variant text-center">
+                                Arts</div>
+                        </div>
+                        <div
+                            class="relative w-1/5 h-[55%] bg-primary/20 rounded-t-md hover:bg-primary/30 transition-colors group z-10">
+                            <div class="absolute bottom-0 w-full bg-primary rounded-t-md transition-all duration-500"
+                                style="height: 100%;"></div>
+                            <div
+                                class="absolute -bottom-8 left-1/2 -translate-x-1/2 font-label-caps text-label-caps text-on-surface-variant text-center">
+                                Sci</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Pie Chart: Popular Job Categories -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30 flex flex-col h-96">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-headline-md text-headline-md font-semibold text-text-rich">Popular Job
+                            Categories</h3>
+                        <button class="p-1 text-outline hover:text-primary transition-colors"><span
+                                class="material-symbols-outlined">more_horiz</span></button>
+                    </div>
+                    <div class="flex-1 flex items-center justify-center relative">
+                        <!-- CSS Pie Chart Placeholder -->
+                        <div class="w-48 h-48 rounded-full relative overflow-hidden shadow-sm" style="background: conic-gradient(
+                            #003156 0deg 144deg, 
+                            #8455ef 144deg 252deg, 
+                            #33ca91 252deg 360deg
+                        );">
+                            <!-- Inner circle for donut look -->
+                            <div
+                                class="absolute inset-0 m-auto w-32 h-32 bg-surface-container-lowest rounded-full flex items-center justify-center shadow-inner">
+                                <span class="font-headline-md text-headline-md font-bold text-text-rich">3</span>
+                                <span
+                                    class="font-label-caps text-label-caps text-on-surface-variant block absolute bottom-8">Sectors</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center gap-6 mt-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-primary"></div>
+                            <span class="font-label-md text-label-md text-on-surface-variant">F&amp;B (40%)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-secondary-container"></div>
+                            <span class="font-label-md text-label-md text-on-surface-variant">Retail (30%)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-on-tertiary-container"></div>
+                            <span class="font-label-md text-label-md text-on-surface-variant">Event (30%)</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Table Section: Business License Approval -->
+            <section
+                class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden flex flex-col">
+                <div class="p-6 border-b border-outline-variant/30 flex justify-between items-center bg-surface-bright">
+                    <div>
+                        <h3 class="font-headline-md text-headline-md font-semibold text-text-rich">Business License
+                            Approval</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">Review pending employer
+                            verifications.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button
+                            class="px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low transition-colors flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm">filter_list</span> Filter
+                        </button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-surface-container-low/50">
+                                <th
+                                    class="py-4 px-6 font-label-caps text-label-caps text-outline uppercase tracking-wider font-medium w-1/3">
+                                    Company Name</th>
+                                <th
+                                    class="py-4 px-6 font-label-caps text-label-caps text-outline uppercase tracking-wider font-medium w-1/4">
+                                    Date Submitted</th>
+                                <th
+                                    class="py-4 px-6 font-label-caps text-label-caps text-outline uppercase tracking-wider font-medium w-1/4">
+                                    License Attachment</th>
+                                <th
+                                    class="py-4 px-6 font-label-caps text-label-caps text-outline uppercase tracking-wider font-medium text-right">
+                                    Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-outline-variant/20">
+                            <!-- Row 1 -->
+                            <tr class="hover:bg-surface-container-lowest/50 transition-colors group">
+                                <td class="py-4 px-6">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-10 h-10 rounded bg-primary/10 flex items-center justify-center text-primary font-bold">
+                                            V
+                                        </div>
+                                        <div>
+                                            <p class="font-label-md text-label-md font-semibold text-text-rich">Vanguard
+                                                Retail Inc.</p>
+                                            <p class="font-label-caps text-label-caps text-on-surface-variant">ID:
+                                                #C-8921</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-6 font-body-md text-body-md text-on-surface-variant">Today, 09:41 AM
+                                </td>
+                                <td class="py-4 px-6">
+                                    <button
+                                        class="flex items-center gap-2 text-primary hover:text-accent-electric transition-colors font-label-md text-label-md">
+                                        <span class="material-symbols-outlined text-sm">description</span>
+                                        Vanguard_Lic_2024.pdf
+                                    </button>
+                                </td>
+                                <td class="py-4 px-6 text-right">
+                                    <div
+                                        class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button aria-label="Reject"
+                                            class="p-2 rounded-lg text-error hover:bg-error/10 transition-colors tooltip">
+                                            <span class="material-symbols-outlined">close</span>
+                                        </button>
+                                        <button aria-label="Approve"
+                                            class="p-2 rounded-lg text-tertiary-container hover:bg-tertiary-container/10 transition-colors tooltip">
+                                            <span class="material-symbols-outlined">check</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Row 2 -->
+                            <tr class="hover:bg-surface-container-lowest/50 transition-colors group">
+                                <td class="py-4 px-6">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-10 h-10 rounded bg-secondary/10 flex items-center justify-center text-secondary font-bold">
+                                            S
+                                        </div>
+                                        <div>
+                                            <p class="font-label-md text-label-md font-semibold text-text-rich">Summit
+                                                Events</p>
+                                            <p class="font-label-caps text-label-caps text-on-surface-variant">ID:
+                                                #C-8915</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-6 font-body-md text-body-md text-on-surface-variant">Yesterday, 14:22
+                                    PM</td>
+                                <td class="py-4 px-6">
+                                    <button
+                                        class="flex items-center gap-2 text-primary hover:text-accent-electric transition-colors font-label-md text-label-md">
+                                        <span class="material-symbols-outlined text-sm">description</span>
+                                        Summit_BusReg_Scan.jpg
+                                    </button>
+                                </td>
+                                <td class="py-4 px-6 text-right">
+                                    <div
+                                        class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button aria-label="Reject"
+                                            class="p-2 rounded-lg text-error hover:bg-error/10 transition-colors">
+                                            <span class="material-symbols-outlined">close</span>
+                                        </button>
+                                        <button aria-label="Approve"
+                                            class="p-2 rounded-lg text-tertiary-container hover:bg-tertiary-container/10 transition-colors">
+                                            <span class="material-symbols-outlined">check</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Row 3 -->
+                            <tr class="hover:bg-surface-container-lowest/50 transition-colors group">
+                                <td class="py-4 px-6">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-10 h-10 rounded bg-tertiary-container/10 flex items-center justify-center text-tertiary-container font-bold">
+                                            O
+                                        </div>
+                                        <div>
+                                            <p class="font-label-md text-label-md font-semibold text-text-rich">Oasis
+                                                F&amp;B Group</p>
+                                            <p class="font-label-caps text-label-caps text-on-surface-variant">ID:
+                                                #C-8902</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-6 font-body-md text-body-md text-on-surface-variant">Oct 24, 11:05 AM
+                                </td>
+                                <td class="py-4 px-6">
+                                    <button
+                                        class="flex items-center gap-2 text-primary hover:text-accent-electric transition-colors font-label-md text-label-md">
+                                        <span class="material-symbols-outlined text-sm">description</span>
+                                        Oasis_License_Auth.pdf
+                                    </button>
+                                </td>
+                                <td class="py-4 px-6 text-right">
+                                    <div
+                                        class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button aria-label="Reject"
+                                            class="p-2 rounded-lg text-error hover:bg-error/10 transition-colors">
+                                            <span class="material-symbols-outlined">close</span>
+                                        </button>
+                                        <button aria-label="Approve"
+                                            class="p-2 rounded-lg text-tertiary-container hover:bg-tertiary-container/10 transition-colors">
+                                            <span class="material-symbols-outlined">check</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-4 border-t border-outline-variant/30 flex justify-center bg-surface-bright">
+                    <button
+                        class="text-primary hover:text-secondary font-label-md text-label-md font-medium transition-colors">View
+                        All Pending Requests</button>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+
+</html>

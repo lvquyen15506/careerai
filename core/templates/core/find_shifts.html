@@ -1,0 +1,91 @@
+{% extends 'core/base_student.html' %}
+{% load static %}
+
+{% block title %}Tìm ca làm việc - CareerAI{% endblock %}
+
+{% block student_content %}
+<div class="flex flex-col gap-6">
+    <!-- Header with Search Form -->
+    <div class="bg-white rounded-2xl p-6 border border-[#e9ecef] shadow-sm flex flex-col gap-4">
+        <div>
+            <h2 class="font-headline-md text-headline-md text-primary m-0">Tìm Kiếm Ca Làm Việc</h2>
+            <p class="text-xs text-[#868e96] mt-1">Duyệt và ứng tuyển vào các ca làm việc đang mở trên hệ thống</p>
+        </div>
+        
+        <form method="get" class="flex flex-col md:flex-row gap-3">
+            <div class="flex-1 relative">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#868e96]">search</span>
+                <input type="text" name="q" value="{{ q }}" placeholder="Tìm theo tên công việc, doanh nghiệp..." class="form-control pl-10" />
+            </div>
+            <div class="w-full md:w-48 relative">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#868e96]">payments</span>
+                <input type="number" name="min_wage" value="{{ min_wage }}" placeholder="Lương tối thiểu..." class="form-control pl-10" />
+            </div>
+            <button type="submit" class="btn-gradient text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-sm flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">search</span>
+                Tìm kiếm
+            </button>
+            {% if q or min_wage %}
+                <a href="{% url 'find_shifts' %}" class="px-6 py-2.5 border border-[#e9ecef] rounded-xl font-bold text-sm text-[#495057] hover:bg-[#f8f9fa] transition-colors flex items-center justify-center">
+                    Xóa lọc
+                </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Shifts Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for shift in shifts %}
+            <div class="bg-white rounded-2xl border border-[#e9ecef] p-5 flex flex-col hover:shadow-md transition-shadow relative">
+                <div class="flex justify-between items-start gap-4 mb-3">
+                    <div>
+                        <h4 class="font-semibold text-[#212529] text-sm leading-snug line-clamp-1">{{ shift.title }}</h4>
+                        <p class="text-xs text-[#868e96] mt-0.5">{{ shift.employer.company_name }}</p>
+                    </div>
+                    <span class="bg-[#5f3dc4]/10 text-[#5f3dc4] px-2.5 py-1 rounded-lg text-xs font-bold whitespace-nowrap">
+                        {{ shift.wage_per_hour|floatformat:0 }}đ/giờ
+                    </span>
+                </div>
+                
+                <p class="text-xs text-[#495057] line-clamp-3 mb-4 leading-relaxed flex-1">
+                    {{ shift.description|default:"Không có mô tả chi tiết cho ca làm này." }}
+                </p>
+                
+                <div class="space-y-2 border-t border-[#e9ecef] pt-4 mt-auto">
+                    <div class="flex items-center gap-2 text-xs text-[#495057]">
+                        <span class="material-symbols-outlined text-[16px] text-[#868e96]">schedule</span>
+                        <span>{{ shift.start_time|date:"d/m/Y H:i" }} - {{ shift.end_time|time:"H:i" }}</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs text-[#495057]">
+                        <span class="material-symbols-outlined text-[16px] text-[#868e96]">location_on</span>
+                        <span class="truncate">{{ shift.employer.address }}</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex gap-2 w-full pt-3 border-t border-[#e9ecef]/50">
+                    <a href="{% url 'shift_detail' shift.id %}" class="flex-1 text-center py-2 border border-[#e9ecef] text-[#495057] font-semibold text-xs rounded-xl hover:bg-[#f8f9fa] transition-colors">
+                        Chi tiết
+                    </a>
+                    {% if shift.id in applied_shift_ids %}
+                        <button class="flex-1 py-2 bg-[#e9ecef] text-[#868e96] font-semibold text-xs rounded-xl cursor-not-allowed" disabled>
+                            Đã ứng tuyển
+                        </button>
+                    {% else %}
+                        <a href="{% url 'apply_shift' shift.id %}" class="flex-1 text-center py-2 btn-gradient text-white font-semibold text-xs rounded-xl hover:opacity-95 transition-opacity">
+                            Nhận ca
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-span-full bg-white rounded-2xl border border-[#e9ecef] p-12 text-center flex flex-col items-center gap-3">
+                <span class="material-symbols-outlined text-4xl text-[#868e96]">info</span>
+                <div>
+                    <p class="font-bold text-[#212529]">Không tìm thấy ca làm việc nào</p>
+                    <p class="text-xs text-[#868e96] mt-1">Hãy thử tìm kiếm với từ khóa khác hoặc xóa bộ lọc.</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

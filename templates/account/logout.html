@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Đăng xuất - CareerAI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col bg-background">
+    <!-- Header -->
+    <header class="w-full bg-surface-container-lowest border-b border-outline-variant/30 py-4 px-margin-desktop shadow-sm flex items-center justify-between">
+        <a href="{% url 'home' %}" class="font-display-lg text-headline-md font-bold text-primary">CareerAI</a>
+    </header>
+
+    <main class="flex-1 w-full max-w-md mx-auto px-margin-mobile py-16 flex flex-col justify-center gap-6">
+        <div class="bg-surface-container-lowest rounded-2xl shadow-md border border-outline-variant/30 p-8 text-center space-y-6">
+            <div class="w-16 h-16 bg-error-container text-error rounded-full flex items-center justify-center mx-auto">
+                <span class="material-symbols-outlined text-[32px]">logout</span>
+            </div>
+
+            <div class="space-y-2">
+                <h3 class="font-headline-md text-headline-md text-primary font-bold">Đăng xuất</h3>
+                <p class="text-sm text-on-surface-variant">Bạn có chắc chắn muốn thoát khỏi phiên đăng nhập hiện tại không?</p>
+            </div>
+
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+                <button type="submit" class="w-full bg-error text-on-error font-bold py-3.5 rounded-xl shadow-sm hover:opacity-95 transition-opacity flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">logout</span>
+                    Đăng xuất
+                </button>
+                <a href="{% url 'home' %}" class="w-full py-3 rounded-xl border border-outline-variant/30 text-center text-sm font-semibold hover:bg-surface transition-colors block">
+                    Quay lại Trang chủ
+                </a>
+            </form>
+        </div>
+    </main>
+</div>
+{% endblock %}

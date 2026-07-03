@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ==================== SEO & META ==================== -->
+    <title>EventMaster - Giải pháp tổ chức sự kiện hoàn hảo, chuyên nghiệp</title>
+    <meta name="description"
+        content="EventMaster - Dịch vụ tổ chức sự kiện trọn gói: kế hoạch chi tiết, thiết kế poster/banner/thiệp mời, bảng phân công, dự trù kinh phí, QR check-in và truyền thông chuyên nghiệp." />
+    <meta name="keywords"
+        content="EventMaster, tổ chức sự kiện, lập kế hoạch sự kiện, thiết kế poster, banner, thiệp mời, QR check-in" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://mimi.id.vn" />
+    <meta property="og:title" content="EventMaster - Giải pháp tổ chức sự kiện hoàn hảo" />
+    <meta property="og:description"
+        content="Đội ngũ trẻ, sáng tạo và cực kỳ chỉn chu – biến mọi ý tưởng sự kiện thành hiện thực hoàn hảo!" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80" />
+    <meta property="og:locale" content="vi_VN" />
+
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ea580c', // Orange-600
+                        primaryDark: '#c2410c', // Orange-700
+                        accent: '#f97316', // Orange-500
+                        bgDark: '#0b0b0c', // Black/dark gray
+                        cardDark: '#161618', // Deep card gray
+                        borderDark: '#27272a', // Zinc 800
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0b0c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ea580c;
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #f97316, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+
+<body class="bg-bgDark text-zinc-300 font-sans antialiased overflow-x-hidden">
+
+    <!-- ==================== HEADER / NAVIGATION ==================== -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-bgDark/80 backdrop-blur-md border-b border-borderDark transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                    <span class="material-symbols-outlined font-bold text-lg"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                </div>
+                <span class="font-serif font-black text-xl text-white tracking-wide">Event<span class="text-primary">Master</span></span>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#" class="text-sm font-semibold text-white hover:text-primary transition-colors">Trang chủ</a>
+                <a href="#services" class="text-sm font-semibold text-zinc-400 hover:text-white transition-colors">Dịch vụ</a>
+                <a href="#portfolio" class="text-sm font-semibold text-zinc-400 hover:text-white transition-colors">Bộ sưu tập</a>
+                <a href="#pricing" class="text-sm font-semibold text-zinc-400 hover:text-white transition-colors">Báo giá</a>
+                <a href="#templates" class="text-sm font-semibold text-zinc-400 hover:text-white transition-colors">Thư viện mẫu</a>
+                <a href="#contact" class="text-sm font-semibold text-zinc-400 hover:text-white transition-colors">Liên hệ</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="hidden md:flex items-center gap-4">
+                <a href="#contact" class="px-5 py-2.5 bg-gradient-to-r from-primary to-accent hover:opacity-95 text-white font-bold text-xs rounded-xl shadow-lg shadow-primary/20 transition-all">
+                    Liên hệ ngay
+                </a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-zinc-400 hover:text-white focus:outline-none">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-bgDark border-t border-borderDark px-4 pt-2 pb-6 space-y-3">
+            <a href="#" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-base font-medium text-white hover:bg-zinc-900">Trang chủ</a>
+            <a href="#services" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-base font-medium text-zinc-400 hover:text-white hover:bg-zinc-900">Dịch vụ</a>
+            <a href="#portfolio" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-base font-medium text-zinc-400 hover:text-white hover:bg-zinc-900">Bộ sưu tập</a>
+            <a href="#pricing" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-base font-medium text-zinc-400 hover:text-white hover:bg-zinc-900">Báo giá</a>
+            <a href="#templates" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-base font-medium text-zinc-400 hover:text-white hover:bg-zinc-900">Thư viện mẫu</a>
+            <a href="#contact" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-base font-medium text-zinc-400 hover:text-white hover:bg-zinc-900">Liên hệ</a>
+            <a href="#contact" onclick="toggleMobileMenu()" class="block w-full text-center px-4 py-3 bg-gradient-to-r from-primary to-accent text-white font-bold text-sm rounded-xl">
+                Liên hệ ngay
+            </a>
+        </div>
+    </header>
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="relative pt-36 pb-20 md:pt-48 md:pb-32 overflow-hidden flex items-center">
+        <!-- Background Blurs -->
+        <div class="absolute top-1/4 left-1/10 w-96 h-96 bg-primary/10 rounded-full blur-3xl -z-10 animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/10 w-96 h-96 bg-red-600/10 rounded-full blur-3xl -z-10 animate-pulse" style="animation-delay: 2s;"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary/10 border border-primary/20 text-accent text-xs font-bold rounded-full uppercase tracking-wider mb-6">
+                <i class="fa-solid fa-star text-[10px]"></i> Giải pháp sự kiện hàng đầu
+            </span>
+
+            <h1 class="font-serif font-black text-5xl md:text-8xl text-white tracking-tight leading-none mb-6">
+                Event <span class="text-gradient">Master</span>
+            </h1>
+
+            <p class="max-w-2xl mx-auto text-base md:text-xl text-zinc-400 leading-relaxed mb-10">
+                Từ kế hoạch chi tiết, thiết kế ấn phẩm đến check-in công nghệ cao. Chúng tôi biến mọi ý tưởng của bạn thành hiện thực hoàn hảo.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                <a href="#contact" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary to-accent hover:opacity-95 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-primary/30 transition-all flex items-center justify-center gap-2">
+                    Nhận tư vấn miễn phí <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <a href="#services" class="w-full sm:w-auto px-8 py-4 bg-cardDark hover:bg-zinc-800 border border-borderDark text-white font-extrabold text-sm rounded-xl transition-all flex items-center justify-center">
+                    Xem dịch vụ
+                </a>
+            </div>
+
+            <!-- Key USPs Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <div class="bg-cardDark/50 border border-borderDark rounded-2xl p-6 flex items-center gap-4 hover:border-zinc-800 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 text-accent flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-pen-nib"></i></div>
+                    <div class="text-left">
+                        <h4 class="text-sm font-bold text-white">Thiết kế độc đáo</h4>
+                        <p class="text-xs text-zinc-500 mt-1">Ấn phẩm truyền thông riêng biệt.</p>
+                    </div>
+                </div>
+                <div class="bg-cardDark/50 border border-borderDark rounded-2xl p-6 flex items-center gap-4 hover:border-zinc-800 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-list-check"></i></div>
+                    <div class="text-left">
+                        <h4 class="text-sm font-bold text-white">Lập kế hoạch chi tiết</h4>
+                        <p class="text-xs text-zinc-500 mt-1">Timeline & kịch bản chặt chẽ.</p>
+                    </div>
+                </div>
+                <div class="bg-cardDark/50 border border-borderDark rounded-2xl p-6 flex items-center gap-4 hover:border-zinc-800 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-users-gear"></i></div>
+                    <div class="text-left">
+                        <h4 class="text-sm font-bold text-white">Đội ngũ chuyên nghiệp</h4>
+                        <p class="text-xs text-zinc-500 mt-1">Hỗ trợ vận hành từ A đến Z.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== KEY BENEFITS CAROUSEL ==================== -->
+    <section class="py-20 bg-cardDark/30 border-y border-borderDark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-primary font-bold text-xs uppercase tracking-widest block mb-2">Giá trị cốt lõi</span>
+                <h2 class="font-serif font-bold text-3xl md:text-5xl text-white">Giải pháp mới cho người tổ chức</h2>
+                <p class="text-zinc-500 text-sm mt-3">Luôn lắng nghe & cải thiện theo phản hồi và nhu cầu thực tế của ban tổ chức.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-cardDark border border-borderDark rounded-2xl p-8 hover:border-primary/40 transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-route"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-3">Kế hoạch chi tiết</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">
+                        Cung cấp hệ thống file kế hoạch, bảng phân công chi tiết công việc, cùng với dự trù kinh phí chuyên nghiệp giúp tối ưu ngân sách.
+                    </p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-cardDark border border-borderDark rounded-2xl p-8 hover:border-primary/40 transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-2xl bg-red-500/10 text-red-500 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-palette"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-3">Thiết kế sáng tạo</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">
+                        Thiết kế poster, banner, giấy mời độc đáo mang đậm bản sắc sự kiện kết hợp viết nội dung truyền thông kích thích tương tác cao.
+                    </p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-cardDark border border-borderDark rounded-2xl p-8 hover:border-primary/40 transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-qrcode"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-3">Check-in thông minh</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">
+                        Tích hợp công nghệ mã QR check-in tiện lợi, giúp quản lý danh sách khách mời hiện đại và xuất báo cáo tự động ngay sau sự kiện kết thúc.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SERVICES SECTION ==================== -->
+    <section id="services" class="py-20 md:py-28 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-primary font-bold text-xs uppercase tracking-widest block mb-2">Dịch vụ & Sản phẩm</span>
+                <h2 class="font-serif font-bold text-3xl md:text-5xl text-white">Chúng tôi làm được những gì?</h2>
+                <p class="text-zinc-500 text-sm mt-3">Mọi thứ bạn cần để biến một ý tưởng thành sự kiện hoàn hảo – hỗ trợ trọn gói từ A đến Z.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Category 1: Bộ Truyền Thông -->
+                <div class="bg-cardDark border border-borderDark rounded-3xl p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-orange-500/10 text-accent flex items-center justify-center text-xl"><i class="fa-solid fa-bullhorn"></i></div>
+                            <h3 class="text-xl font-bold text-white">Bộ truyền thông sự kiện</h3>
+                        </div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <span class="text-primary text-sm mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                                <div>
+                                    <h4 class="text-sm font-semibold text-white">Thiết kế Banner & Poster</h4>
+                                    <p class="text-xs text-zinc-500 mt-0.5">Ấn phẩm đồ họa độc quyền, phù hợp với các nền tảng mạng xã hội và backdrop sân khấu.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-primary text-sm mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                                <div>
+                                    <h4 class="text-sm font-semibold text-white">Biên soạn nội dung quảng bá</h4>
+                                    <p class="text-xs text-zinc-500 mt-0.5">Sáng tạo kịch bản truyền thông, caption thu hút, tăng tỷ lệ người đăng ký tham gia.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-primary text-sm mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                                <div>
+                                    <h4 class="text-sm font-semibold text-white">Thiết kế Giấy mời điện tử</h4>
+                                    <p class="text-xs text-zinc-500 mt-0.5">Ấn phẩm thiệp mời trực tuyến sang trọng, tích hợp mã định danh check-in.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-primary text-sm mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                                <div>
+                                    <h4 class="text-sm font-semibold text-white">Chụp ảnh & Thước phim Recap</h4>
+                                    <p class="text-xs text-zinc-500 mt-0.5">Ghi lại toàn bộ khoảnh khắc ấn tượng của sự kiện bằng hình ảnh và video chất lượng cao.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Category 2: Bộ Hậu Cần -->
+                <div class="bg-cardDark border border-borderDark rounded-3xl p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center text-xl"><i class="fa-solid fa-boxes-packing"></i></div>
+                            <h3 class="text-xl font-bold text-white">Bộ hậu cần & Vận hành</h3>
+                        </div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <span class="text-red-500 text-sm mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                                <div>
+                                    <h4 class="text-sm font-semibold text-white">Lập kế hoạch & Xây dựng Timeline</h4>
+                                    <p class="text-xs text-zinc-500 mt-0.5">Bảng phân công nhiệm vụ chi tiết từng mốc thời gian, giảm thiểu rủi ro phát sinh.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-red-500 text-sm mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                                <div>
+                                    <h4 class="text-sm font-semibold text-white">Hệ thống Quản lý Check-in</h4>
+                                    <p class="text-xs text-zinc-500 mt-0.5">Cài đặt công cụ quét mã, ghi nhận thông tin khách và bàn giao danh sách tự động.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-red-500 text-sm mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                                <div>
+                                    <h4 class="text-sm font-semibold text-white">Kịch bản & Điều phối MC chuyên nghiệp</h4>
+                                    <p class="text-xs text-zinc-500 mt-0.5">Biên soạn lời dẫn chương trình chi tiết và hỗ trợ nhân sự giám sát tiến trình sân khấu.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-red-500 text-sm mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                                <div>
+                                    <h4 class="text-sm font-semibold text-white">Bố trí & Setup không gian sự kiện</h4>
+                                    <p class="text-xs text-zinc-500 mt-0.5">Sắp xếp sơ đồ chỗ ngồi, khu vực check-in và trang trí sân khấu theo chủ đề.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PRICING SECTION ==================== -->
+    <section id="pricing" class="py-20 bg-cardDark/30 border-y border-borderDark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-primary font-bold text-xs uppercase tracking-widest block mb-2">Báo giá chi tiết</span>
+                <h2 class="font-serif font-bold text-3xl md:text-5xl text-white">Các Gói Dịch Vụ Tổ Chức</h2>
+                <p class="text-zinc-500 text-sm mt-3">Chọn gói giải pháp phù hợp với quy mô và ngân sách của bạn.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Basic Plan -->
+                <div class="bg-cardDark border border-borderDark rounded-3xl p-8 hover:border-zinc-800 transition-colors flex flex-col justify-between h-full">
+                    <div>
+                        <span class="text-[10px] font-bold tracking-wider text-zinc-500 uppercase">Hỗ trợ cơ bản</span>
+                        <h3 class="text-lg font-bold text-white mt-1">Gói Cơ Bản</h3>
+                        <div class="flex items-baseline gap-1.5 my-6">
+                            <span class="text-2xl font-bold text-white">500.000đ</span>
+                            <span class="text-xs text-zinc-500"> - 1.000.000đ</span>
+                        </div>
+                        <p class="text-xs text-zinc-400 leading-relaxed mb-6">
+                            Phù hợp với các câu lạc bộ học thuật, sự kiện nội bộ đã có sẵn nhân lực thực hiện, cần hỗ trợ chuyên môn về thiết kế và kịch bản.
+                        </p>
+                        <hr class="border-borderDark mb-6" />
+                        <ul class="space-y-3 text-xs text-zinc-400">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-primary"></i> Thiết kế ấn phẩm truyền thông</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-primary"></i> Viết nội dung truyền thông</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-primary"></i> Lập timeline kịch bản chương trình</li>
+                            <li class="flex items-center gap-2.5 text-zinc-600"><i class="fa-solid fa-xmark text-zinc-700"></i> Không hỗ trợ quét QR Check-in</li>
+                            <li class="flex items-center gap-2.5 text-zinc-600"><i class="fa-solid fa-xmark text-zinc-700"></i> Không quay phim & dựng phim recap</li>
+                        </ul>
+                    </div>
+                    <a href="#contact" class="block w-full text-center py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xs rounded-xl mt-8 transition-colors">
+                        Đăng ký tư vấn
+                    </a>
+                </div>
+
+                <!-- Pro Plan (Popular) -->
+                <div class="bg-cardDark border-2 border-primary rounded-3xl p-8 relative flex flex-col justify-between h-full shadow-2xl shadow-primary/5">
+                    <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 bg-primary text-white text-[9px] font-bold rounded-full uppercase tracking-widest">Khuyên dùng</span>
+                    <div>
+                        <span class="text-[10px] font-bold tracking-wider text-accent uppercase">Đầy đủ hạng mục</span>
+                        <h3 class="text-lg font-bold text-white mt-1">Gói Nâng Cao</h3>
+                        <div class="flex items-baseline gap-1.5 my-6">
+                            <span class="text-2xl font-bold text-gradient">1.500.000đ</span>
+                            <span class="text-xs text-zinc-500"> - 3.000.000đ</span>
+                        </div>
+                        <p class="text-xs text-zinc-400 leading-relaxed mb-6">
+                            Dành cho sự kiện cấp Khoa, chương trình chào tân sinh viên, hoặc hội thảo quy mô vừa (100 – 300 người) cần hình ảnh đồng bộ.
+                        </p>
+                        <hr class="border-borderDark mb-6" />
+                        <ul class="space-y-3 text-xs text-zinc-400">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-primary"></i> Bao gồm đầy đủ của Gói Cơ Bản</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-primary"></i> Thiết kế thiệp mời & Hỗ trợ in ấn</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-primary"></i> Viết nội dung quảng bá & kịch bản MC</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-primary"></i> Hệ thống Check-in quét mã QR thông minh</li>
+                            <li class="flex items-center gap-2.5 text-zinc-600"><i class="fa-solid fa-xmark text-zinc-700"></i> Không có nhân sự trang trí tại chỗ</li>
+                        </ul>
+                    </div>
+                    <a href="#contact" class="block w-full text-center py-3 bg-gradient-to-r from-primary to-accent hover:opacity-95 text-white font-bold text-xs rounded-xl mt-8 shadow-md transition-all">
+                        Đăng ký tư vấn ngay
+                    </a>
+                </div>
+
+                <!-- Premium Plan -->
+                <div class="bg-cardDark border border-borderDark rounded-3xl p-8 hover:border-zinc-800 transition-colors flex flex-col justify-between h-full">
+                    <div>
+                        <span class="text-[10px] font-bold tracking-wider text-zinc-500 uppercase">Trọn gói từ A - Z</span>
+                        <h3 class="text-lg font-bold text-white mt-1">Gói Trọn Gói</h3>
+                        <div class="flex items-baseline gap-1.5 my-6">
+                            <span class="text-2xl font-bold text-white">3.000.000đ</span>
+                            <span class="text-xs text-zinc-500"> - 6.500.000đ</span>
+                        </div>
+                        <p class="text-xs text-zinc-400 leading-relaxed mb-6">
+                            Dành riêng cho các chương trình trọng điểm cấp Trường/Khoa: Cuộc thi tài năng, Gala Dinner, Chào tân sinh viên quy mô lớn.
+                        </p>
+                        <hr class="border-borderDark mb-6" />
+                        <ul class="space-y-3 text-xs text-zinc-400">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-primary"></i> Toàn bộ quyền lợi của Gói Nâng Cao</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-primary"></i> Quay phim và dựng video recap chuyên nghiệp</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-primary"></i> Nhân sự điều phối & Giám sát tiến độ trực tiếp</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-primary"></i> Trang trí sân khấu, photobooth & check-in</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-primary"></i> Vận hành hệ thống quản lý công việc và báo cáo</li>
+                        </ul>
+                    </div>
+                    <a href="#contact" class="block w-full text-center py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xs rounded-xl mt-8 transition-colors">
+                        Đăng ký tư vấn
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PORTFOLIO SLIDER ==================== -->
+    <section id="portfolio" class="py-20 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                <div>
+                    <span class="text-primary font-bold text-xs uppercase tracking-widest block mb-2">Hình ảnh dự án</span>
+                    <h2 class="font-serif font-bold text-3xl md:text-5xl text-white">Bộ sưu tập EventMaster</h2>
+                    <p class="text-zinc-500 text-sm mt-3">Các ấn phẩm và khoảnh khắc từ những sự kiện chúng tôi đã đồng hành.</p>
+                </div>
+                <div class="flex gap-3 mt-6 md:mt-0">
+                    <button onclick="slidePortfolio('left')" class="w-10 h-10 border border-borderDark hover:border-primary/50 text-white flex items-center justify-center rounded-full hover:bg-zinc-900 transition-colors">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button onclick="slidePortfolio('right')" class="w-10 h-10 border border-borderDark hover:border-primary/50 text-white flex items-center justify-center rounded-full hover:bg-zinc-900 transition-colors">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Carousel Wrapper -->
+            <div id="portfolio-container" class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6" style="scrollbar-width: none;">
+                <!-- Card 1 -->
+                <div class="min-w-[280px] sm:min-w-[360px] snap-start bg-cardDark border border-borderDark rounded-2xl overflow-hidden group">
+                    <div class="h-60 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80" alt="Sự kiện 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-bgDark/80 via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-[10px] text-accent font-bold uppercase tracking-wider">Hội thảo học thuật</span>
+                        <h4 class="text-base font-bold text-white mt-1">Gặp gỡ & Kết nối Doanh Nghiệp</h4>
+                        <p class="text-xs text-zinc-500 mt-2">Đồng hành trong khâu truyền thông, thiết kế và check-in khách mời.</p>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="min-w-[280px] sm:min-w-[360px] snap-start bg-cardDark border border-borderDark rounded-2xl overflow-hidden group">
+                    <div class="h-60 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=600&q=80" alt="Sự kiện 2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-bgDark/80 via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-[10px] text-accent font-bold uppercase tracking-wider">Đêm nhạc / Concert</span>
+                        <h4 class="text-base font-bold text-white mt-1">Đêm Hội Âm Nhạc SVI - Gala Diner</h4>
+                        <p class="text-xs text-zinc-500 mt-2">Dựng kịch bản sân khấu, quản lý hậu cần và hiệu ứng ánh sáng.</p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="min-w-[280px] sm:min-w-[360px] snap-start bg-cardDark border border-borderDark rounded-2xl overflow-hidden group">
+                    <div class="h-60 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=600&q=80" alt="Sự kiện 3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-bgDark/80 via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-[10px] text-accent font-bold uppercase tracking-wider">Chào tân sinh viên</span>
+                        <h4 class="text-base font-bold text-white mt-1">Ngày Hội Khởi Nghiệp Công Nghệ</h4>
+                        <p class="text-xs text-zinc-500 mt-2">Đăng ký check-in mã QR, timeline check tiến độ dự án.</p>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="min-w-[280px] sm:min-w-[360px] snap-start bg-cardDark border border-borderDark rounded-2xl overflow-hidden group">
+                    <div class="h-60 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=600&q=80" alt="Sự kiện 4" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-bgDark/80 via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-[10px] text-accent font-bold uppercase tracking-wider">Tiệc cưới / Gala</span>
+                        <h4 class="text-base font-bold text-white mt-1">Save The Date Elegant Gala</h4>
+                        <p class="text-xs text-zinc-500 mt-2">Trang trí trọn gói, thư viện thiệp mời tinh xảo & sang trọng.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="text-xs text-zinc-600 italic mt-4 text-center"><i class="fa-solid fa-hand-pointer"></i> Kéo hoặc vuốt ngang để xem thêm nhiều dự án khác.</p>
+        </div>
+    </section>
+
+    <!-- ==================== TEMPLATES LIBRARY SECTION ==================== -->
+    <section id="templates" class="py-20 bg-cardDark/30 border-y border-borderDark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-primary font-bold text-xs uppercase tracking-widest block mb-2">Thư viện mẫu</span>
+                <h2 class="font-serif font-bold text-3xl md:text-5xl text-white">Giấy mời tiện lợi cho mọi nhu cầu</h2>
+                <p class="text-zinc-500 text-sm mt-3">Sử dụng ngay – chỉnh sửa nhanh theo phong cách sự kiện của bạn.</p>
+            </div>
+
+            <!-- Grid of Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Template Item 1 -->
+                <div class="bg-cardDark border border-borderDark rounded-2xl overflow-hidden hover:border-primary/50 transition-all group flex flex-col justify-between">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=400&q=80" alt="Birthday Card" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2.5">
+                            <button onclick="previewTemplate('https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80', 'Thiệp mời Sinh Nhật')" class="p-2.5 bg-white/20 hover:bg-white text-white hover:text-black rounded-xl backdrop-blur-md transition-all">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-sm font-bold text-white">Thiệp mời sinh nhật</h4>
+                        <p class="text-xs text-zinc-500 mt-1">Đầy đủ thông tin, màu sắc tươi vui năng động.</p>
+                        <div class="flex gap-2 mt-4">
+                            <button onclick="previewTemplate('https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80', 'Thiệp mời Sinh Nhật')" class="flex-1 text-center py-2 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-xs rounded-lg transition-colors">Xem trước</button>
+                            <a href="#contact" class="flex-1 text-center py-2 bg-gradient-to-r from-primary to-accent hover:opacity-95 text-white font-semibold text-xs rounded-lg transition-colors">Tải ngay</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Template Item 2 -->
+                <div class="bg-cardDark border border-borderDark rounded-2xl overflow-hidden hover:border-primary/50 transition-all group flex flex-col justify-between">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=400&q=80" alt="Graduation Card" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2.5">
+                            <button onclick="previewTemplate('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80', 'Thiệp mời Lễ Tốt Nghiệp')" class="p-2.5 bg-white/20 hover:bg-white text-white hover:text-black rounded-xl backdrop-blur-md transition-all">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-sm font-bold text-white">Thiệp mời tốt nghiệp</h4>
+                        <p class="text-xs text-zinc-500 mt-1">Trang trọng, tôn vinh cột mốc quan trọng.</p>
+                        <div class="flex gap-2 mt-4">
+                            <button onclick="previewTemplate('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80', 'Thiệp mời Lễ Tốt Nghiệp')" class="flex-1 text-center py-2 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-xs rounded-lg transition-colors">Xem trước</button>
+                            <a href="#contact" class="flex-1 text-center py-2 bg-gradient-to-r from-primary to-accent hover:opacity-95 text-white font-semibold text-xs rounded-lg transition-colors">Tải ngay</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Template Item 3 -->
+                <div class="bg-cardDark border border-borderDark rounded-2xl overflow-hidden hover:border-primary/50 transition-all group flex flex-col justify-between">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=400&q=80" alt="Wedding Card" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2.5">
+                            <button onclick="previewTemplate('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80', 'Thiệp cưới / Save the Date')" class="p-2.5 bg-white/20 hover:bg-white text-white hover:text-black rounded-xl backdrop-blur-md transition-all">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-sm font-bold text-white">Save the Date / Thiệp cưới</h4>
+                        <p class="text-xs text-zinc-500 mt-1">Sang trọng với thiết kế hoa văn mềm mại.</p>
+                        <div class="flex gap-2 mt-4">
+                            <button onclick="previewTemplate('https://images.unsplash.com/photo-1519741497674-61148183552?auto=format&fit=crop&w=800&q=80', 'Thiệp cưới / Save the Date')" class="flex-1 text-center py-2 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-xs rounded-lg transition-colors">Xem trước</button>
+                            <a href="#contact" class="flex-1 text-center py-2 bg-gradient-to-r from-primary to-accent hover:opacity-95 text-white font-semibold text-xs rounded-lg transition-colors">Tải ngay</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Template Item 4 -->
+                <div class="bg-cardDark border border-borderDark rounded-2xl overflow-hidden hover:border-primary/50 transition-all group flex flex-col justify-between">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=400&q=80" alt="Professional Event" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2.5">
+                            <button onclick="previewTemplate('https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80', 'Thiệp mời Sự kiện Chuyên Nghiệp')" class="p-2.5 bg-white/20 hover:bg-white text-white hover:text-black rounded-xl backdrop-blur-md transition-all">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-sm font-bold text-white">Thiệp mời sự kiện lịch lãm</h4>
+                        <p class="text-xs text-zinc-500 mt-1">Dành cho hội thảo doanh nghiệp, gala.</p>
+                        <div class="flex gap-2 mt-4">
+                            <button onclick="previewTemplate('https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80', 'Thiệp mời Sự kiện Chuyên Nghiệp')" class="flex-1 text-center py-2 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-xs rounded-lg transition-colors">Xem trước</button>
+                            <a href="#contact" class="flex-1 text-center py-2 bg-gradient-to-r from-primary to-accent hover:opacity-95 text-white font-semibold text-xs rounded-lg transition-colors">Tải ngay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="text-xs text-zinc-600 text-center mt-8">Tất cả biểu mẫu đều chuẩn phong cách Việt Nam – Dễ dàng tải về và in ấn ngay.</p>
+        </div>
+    </section>
+
+    <!-- ==================== COORDINATION CENTER ==================== -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
+                <!-- Content Left -->
+                <div class="lg:col-span-2 space-y-6">
+                    <span class="text-primary font-bold text-xs uppercase tracking-widest block">Công cụ quản lý</span>
+                    <h2 class="font-serif font-bold text-3xl md:text-5xl text-white leading-tight">Trung tâm Điều phối Sự kiện</h2>
+                    <p class="text-zinc-400 text-sm leading-relaxed">
+                        Bộ công cụ quản lý dự án toàn diện được thiết kế đặc thù cho điều phối sự kiện: Checklist hạng mục công việc, kịch bản điều phối thời gian chạy (Run-of-show), quản lý danh sách khách mời, dự trù ngân sách. 
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-xs font-semibold text-white">
+                            <i class="fa-solid fa-circle-check text-primary"></i> Mẫu kịch bản chương trình chuẩn hóa.
+                        </div>
+                        <div class="flex items-center gap-2 text-xs font-semibold text-white">
+                            <i class="fa-solid fa-circle-check text-primary"></i> Trình theo dõi tiến độ thời gian thực.
+                        </div>
+                        <div class="flex items-center gap-2 text-xs font-semibold text-white">
+                            <i class="fa-solid fa-circle-check text-primary"></i> File Excel/Google Sheets công cụ hoàn chỉnh.
+                        </div>
+                    </div>
+                    <div class="pt-4">
+                        <a href="#contact" class="px-6 py-3.5 bg-gradient-to-r from-primary to-accent text-white font-bold text-xs rounded-xl shadow-lg transition-all inline-flex items-center gap-2">
+                            Nhận Bộ Template Đầy Đủ <i class="fa-solid fa-download"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Graphic Grid Right (Mock Spreadsheet) -->
+                <div class="lg:col-span-3 bg-cardDark border border-borderDark rounded-2xl p-5 shadow-2xl overflow-hidden">
+                    <div class="flex justify-between items-center border-b border-borderDark pb-4 mb-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3.5 h-3.5 rounded-full bg-red-500"></div>
+                            <div class="w-3.5 h-3.5 rounded-full bg-amber-500"></div>
+                            <div class="w-3.5 h-3.5 rounded-full bg-emerald-500"></div>
+                            <span class="text-xs font-semibold text-zinc-500 font-mono ml-2">coordination-hub.xlsx</span>
+                        </div>
+                        <span class="px-2 py-0.5 bg-primary/10 border border-primary/20 text-accent text-[9px] font-bold rounded-lg uppercase">Live Preview</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left font-mono text-[10px] text-zinc-400 border-collapse">
+                            <thead>
+                                <tr class="bg-zinc-900 border-b border-borderDark text-white">
+                                    <th class="py-2.5 px-3">Hạng mục</th>
+                                    <th class="py-2.5 px-3">Phụ trách</th>
+                                    <th class="py-2.5 px-3">Thời hạn</th>
+                                    <th class="py-2.5 px-3 text-right">Kinh phí (Dự kiến)</th>
+                                    <th class="py-2.5 px-3 text-right">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-borderDark">
+                                <tr>
+                                    <td class="py-2.5 px-3 font-semibold text-white">Thiết kế ấn phẩm & Poster</td>
+                                    <td class="py-2.5 px-3">Hùng (Graphic)</td>
+                                    <td class="py-2.5 px-3">15/07/2026</td>
+                                    <td class="py-2.5 px-3 text-right">1.200.000đ</td>
+                                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-500 rounded">Done</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 px-3 font-semibold text-white">In thiệp mời & Gửi thư</td>
+                                    <td class="py-2.5 px-3">Mai (Hậu cần)</td>
+                                    <td class="py-2.5 px-3">18/07/2026</td>
+                                    <td class="py-2.5 px-3 text-right">800.000đ</td>
+                                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 bg-amber-500/10 text-amber-500 rounded">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 px-3 font-semibold text-white">MC Script & Kịch bản lễ</td>
+                                    <td class="py-2.5 px-3">Trang (MC)</td>
+                                    <td class="py-2.5 px-3">20/07/2026</td>
+                                    <td class="py-2.5 px-3 text-right">0đ</td>
+                                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 bg-blue-500/10 text-blue-500 rounded">Drafting</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 px-3 font-semibold text-white">Setup Photobooth sân khấu</td>
+                                    <td class="py-2.5 px-3">EventMaster</td>
+                                    <td class="py-2.5 px-3">24/07/2026</td>
+                                    <td class="py-2.5 px-3 text-right">3.500.000đ</td>
+                                    <td class="py-2.5 px-3 text-right"><span class="px-2 py-0.5 bg-zinc-800 text-zinc-500 rounded">Scheduled</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CONTACT FORM ==================== -->
+    <section id="contact" class="py-20 bg-cardDark/30 border-t border-borderDark relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                <!-- Info Column -->
+                <div class="space-y-8">
+                    <div>
+                        <span class="text-primary font-bold text-xs uppercase tracking-widest block mb-2">Liên hệ với chúng tôi</span>
+                        <h2 class="font-serif font-bold text-4xl text-white">Hãy để EventMaster biến ý tưởng của bạn thành thực tế</h2>
+                        <p class="text-zinc-400 text-sm mt-3">Đội ngũ trẻ trung, sáng tạo và tận tâm luôn sẵn sàng lắng nghe mọi yêu cầu tư vấn sự kiện của bạn.</p>
+                    </div>
+
+                    <div class="space-y-5">
+                        <div class="flex items-center gap-4">
+                            <div class="w-11 h-11 bg-primary/10 text-primary flex items-center justify-center text-lg rounded-xl shrink-0"><i class="fa-solid fa-phone"></i></div>
+                            <div>
+                                <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Hotline hỗ trợ</p>
+                                <p class="text-sm font-semibold text-white">0356.197.320</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-11 h-11 bg-primary/10 text-primary flex items-center justify-center text-lg rounded-xl shrink-0"><i class="fa-solid fa-envelope"></i></div>
+                            <div>
+                                <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Hòm thư điện tử</p>
+                                <p class="text-sm font-semibold text-white">eventmastergiaiphaptochucsukie@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-11 h-11 bg-primary/10 text-primary flex items-center justify-center text-lg rounded-xl shrink-0"><i class="fa-solid fa-location-dot"></i></div>
+                            <div>
+                                <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Trụ sở hoạt động</p>
+                                <p class="text-sm font-semibold text-white">Tân Thịnh • Thành phố Thái Nguyên</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Icons -->
+                    <div class="space-y-3">
+                        <p class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Theo dõi chúng tôi trên mạng xã hội</p>
+                        <div class="flex gap-4">
+                            <a href="#" class="w-10 h-10 bg-zinc-900 border border-borderDark text-zinc-400 hover:text-white hover:border-primary flex items-center justify-center rounded-xl transition-all"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#" class="w-10 h-10 bg-zinc-900 border border-borderDark text-zinc-400 hover:text-white hover:border-primary flex items-center justify-center rounded-xl transition-all"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" class="w-10 h-10 bg-zinc-900 border border-borderDark text-zinc-400 hover:text-white hover:border-primary flex items-center justify-center rounded-xl transition-all"><i class="fa-brands fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Column -->
+                <div class="bg-cardDark border border-borderDark rounded-3xl p-8 shadow-2xl">
+                    <h3 class="text-base font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-regular fa-envelope-open text-primary"></i> Gửi Yêu Cầu Tư Vấn Mới
+                    </h3>
+                    <form onsubmit="handleSubmitContact(event)" class="space-y-4">
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-zinc-400">Họ & tên *</label>
+                            <input type="text" name="name" required class="block w-full px-4 py-3 bg-bgDark border border-borderDark rounded-xl text-sm text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none" placeholder="Nguyễn Văn A" />
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-zinc-400">Email liên hệ *</label>
+                                <input type="email" name="email" required class="block w-full px-4 py-3 bg-bgDark border border-borderDark rounded-xl text-sm text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none" placeholder="email@gmail.com" />
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-zinc-400">Số điện thoại *</label>
+                                <input type="tel" name="phone" required class="block w-full px-4 py-3 bg-bgDark border border-borderDark rounded-xl text-sm text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none" placeholder="0987xxxxxx" />
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-zinc-400">Nội dung yêu cầu tư vấn</label>
+                            <textarea name="notes" rows="4" class="block w-full px-4 py-3 bg-bgDark border border-borderDark rounded-xl text-sm text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none resize-none" placeholder="Mô tả sơ qua về loại hình sự kiện, thời gian dự kiến và mong muốn hỗ trợ của bạn..."></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 bg-gradient-to-r from-primary to-accent hover:opacity-95 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-primary/20 transition-all">
+                            Gửi yêu cầu tư vấn ngay
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-bgDark border-t border-borderDark py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-wand-magic-sparkles text-[14px]"></i>
+                </div>
+                <span class="font-serif font-black text-lg text-white">EventMaster</span>
+            </div>
+            
+            <p class="text-xs text-zinc-500 text-center">
+                &copy; 2026 EventMaster. Toàn bộ thiết kế lấy cảm hứng từ ICTU. Hỗ trợ giải pháp sự kiện hoàn hảo.
+            </p>
+            
+            <div class="flex items-center gap-6">
+                <a href="#" class="text-xs text-zinc-500 hover:text-white transition-colors">Điều khoản</a>
+                <a href="#" class="text-xs text-zinc-500 hover:text-white transition-colors">Bảo mật</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== MODAL: TEMPLATE LIGHTBOX PREVIEW ==================== -->
+    <div id="previewModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="relative max-w-2xl w-full m-4 bg-cardDark border border-borderDark rounded-3xl overflow-hidden p-6 shadow-2xl">
+            <!-- Modal Title Header -->
+            <div class="flex justify-between items-center border-b border-borderDark pb-4 mb-4">
+                <h4 id="previewModalTitle" class="text-sm font-bold text-white">Mẫu thiết kế thiệp mời</h4>
+                <button onclick="closePreviewModal()" class="text-zinc-500 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Image Container -->
+            <div class="h-96 md:h-[450px] rounded-xl overflow-hidden bg-bgDark">
+                <img id="previewModalImg" src="" alt="Mẫu thiệp mời" class="w-full h-full object-contain" />
+            </div>
+            
+            <!-- Modal Actions Footer -->
+            <div class="flex gap-4 mt-6 justify-end">
+                <button onclick="closePreviewModal()" class="px-5 py-2.5 border border-borderDark hover:bg-zinc-800 text-white font-semibold text-xs rounded-xl transition-colors">Đóng lại</button>
+                <a href="#contact" onclick="closePreviewModal()" class="px-6 py-2.5 bg-gradient-to-r from-primary to-accent hover:opacity-95 text-white font-bold text-xs rounded-xl shadow-lg transition-all">Tải xuống & Chỉnh sửa</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <script>
+        // Toggle mobile hamburger menu drawer
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Horizontal slider scroll action
+        function slidePortfolio(direction) {
+            const container = document.getElementById('portfolio-container');
+            const scrollAmount = 380; // card width + gap
+            if (direction === 'left') {
+                container.scrollLeft -= scrollAmount;
+            } else {
+                container.scrollLeft += scrollAmount;
+            }
+        }
+
+        // Preview invitation card modal triggers
+        function previewTemplate(imageUrl, title) {
+            const modal = document.getElementById('previewModal');
+            const img = document.getElementById('previewModalImg');
+            const titleEl = document.getElementById('previewModalTitle');
+            
+            titleEl.textContent = title;
+            img.src = imageUrl;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+            }, 10);
+        }
+
+        function closePreviewModal() {
+            const modal = document.getElementById('previewModal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Mock Submission Handler for WOW experience
+        function handleSubmitContact(e) {
+            e.preventDefault();
+            alert("🎉 Yêu cầu tư vấn của bạn đã được ghi nhận thành công! Đội ngũ EventMaster sẽ liên hệ tư vấn trực tiếp qua số điện thoại/email trong vòng 1-2 giờ tới.");
+            e.target.reset();
+        }
+    </script>
+</body>
+
+</html>
