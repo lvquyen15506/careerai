@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: careerai
+    env: python
+    plan: starter
+    region: oregon
+    repo: "REPLACE_WITH_GIT_REPO_URL"
+    branch: main
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn student_job_platform.wsgi:application --bind 0.0.0.0:$PORT --workers 3"
+    autoDeploy: true
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        sync: false
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "your-app.onrender.com"
+      - key: USE_S3
+        value: "False"
+      - key: AWS_STORAGE_BUCKET_NAME
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "3306"
+
+databases:
+  - name: careerai-db
+    plan: starter
+    region: oregon
+    type: postgresql
