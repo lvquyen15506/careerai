@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.microsoft',
     'crispy_forms',
     'crispy_bootstrap5',
+    'storages',
 
     # Local apps
     'core',
@@ -120,6 +121,27 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Optional: use S3-compatible storage for MEDIA/STATIC when configured via env
+USE_S3 = os.getenv('USE_S3', 'False').lower() == 'true'
+if USE_S3:
+    # django-storages / boto3 configuration
+    INSTALLED_APPS += ['storages'] if 'storages' not in INSTALLED_APPS else []
+    DEFAULT_FILE_STORAGE = os.getenv('DEFAULT_FILE_STORAGE', 'storages.backends.s3boto3.S3Boto3Storage')
+    STATICFILES_STORAGE = os.getenv('STATICFILES_STORAGE', 'storages.backends.s3boto3.S3Boto3Storage')
+
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME', None)
+    AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_CUSTOM_DOMAIN', None)
+
+    if AWS_S3_CUSTOM_DOMAIN:
+        MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+        STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+    else:
+        MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/'
+        STATIC_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/'
 
 # ============================================================
 # DJANGO-ALLAUTH CONFIGURATION (SSO)
