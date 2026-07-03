@@ -58,4 +58,6 @@ urlpatterns = [
     path('portal-admin/employer/<int:employer_id>/edit/', views.admin_edit_employer_view, name='admin_edit_employer'),
     path('portal-admin/employer/<int:employer_id>/delete/', views.admin_delete_employer_view, name='admin_delete_employer'),
     path('portal-admin/application/<int:application_id>/delete/', views.admin_delete_application_view, name='admin_delete_application'),
+    # Healthcheck
+    path('health/', views.health_check_view, name='health'),
 ]

@@ -37,6 +37,12 @@ from .forms import (
 from .services import smart_match, update_trust_score, fetch_and_sync_student_profile
 
 
+def health_check_view(request):
+    """Simple health endpoint for load balancers / Render health checks."""
+    from django.http import HttpResponse
+    return HttpResponse('OK', content_type='text/plain')
+
+
 def home_view(request):
     """
     Trang chủ - chuyển hướng theo vai trò nếu đã đăng nhập,
