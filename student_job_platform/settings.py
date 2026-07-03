@@ -134,6 +134,9 @@ LOGGING = {
     },
 }
 
+# Optional: use S3-compatible storage for MEDIA/STATIC when configured via env
+USE_S3 = os.getenv('USE_S3', 'False').lower() == 'true'
+
 # Whitenoise: ensure static files compressed and cached when not using S3
 if not USE_S3:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -148,8 +151,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Optional: use S3-compatible storage for MEDIA/STATIC when configured via env
-USE_S3 = os.getenv('USE_S3', 'False').lower() == 'true'
 if USE_S3:
     # django-storages / boto3 configuration
     INSTALLED_APPS += ['storages'] if 'storages' not in INSTALLED_APPS else []
@@ -161,6 +162,25 @@ if USE_S3:
     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
     AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME', None)
     AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_CUSTOM_DOMAIN', None)
+    # Cloudflare R2 (S3-compatible) support: set AWS_S3_ENDPOINT_URL to the R2 endpoint
+    # e.g. https://<account_id>.r2.cloudflarestorage.com
+    AWS_S3_ENDPOINT_URL = os.getenv('AWS_S3_ENDPOINT_URL', None)
+    AWS_DEFAULT_ACL = None
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+
+    # Construct public URLs. For Cloudflare R2 endpoint style, the bucket is often placed
+    # in the path: https://<account_id>.r2.cloudflarestorage.com/<bucket>/
+    if AWS_S3_CUSTOM_DOMAIN:
+        MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+        STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+    elif AWS_S3_ENDPOINT_URL:
+        MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/media/'
+        STATIC_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/static/'
+    else:
+        MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/'
+        STATIC_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/'
 
     if AWS_S3_CUSTOM_DOMAIN:
         MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
